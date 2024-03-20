@@ -26,6 +26,8 @@ import Reservation from './screens/user_reservation';
 import StoreInfo from './screens/user_storeinfo';
 import WaitingRegi from './screens/waiting_regi';
 import WatingSetup from './screens/wating_setup';
+
+
 const Stack = createStackNavigator();
 
 

@@ -75,7 +75,7 @@ const handleKakaoLogin = () => {
             <Text style={styles.headerText}></Text>
           </View>
           <View style={styles.parentContainer}>
-          <Image source={require('../assets/images/Logo.png')} style={styles.logo} />
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
         </View>
         
  
@@ -142,7 +142,7 @@ const handleKakaoLogin = () => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonKakao} onPress={handleKakaoLogin}>
       <Image
-        source={require('../assets/images/Kakaostart.png')} // Make sure the path is correct
+        source={require('../assets/Kakaostart.png')} // Make sure the path is correct
         style={styles.kakaoLoginImage}
       />
     </TouchableOpacity>

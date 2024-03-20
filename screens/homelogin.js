@@ -53,7 +53,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
       
       
         {/* Logo를 중앙에 배치합니다. */}
-        <Image source={require('../assets/images/Logo.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
       </View>
       <View style={styles.inputContainer}>
   <Text style={styles.inputLabel}>아이디*</Text>
@@ -82,7 +82,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
 
         <TouchableOpacity style={styles.buttonKakao} onPress={onKakaoLogin}>
         <Image
-        source={require('../assetsLarge.png')} // 이미지 파일 경로를 확인하세요
+        source={require('../assets/Large.png')} // 이미지 파일 경로를 확인하세요
         style={styles.kakaoLoginImage}
         />
   </TouchableOpacity>

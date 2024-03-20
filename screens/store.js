@@ -209,7 +209,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
          {/* 수빈수정 */}
         {sortedCafes.map((cafe) => (
           <View key={cafe.store_seq} style={styles.cafeContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('storeInfo', cafe)}>
+            <TouchableOpacity onPress={() => navigation.navigate('StoreInfo', cafe)}>
             <Image source={cafe.image} style={styles.cafeImage} />
             <View style={styles.cafeInfo}>
               <Text style={styles.cafeName}>{cafe.store_name}</Text>

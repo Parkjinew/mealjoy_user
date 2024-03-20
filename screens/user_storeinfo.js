@@ -32,7 +32,7 @@ const StoreInfo = ({route}) => {
       discription: '바삭하게 튀긴 불고기볼',
       rating: '4.6',
       reviews: '420 리뷰',
-      image: require('../assets/don.png'),
+      image: require('../assets/cake.png'),
       con: '품절',
     },
     // Add more food items here
@@ -49,7 +49,7 @@ const StoreInfo = ({route}) => {
       <ScrollView>
         <Image
           style={styles.image}
-          source={require('../assets/bugger.png')} // Replace with your image path
+          source={require('../assets/cake.png')} // Replace with your image path
         />
         
         <View style={styles.body}>

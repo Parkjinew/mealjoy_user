@@ -12,7 +12,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Foundation } from '@expo/vector-icons';
 
 
-const StoreInfo = () => {
+const StoreInfo = ({route}) => {
+  const store = {route}.route.params;
+  console.log(store.store_name);
 
   const foodData = [
     {
@@ -21,7 +23,7 @@ const StoreInfo = () => {
       discription: '매콤한 양념의 타코',
       rating: '4.1',
       reviews: '908 리뷰',
-      image: require('./assets/taco.jpg'),
+      image: require('../assets/cake.png'),
       con: '현재 이용가능',
     },
     {
@@ -30,7 +32,7 @@ const StoreInfo = () => {
       discription: '바삭하게 튀긴 불고기볼',
       rating: '4.6',
       reviews: '420 리뷰',
-      image: require('./assets/bol.jpg'),
+      image: require('../assets/don.png'),
       con: '품절',
     },
     // Add more food items here
@@ -47,13 +49,13 @@ const StoreInfo = () => {
       <ScrollView>
         <Image
           style={styles.image}
-          source={require('./assets/food.jpeg')} // Replace with your image path
+          source={require('../assets/bugger.png')} // Replace with your image path
         />
         
         <View style={styles.body}>
 
         <View style={styles.starContainer}>
-        <Text style={styles.title}>타코</Text>
+        <Text style={styles.title}>{store.store_name}</Text>
         <TouchableOpacity onPress={toggleFavorite}>
         <Ionicons
           name={favorite ? "heart" : "heart-outline"}

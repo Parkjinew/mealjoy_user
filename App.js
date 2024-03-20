@@ -14,6 +14,8 @@ import Number from './screens/number_setting';
 import Password from './screens/pw_setting';
 import ChangePassword from './screens/change_pw';
 import StoreDetail from './screens/location';
+// 수빈 수정
+import storeInfo from './screens/user_storeinfo';
 
 import Store from './screens/store';
 const Stack = createStackNavigator();
@@ -37,6 +39,9 @@ export default function App() {
         <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }}/>
         <Stack.Screen name="StoreDetail" component={StoreDetail} options={{ headerShown: false }}/>
         <Stack.Screen name="Store" component={Store} options={{ headerShown: false }}/>
+        {/* 수빈 수정 */}
+        <Stack.Screen name="storeInfo" component={storeInfo} options={{ headerShown: false }}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );

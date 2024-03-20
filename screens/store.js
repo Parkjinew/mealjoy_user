@@ -22,27 +22,27 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const images = [
-    { id: '0', uri: require('../assets/bentto.png'), label: '전체' },
-    { id: '1', uri: require('../assets/bentto.png'), label: '한식' },
-    { id: '2', uri: require('../assets/bentto.png'), label: '카페/디저트' },
-    { id: '3', uri: require('../assets/cake.png'), label: '중국집' },
-    { id: '4', uri: require('../assets/cake.png'), label: '분식' },
-    // 2번째 줄
-    { id: '5', uri: require('../assets/bugger.png'), label: '버거' },
-    { id: '6', uri: require('../assets/chick.png'), label: '치킨' },
-    { id: '7', uri: require('../assets/pizza.png'), label: '피자/양식' },
-    { id: '8', uri: require('../assets/pizza.png'), label: '일식/돈까스' },
-    // 3번째 줄
-    { id: '9', uri: require('../assets/sand.png'), label: '샌드위치' },
-    { id: '10', uri: require('../assets/shushi.png'), label: '찜/탕' },
-    { id: '11', uri: require('../assets/bentto.png'), label: '족발/보쌈' },
-    { id: '12', uri: require('../assets/meet.png'), label: '샐러드' },
-    { id: '13', uri: require('../assets/coffe.png'), label: '아시안' },
-    { id: '14', uri: require('../assets/coffe.png'), label: '도시락/죽' },
-    { id: '15', uri: require('../assets/coffe.png'), label: '회/초밥' },
-    { id: '16', uri: require('../assets/coffe.png'), label: '고기/구이' },
-    {id:'17'},
-    {id:'18'}
+  { id: '0', uri: require('../assets/all.png'), label: '전체' },
+  { id: '1', uri: require('../assets/bibi.png'), label: '한식' },
+  { id: '2', uri: require('../assets/coffe.png'), label: '카페/디저트' },
+  { id: '3', uri: require('../assets/chin.png'), label: '중국집' },
+  { id: '4', uri: require('../assets/ddok.png'), label: '분식' },
+  // 2번째 줄
+  { id: '5', uri: require('../assets/bugger.png'), label: '버거' },
+  { id: '6', uri: require('../assets/chick.png'), label: '치킨' },
+  { id: '7', uri: require('../assets/pizza.png'), label: '피자/양식' },
+  { id: '8', uri: require('../assets/don.png'), label: '일식/돈까스' },
+  // 3번째 줄
+  { id: '9', uri: require('../assets/sand.png'), label: '샌드위치' },
+  { id: '10', uri: require('../assets/tang.png'), label: '찜/탕' },
+  { id: '11', uri: require('../assets/jok.png'), label: '족발/보쌈' },
+  { id: '12', uri: require('../assets/sal.png'), label: '샐러드' },
+  { id: '13', uri: require('../assets/noddle.png'), label: '아시안' },
+  { id: '14', uri: require('../assets/bentto.png'), label: '도시락/죽' },
+  { id: '15', uri: require('../assets/shushi.png'), label: '회/초밥' },
+  { id: '16', uri: require('../assets/meet.png'), label: '고기/구이' },
+  {id:'17'},
+  {id:'18'}
   
     // ... 더 많은 이미지를 추가할 수 있습니다.
   ];
@@ -206,8 +206,10 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
+         {/* 수빈수정 */}
         {sortedCafes.map((cafe) => (
           <View key={cafe.store_seq} style={styles.cafeContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('storeInfo', cafe)}>
             <Image source={cafe.image} style={styles.cafeImage} />
             <View style={styles.cafeInfo}>
               <Text style={styles.cafeName}>{cafe.store_name}</Text>
@@ -217,6 +219,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
               </Text>
               <Text style={styles.cafeDescription}>{cafe.store_desc}</Text>
             </View>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>

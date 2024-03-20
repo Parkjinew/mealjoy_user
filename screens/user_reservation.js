@@ -105,7 +105,7 @@ const Reservation = () => {
         {/* 이미지, 제목, 별점 등 상단 섹션은 여기에 포함됩니다. */}
         <Image
           style={styles.image}
-          source={require('./assets/food.jpeg')} // Replace with your image path
+          source={require('../assets/cake.png')} // Replace with your image path
         />
         <View style={styles.body}>
           <View style={styles.starContainer}>

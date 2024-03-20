@@ -61,7 +61,7 @@ const TableButton = ({ id, selected, onPress }) => (
     );
   };
 
-export default function user_order({navigation}){
+export default function UserOrder({navigation}){
   const [selectedFoods, setSelectedFoods] = useState([]);
      const [quantities, setQuantities] = useState({});
 
@@ -91,7 +91,7 @@ export default function user_order({navigation}){
           discription: '매콤한 양념의 타코',
           rating: '4.1',
           price: '20,000원',
-          image: require('./assets/taco.jpg'),
+          image: require('../assets/cake.png'),
         },
         {
           id: '2',
@@ -99,7 +99,7 @@ export default function user_order({navigation}){
           discription: '바삭하게 튀긴 불고기볼',
           rating: '4.6',
           price: '18,000원',
-          image: require('./assets/bol.jpg'),
+          image: require('../assets/cake.png'),
         },
         // Add more food items here
       ];
@@ -168,7 +168,7 @@ export default function user_order({navigation}){
       <ScrollView>
         <Image
           style={styles.image}
-          source={require('./assets/food.jpeg')} // Replace with your image path
+          source={require('../assets/cake.png')} // Replace with your image path
         />
         
         <View style={styles.body}>

@@ -21,7 +21,7 @@ const StoreInfo = () => {
       discription: '매콤한 양념의 타코',
       rating: '4.1',
       reviews: '908 리뷰',
-      image: require('./assets/taco.jpg'),
+      image: require('../assets/cake.png'),
       con: '현재 이용가능',
     },
     {
@@ -30,7 +30,7 @@ const StoreInfo = () => {
       discription: '바삭하게 튀긴 불고기볼',
       rating: '4.6',
       reviews: '420 리뷰',
-      image: require('./assets/bol.jpg'),
+      image: require('../assets/cake.png'),
       con: '품절',
     },
     // Add more food items here
@@ -47,7 +47,7 @@ const StoreInfo = () => {
       <ScrollView>
         <Image
           style={styles.image}
-          source={require('./assets/food.jpeg')} // Replace with your image path
+          source={require('../assets/cake.png')} // Replace with your image path
         />
         
         <View style={styles.body}>

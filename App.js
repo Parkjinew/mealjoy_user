@@ -58,11 +58,10 @@ export default function App() {
         <Stack.Screen name="StoreInfo" component={StoreInfo} options={{ headerShown: false }}/>
         <Stack.Screen name="WaitingRegi" component={WaitingRegi} options={{ headerShown: false }}/>
         <Stack.Screen name="WatingSetup" component={WatingSetup} options={{ headerShown: false }}/>
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );
+  // 안녕~
 }
 
 

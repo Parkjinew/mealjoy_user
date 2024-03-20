@@ -1,14 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, Platform } from 'react-native';
 import Postcode from '@actbase/react-daum-postcode';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const AddressChange = ({ navigation, route }) => {
-  const getAddressData = (data) => {
-    if (route.params?.onSelect) {
-      route.params.onSelect({
-        default_address: data.address,
-      });
-    }
+const AddressChange = ({ navigation }) => {
+  const getAddressData = async (data) => { 
+    await AsyncStorage.setItem('selectedAddress', data.address);
     navigation.goBack();
   };
 

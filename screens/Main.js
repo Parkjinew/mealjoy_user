@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView,
   Platform,TouchableWithoutFeedback,Keyboard } from 'react-native';
@@ -14,7 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 const images = [
   { id: '0', uri: require('../assets/all.png'), label: '전체' },
@@ -46,6 +47,7 @@ const Main = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
     const navigation = useNavigation();
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
+  const [selectedAddress, setSelectedAddress] = useState('동구 대명동');
   React.useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -77,6 +79,44 @@ const Main = () => {
     }
   }
 
+  const handleSelectAddress = async (addressData) => {
+    const address = addressData.default_address;
+    
+    await saveAddress(address); // 선택된 주소를 저장
+    setSelectedAddress(address);
+    navigation.navigate('SearchResult', { selectedAddress: addressData.default_address });
+  };
+
+  const saveAddress = async (address) => {
+    await AsyncStorage.setItem('selectedAddress', address);
+  };
+  
+  // 주소 로드
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      const loadAddress = async () => {
+        const address = await AsyncStorage.getItem('selectedAddress');
+        if (address) {
+          setSelectedAddress(address);
+        }
+      };
+  
+      loadAddress();
+    }
+  }, [isFocused]);
+  useEffect(() => {
+    const loadAddress = async () => {
+      const address = await AsyncStorage.getItem('selectedAddress');
+      if (address) {
+        setSelectedAddress(address);
+      }
+    };
+  
+    loadAddress();
+  }, []);
+  
   const renderImagesRow = (imagesRow) => {
     return (
       <View style={styles.imagesRow}>
@@ -151,14 +191,11 @@ const Main = () => {
   style={styles.dropdown}
   onPress={() => {
     navigation.navigate('AddressChange', {
-      onSelect: (addressData) => {
-        console.log(addressData); // 여기에서 주소 데이터를 처리합니다.
-        // 예: 상태에 저장하거나 다른 로직을 실행합니다.
-      },
+      onSelect: handleSelectAddress,
     });
   }}
 >
-          <Text style={styles.dropdownText}>동구 대명동 ▼</Text>
+          <Text style={styles.dropdownText}>{selectedAddress} ▼</Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -234,7 +271,7 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {
     alignSelf: 'flex-start', // 이 컨테이너 내의 요소를 왼쪽으로 정렬
-    width: '30%', // 컨테이너의 너비를 header의 전체 너비로 설정
+    width: '100%', // 컨테이너의 너비를 header의 전체 너비로 설정
     paddingBottom:20,
     paddingTop:5
   },

@@ -11,6 +11,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SearchResult = ({ route }) => {
     const navigation = useNavigation();
@@ -49,10 +50,39 @@ const SearchResult = ({ route }) => {
             [id]: !currentFavorites[id],
         }));
     };
-    const handleSelectAddress = (addressData) => {
-      setSelectedAddress(addressData.default_address);
+    const handleSelectAddress = async (addressData) => {
+      const address = addressData.default_address;
+      await saveAddress(address); // 선택된 주소를 저장
+      setSelectedAddress(address);
     };
+
+    const saveAddress = async (address) => {
+      await AsyncStorage.setItem('selectedAddress', address);
+    };
+    
+    // 주소 로드
+   
+    
+    useEffect(() => {
+      const loadAddress = async () => {
+        const address = await AsyncStorage.getItem('selectedAddress');
+        if (address) {
+          setSelectedAddress(address);
+        }
+      };
+    
+      loadAddress();
+    }, []);
     const renderRestaurants = () => {
+
+      if (restaurants.length === 0) {
+        return (
+            <View style={styles.noResultsContainer}>
+                <Text style={styles.noResultsText}>검색 결과가 없습니다.</Text>
+            </View>
+        );
+    }
+
         const restaurantItems = [];
         for (let i = 0; i < restaurants.length; i++) {
             const item = restaurants[i];
@@ -154,6 +184,16 @@ const SearchResult = ({ route }) => {
 };
 
     const styles = StyleSheet.create({
+      noResultsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+    },
+    noResultsText: {
+        fontSize: 18,
+        color: '#666',
+    },
       restaurantRatingContainer:{
         flexDirection: 'row'
       },

@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Main from "./screens/Main";
-import search_result from "./screens/search_result";
+import SearchResult from "./screens/search_result";
 import AddressChange from './screens/address_change';
 import Chatbot from './screens/chatbot';
 import OrderList from './screens/user_orderlist';
@@ -36,7 +36,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" component={Main} options={{ headerShown: false }}/>
-        <Stack.Screen name="SearchResult" component={search_result} options={{ headerShown: false }}/>
+        <Stack.Screen name="SearchResult" component={SearchResult} options={{ headerShown: false }}/>
         <Stack.Screen name="AddressChange" component={AddressChange} options={{ headerShown: false }} />
         <Stack.Screen name="ChatBot" component={Chatbot} options={{headerShown: false}}/>
         <Stack.Screen name="OrderList" component={OrderList} options={{ headerShown: false }}/>

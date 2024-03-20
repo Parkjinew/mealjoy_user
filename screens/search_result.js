@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView,
   Platform,TouchableWithoutFeedback,Keyboard,FlatList } from 'react-native';
@@ -12,12 +12,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-    const dismissKeyboard = () => Keyboard.dismiss();
 
 
-    const SearchResult = () => {
+
+    const SearchResult = ({route}) => {
         const navigation = useNavigation();
+        const search = route.params;
+        const [restaurants, setRestaurants] = useState([]);
+        useEffect(() => {
+          const fetchSearchResults = async () => {
+            try {
+              // 서버로부터 검색 결과 데이터를 받아옵니다.
+              // 이 URL은 예시이며, 실제 서버의 URL로 교체해야 합니다.
+              const response = await axios.get('http://119.200.31.63:8090/botbuddies/search_result');
+              setRestaurants(response.data); // 받아온 데이터로 상태 업데이트
+            } catch (error) {
+              console.error(error);
+            }
+          };
+      
+          fetchSearchResults();
+        }, []);
       const [keyboardVisible, setKeyboardVisible] = React.useState(false);
       React.useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -39,79 +56,7 @@ import { useNavigation } from '@react-navigation/native';
         };
       }, []);
     
-      const renderImagesRow = (imagesRow) => {
-        return (
-          <View style={styles.imagesRow}>
-            {imagesRow.map((img) => (
-              <TouchableOpacity key={img.id} style={styles.imageTouchable}>
-                <Image source={img.uri} style={styles.image} />
-                <Text style={styles.imageLabel}>{img.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        );
-      };
-      const restaurants = [
-        // 식당 데이터 샘플
-        {
-          id: '1',
-          name: '밀식초',
-          category: '한식',
-          rating: '9.5',
-          reviews: '908 리뷰',
-          imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-        },
-        {
-            id: '2',
-            name: '밀식초',
-            category: '한식',
-            rating: '9.5',
-            reviews: '908 리뷰',
-            imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-          },
-          {
-            id: '3',
-            name: '밀식초',
-            category: '한식',
-            rating: '9.5',
-            reviews: '908 리뷰',
-            imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-          },
-          {
-            id: '4',
-            name: '밀식초',
-            category: '한식',
-            rating: '9.5',
-            reviews: '908 리뷰',
-        
-            imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-          },
-          {
-            id: '5',
-            name: '밀식초',
-            category: '한식',
-            rating: '9.5',
-            reviews: '908 리뷰',
-            imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-          },
-          {
-            id: '6',
-            name: '밀식초',
-            category: '한식',
-            rating: '9.5',
-            reviews: '908 리뷰',
-            imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-          },
-          {
-            id: '7',
-            name: '밀식초',
-            category: '한식',
-            rating: '9.5',
-            reviews: '908 리뷰',
-            imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-          },
-        // ...기타 식당 데이터
-      ];
+      
     
       const [favorites, setFavorites] = useState({}); 
 
@@ -121,29 +66,22 @@ import { useNavigation } from '@react-navigation/native';
       [id]: !currentFavorites[id],
     }));
   };
-      const renderRestaurant = ({ item }) => 
+      const renderRestaurant = ({ search }) => 
       (
         <View style={styles.restaurantItem}>
-          <TouchableOpacity>
-      <Image source={item.imageUri} style={styles.restaurantImage} />
+      <TouchableOpacity>
+        <Image source={{ uri: item.imageUri }} style={styles.restaurantImage} />
       </TouchableOpacity>
       <View style={styles.restaurantDetailContainer}>
         <View style={styles.restaurantNameAndIcon}>
-        <TouchableOpacity>
-          <Text style={styles.restaurantName}>{item.name}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.heart} onPress={() => toggleFavorite(item.id)}>
-            <FontAwesome name={favorites[item.id] ? "heart" : "heart-o"} size={24} color="red" />
+          <Text style={styles.restaurantName}>{search.store_name}</Text>
+          <TouchableOpacity style={styles.heart} onPress={() => toggleFavorite(search.id)}>
+            <FontAwesome name={search.isFavorite ? "heart" : "heart-o"} size={24} color="red" />
           </TouchableOpacity>
         </View>
-          <TouchableOpacity>
-        <Text style={styles.restaurantcategory}>{item.category}</Text>
-        <View style={styles.ratingContainer}>
-          <FontAwesome name="star" size={16} color="#FFD700" />
-          <Text style={styles.restaurantRating}>{item.rating}</Text>
-        </View>
-        <Text style={styles.restaurantReviews}>{item.reviews}</Text>
-        </TouchableOpacity>
+        <Text style={styles.restaurantCategory}>{search.category_seq}</Text>
+        <Text style={styles.restaurantRating}>Rating: {search.AverageRating}</Text>
+        <Text style={styles.restaurantReviews}>{search.ReviewCount} reviews</Text>
       </View>
     </View>
   );
@@ -162,9 +100,9 @@ import { useNavigation } from '@react-navigation/native';
 
 
               <FlatList
-                data={restaurants}
+                data={searchData}
                 renderItem={renderRestaurant}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
                 ListHeaderComponent={
                   <>
                     <View style={styles.header}>

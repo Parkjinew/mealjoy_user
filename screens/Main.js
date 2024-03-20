@@ -43,6 +43,7 @@ const images = [
 ];
 const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
+  const [searchQuery, setSearchQuery] = React.useState('');
     const navigation = useNavigation();
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
   React.useEffect(() => {
@@ -90,7 +91,19 @@ const Main = () => {
   };
 
   const Stack = createStackNavigator();
-
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/search_result', {
+        searchQuery: searchQuery,
+      });
+      
+      // 검색 결과 페이지로 응답 데이터 넘기기
+      navigation.navigate('SearchResult', response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   return (
     
     <SafeAreaView style={styles.safeArea}>
@@ -121,8 +134,10 @@ const Main = () => {
         style={styles.searchInput}
         placeholder="지역,음식,메뉴검색"
         placeholderTextColor="#888"
+        value={searchQuery}
+        onChangeText={text => setSearchQuery(text)}
       />
-      <TouchableOpacity onPress={() => navigation.navigate('SearchResult')}>
+      <TouchableOpacity onPress={handleSearch}>
       <EvilIcons name="search" size={24} color="black" style={styles.searchIcon}/>
       </TouchableOpacity>
     </View>

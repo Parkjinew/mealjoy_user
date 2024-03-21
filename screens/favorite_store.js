@@ -10,33 +10,38 @@ import {  Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
 
-const initialFavorites = initialRestaurants.reduce((acc, restaurant) => {
-  acc[restaurant.id] = true;
-  return acc;
-}, {});
 
-const FavoriteStore = () => {
+
+const FavoriteStore = ({route}) => {
   const navigation = useNavigation();
-  const [favorites, setFavorites] = useState(initialFavorites);
-  const [restaurants, setRestaurants] = useState(initialRestaurants);
-  const toggleFavorite = (id) => {
-    setFavorites((currentFavorites) => {
-      const updatedFavorites = { ...currentFavorites };
-      if (updatedFavorites[id]) {
-        delete updatedFavorites[id];
-        setRestaurants((currentRestaurants) =>
-          currentRestaurants.filter((item) => item.id !== id)
-        );
-      } else {
-        updatedFavorites[id] = true;
-      }
-      return updatedFavorites;
-    });
+  const { FavoriteStore } = route.params;
+  console.log(FavoriteStore);
+  const [restaurants, setRestaurants] = useState(FavoriteStore);
+
+
+  const categoryLabels = {
+    '1': '한식',
+    '2': '카페/디저트',
+    '3': '중국집',
+    '4': '분식',
+    '5': '버거',
+    '6': '치킨',
+    '7': '피자/양식',
+    '8': '일식/돈까스',
+    '9': '샌드위치',
+    '10': '찜/탕',
+    '11': '족발/보쌈',
+    '12': '샐러드',
+    '13': '아시안',
+    '14': '도시락/죽',
+    '15': '회/초밥',
+    '16': '고기/구이',
+    
   };
-  
 
   const renderRestaurants = () => {
     const restaurantItems = [];
@@ -46,38 +51,37 @@ const FavoriteStore = () => {
       restaurantItems.push(
     <View style={styles.restaurantItem}>
       <TouchableOpacity>
-        <Image source={{uri : item.imageFilename} style={styles.restaurantImage} />
+        <Image source={{uri : item.STORE_IMG}} style={styles.restaurantImage} />
       </TouchableOpacity>
       <View style={styles.restaurantDetailContainer}>
         <View style={styles.restaurantNameAndIcon}>
           <TouchableOpacity >
-            <Text style={styles.restaurantName}>{item.name}</Text>
+            <Text style={styles.restaurantName}>{item.store_name}</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity >
-          <Text style={styles.restaurantcategory}>{item.category}</Text>
+          <Text style={styles.restaurantcategory}>{categoryLabel}</Text>
           <View style={styles.ratingContainer}>
             <FontAwesome name="star" size={16} color="#FFD700" />
-            <Text style={styles.restaurantRating}>{item.rating}</Text>
+            <Text style={styles.restaurantRating}>{item.averageRating}</Text>
           </View>
-          <Text style={styles.restaurantReviews}>{item.reviews}</Text>
+          <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
         </TouchableOpacity>
       </View>
     </View>
-  };
+      );
+  }
+  return restaurantItems;
+};
+
+  const Stack = createStackNavigator();
 
   
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView style={styles.keyboardAvoid} behavior={Platform.OS === 'ios' ? 'padding' : null}>
-        <FlatList
-          data={restaurants}
-          renderItem={renderRestaurant}
-          keyExtractor={item => item.id}
-          ListHeaderComponent={
-            <>
-            
+          <ScrollView>
             <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backrow}>
             <Ionicons name="arrow-back" size={24} color="#000" />
@@ -87,12 +91,12 @@ const FavoriteStore = () => {
           
         </View>
         <View>
-            <Text style={styles.total}>총 {restaurants.length}개</Text></View>
-            </>
-          }
-        />
-      </KeyboardAvoidingView>
+            <Text style={styles.total}>총 개</Text></View> 
 
+          {renderRestaurants()}
+        </ScrollView>
+      </KeyboardAvoidingView>
+      
           
 
         <View style={styles.tabBar}>

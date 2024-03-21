@@ -13,7 +13,7 @@ const Setting = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()}>
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>내 정보 수정</Text>
@@ -63,6 +63,9 @@ const Setting = () => {
 };
 
 const styles = StyleSheet.create({
+  backbutton:{
+    zIndex:666
+  },
     edge:{
         borderColor:'#efefef',
         borderWidth:0.7,

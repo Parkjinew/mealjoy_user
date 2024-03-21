@@ -48,22 +48,21 @@ const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const checkLoginStatus = async () => {
-      const token = await AsyncStorage.getItem('userToken');
-      setIsLoggedIn(!!token); // !!를 사용하여 token이 있으면 true, 없으면 false로 설정
+      const userInfo = await AsyncStorage.getItem('userInfo');
+      setIsLoggedIn(!!userInfo); // userInfo가 있으면 true, 없으면 false
     };
 
     checkLoginStatus();
   }, []);
   const handleUserIconPress = () => {
     if (isLoggedIn) {
-      // 로그인 상태면 사용자 페이지로 이동
+      // 사용자가 로그인 상태면, 개인정보수정 페이지로 네비게이션
       navigation.navigate('Setting');
     } else {
-      // 로그인 상태가 아니면 로그인 페이지로 이동
+      // 사용자가 로그인 상태가 아니면, 로그인 페이지로 네비게이션
       navigation.navigate('HomeLogin');
     }
   };
-
 
   const [searchQuery, setSearchQuery] = React.useState('');
     const navigation = useNavigation();
@@ -127,6 +126,7 @@ const Main = () => {
       loadAddress();
     }
   }, [isFocused]);
+
   useEffect(() => {
     const loadAddress = async () => {
       const address = await AsyncStorage.getItem('selectedAddress');

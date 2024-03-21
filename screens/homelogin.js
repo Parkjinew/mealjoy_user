@@ -11,9 +11,12 @@ import {
     Text
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
-  // Existing code...
+  const navigation = useNavigation();
   // 로그인 상태 관리
   const [loginInfo, setLoginInfo] = useState({
       id: '',
@@ -27,10 +30,21 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
   };
 
   // 로그인 버튼 핸들러
-  const handleLogin = () => {
-    // 로그인 검증 로직을 여기에 추가
-    console.log('로그인 시도', loginInfo);
-    // 성공 시 여기에 네비게이션 로직 추가 (예: navigation.navigate('Home'))
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/signin', {
+        id: loginInfo.id,
+        password: loginInfo.password,
+      });
+       
+      await AsyncStorage.setItem('userInfo', JSON.stringify(response.data));
+      console.log('로그인 성공:', response.data);
+      // 로그인 성공 후 화면 이동 로직
+      navigation.navigate('Main'); // 예시입니다. 실제로는 Home 대신 목적지 화면의 이름을 사용해야 합니다.
+    } catch (error) {
+      console.error('로그인 실패:', error);
+      Alert.alert('로그인 실패', '아이디 또는 비밀번호를 확인해주세요.');
+    }
   };
 // // 카카오 로그인 핸들러
 // const onKakaoLogin = () => {
@@ -46,7 +60,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-      <TouchableOpacity style={styles.backButton} onPress={() => alert('Go Back')}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={24} color="black" />
         <Text style={styles.headerTitle}></Text>
       </TouchableOpacity>
@@ -266,4 +280,3 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', // 이미지가 비율을 유지하며 버튼 안에 맞춰집니다.
   },
 });
-

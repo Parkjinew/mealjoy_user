@@ -27,7 +27,7 @@ const Password = () => {
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 */}
       <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()}>
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>비밀번호 변경</Text>
@@ -68,6 +68,9 @@ const Password = () => {
 };
 
 const styles = StyleSheet.create({
+  backbutton:{
+    zIndex:666
+  },
     find:{
         fontSize:13,
         color:'gray'

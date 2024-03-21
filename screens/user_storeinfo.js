@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button, Linking  } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,9 +10,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Foundation } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 
 const StoreInfo = ({route}) => {
+  const navigation = useNavigation();
   const data = {route}.route.params;
   const store = data.store;
   const menu = data.menu;
@@ -21,6 +24,25 @@ const StoreInfo = ({route}) => {
 
   const [favorite, setFavorite] = useState(false);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const storedUserInfo = await AsyncStorage.getItem('userInfo');
+      if (storedUserInfo) {
+        setIsLoggedIn(true);
+        setUserInfo(JSON.parse(storedUserInfo));
+      } else {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+  
+
   const toggleFavorite = () => {
     setFavorite(!favorite);
   };
@@ -28,6 +50,58 @@ const StoreInfo = ({route}) => {
   const getImageSource = (imageUri) => {
     return imageUri ? { uri: imageUri } : require('../assets/logo.png');
   };
+
+  const order = async() => {
+    if(isLoggedIn){
+      try{
+        console.log("order");
+      } catch(error){
+        console.error(error);
+      }
+  } else {
+    // 로그인 상태가 아닐 때 로그인 화면으로 이동
+    navigation.navigate('HomeLogin');
+  }
+    
+  }
+
+  const waiting = async() => {
+    if(isLoggedIn){
+      try{
+        console.log("waiting");
+      } catch(error){
+        console.error(error);
+      }
+    } else {
+      // 로그인 상태가 아닐 때 로그인 화면으로 이동
+      navigation.navigate('HomeLogin');
+    }
+    
+  }
+
+  const reservation = async() => {
+    if(isLoggedIn){
+      try{
+        console.log("Reservation");
+      } catch(error){
+        console.error(error);
+      }
+    } else {
+      // 로그인 상태가 아닐 때 로그인 화면으로 이동
+      navigation.navigate('HomeLogin');
+    }
+    
+  }
+
+  const handlePress = () => {
+    if (store.category_seq === 2 || store.tableCount > 0) {
+      order();
+    } else {
+      waiting();
+    }
+  };
+
+  
 
   return (
     <View style={styles.container}>
@@ -67,7 +141,7 @@ const StoreInfo = ({route}) => {
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
             <Text style={styles.iconText}>예약하기</Text>
           </TouchableOpacity>
@@ -79,7 +153,7 @@ const StoreInfo = ({route}) => {
           console.log(typeof(food.image))
         
           return(
-            <View key={food.id} style={styles.foodItem}>
+            <View key={food.menu_seq} style={styles.foodItem}>
 
               <Image
                   style={styles.foodImage}
@@ -96,10 +170,10 @@ const StoreInfo = ({route}) => {
 
       </ScrollView>
 
-      <TouchableOpacity style={styles.orderButton}>
+      <TouchableOpacity style={styles.orderButton}  onPress={handlePress}>
         <Text style={styles.orderButtonText}>
           {/* 테이블 수 가져오기 수정필요 */}
-          {store.tableCount === 0 ? '줄서기' : '주문하기'}
+          {store.category_seq === 2 ? "주문하기" :  store.tableCount === 0 ? '줄서기' : '주문하기'}
         </Text>
       </TouchableOpacity>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import {
   View,
   Text,
@@ -130,6 +130,7 @@ const Store = ({route}) => {
   const [sortOption, setSortOption] = useState(alignSet);  
   const [sortedCafes, setSortedCafes] = useState(cafes);
   const [modalVisible, setModalVisible] = useState(false);
+  const scrollViewRef = useRef();
 
 
   const storeList = async (id) => {
@@ -149,8 +150,8 @@ const Store = ({route}) => {
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeAlign', {align : align, category : category})
       console.log(response.data);
-
-      navigation.push('Store', {data: response.data, id : category, align : align})
+      setSortedCafes(response.data);
+      scrollViewRef.current?.scrollTo({y:0, animated:true});
 
     } catch(error){
       console.error(error);
@@ -255,6 +256,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
       />
 
       <ScrollView
+      ref={scrollViewRef}
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >

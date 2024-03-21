@@ -80,7 +80,7 @@ const SortMenu = ({ visible, onClose, onSelect }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          {["랭킹순", "거리순", "평점순", "리뷰순"].map((option) => (
+          {["정렬", "거리순", "평점순", "리뷰순"].map((option) => (
             <TouchableOpacity
               key={option}
               style={styles.modalButton}
@@ -125,7 +125,7 @@ const Divider = () => {
 const Store = ({route}) => {
     const navigation = useNavigation();
   const cafes = route.params;  
-  const [sortOption, setSortOption] = useState("ranking");
+  const [sortOption, setSortOption] = useState("align");
   const [sortedCafes, setSortedCafes] = useState(cafes);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -170,7 +170,7 @@ const Store = ({route}) => {
   // Header 컴포넌트
 const Header = ({ totalCafes, onSortPress, sortOption }) => {
     const optionToText = {
-      ranking: "랭킹순",
+      align: "정렬",
       distance: "거리순",
       rating: "평점순",
       review: "리뷰순",
@@ -212,7 +212,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
   const handleSelectSortOption = (option) => {
     const textToOption = {
-      "랭킹순": "ranking",
+      "정렬": "align",
       "거리순": "distance",
       "평점순": "rating",
       "리뷰순": "review",

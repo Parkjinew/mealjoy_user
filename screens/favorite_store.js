@@ -42,6 +42,16 @@ const FavoriteStore = ({route}) => {
     '16': '고기/구이',
     
   };
+  const storeinfo = async(id) => {
+    try{
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeinfo', {id : id})
+      console.log(response.data);
+      navigation.navigate('StoreInfo', response.data);
+    } catch(error){
+      console.error(error);
+    }
+    
+  }
 
   const renderRestaurants = () => {
     const restaurantItems = [];
@@ -49,26 +59,23 @@ const FavoriteStore = ({route}) => {
       const item = restaurants[i];
       const categoryLabel = categoryLabels[item.category_seq] || '기타';
       restaurantItems.push(
-    <View key={item.store_name} style={styles.restaurantItem}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => storeinfo(item.store_seq)}>
+    <View key={item.store_seq} style={styles.restaurantItem}>
         <Image source={{uri : item.store_IMG}} style={styles.restaurantImage} />
-      </TouchableOpacity>
       <View style={styles.restaurantDetailContainer}>
         <View style={styles.restaurantNameAndIcon}>
-          <TouchableOpacity >
             <Text style={styles.restaurantName}>{item.store_name}</Text>
-          </TouchableOpacity>
         </View>
-        <TouchableOpacity >
           <Text style={styles.restaurantcategory}>{categoryLabel}</Text>
           <View style={styles.ratingContainer}>
             <FontAwesome name="star" size={16} color="#FFD700" />
             <Text style={styles.restaurantRating}>{item.averageRating}</Text>
           </View>
           <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
-        </TouchableOpacity>
+  
       </View>
     </View>
+      </TouchableOpacity>
       );
   }
   return restaurantItems;
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
       marginRight: 20, // 아이콘과 이름 사이의 간격을 조
     },
       restaurantcategory:{
-          paddingTop:5,
+         
           paddingBottom:5,
       },
       restaurantItem: {
@@ -167,7 +174,9 @@ const styles = StyleSheet.create({
           backgroundColor: '#fff',
           borderRadius: 8,
           paddingLeft:15,
-          elevation: 3,
+          borderBottomWidth:1,
+            paddingBottom:16,
+            borderColor:'#ddd'
         },
         restaurantImage: {
           width: 120,
@@ -182,6 +191,8 @@ const styles = StyleSheet.create({
         restaurantName: {
           fontWeight: 'bold',
           fontSize: 20,
+          marginBottom:10,
+            marginTop:-15
         },
         ratingContainer: {
           flexDirection: 'row',

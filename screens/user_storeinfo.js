@@ -13,8 +13,11 @@ import { Foundation } from '@expo/vector-icons';
 
 
 const StoreInfo = ({route}) => {
-  const store = {route}.route.params;
-  console.log(store.store_name);
+  const data = {route}.route.params;
+  const store = data.store;
+  const menu = data.menu;
+  console.log(store);
+  console.log(menu);
 
   const foodData = [
     {
@@ -43,13 +46,16 @@ const StoreInfo = ({route}) => {
     setFavorite(!favorite);
   };
 
+  const getImageSource = (imageUri) => {
+    return imageUri ? { uri: imageUri } : require('../assets/logo.png');
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <Image
           style={styles.image}
-          source={require('../assets/cake.png')} // Replace with your image path
+          source={{uri : store.imageFilename}} // Replace with your image path
         />
         
         <View style={styles.body}>
@@ -67,9 +73,9 @@ const StoreInfo = ({route}) => {
         </View>
         <View style={styles.starContainer}>
           <AntDesign name="star" size={30} color="#FFD700" />
-          <Text style={styles.starRating}>5.0</Text>
+          <Text style={styles.starRating}>{store.averageRating}</Text>
           <TouchableOpacity>
-          <Text style={styles.reviewCount}>1,111개 리뷰 ▷</Text>
+          <Text style={styles.reviewCount}>{store.reviewCount}개 리뷰 ▷</Text>
           </TouchableOpacity>
         </View>
 
@@ -87,23 +93,21 @@ const StoreInfo = ({route}) => {
             <Text style={styles.iconText}>예약하기</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.subtitle}>타코가 맛있는 집</Text>
+        <Text style={styles.subtitle}>{store.store_desc}</Text>
         
 
-        {foodData.map((food) => {
+        {menu.map((food) => {
           console.log(typeof(food.image))
         
           return(
-            <TouchableOpacity key={food.id} style={styles.foodItem}>
+            <TouchableOpacity key={food.menu_seq} style={styles.foodItem}>
               <Image
-                style={styles.foodImage}
-                source={food.image} // Replace with your image path
-              />
+                  style={styles.foodImage}
+                  source={getImageSource(food.menu_img)}
+                />
               <View style={styles.foodInfo}>
-                <Text style={styles.foodTitle}>{food.title}</Text>
-                <Text style={styles.fooddiscription}>{food.discription}</Text>
-                <Text style={styles.foodReviews}>{food.reviews}</Text>
-                <Text>{food.con}</Text>
+                <Text style={styles.foodTitle}>{food.menu_name}</Text>
+                <Text style={styles.fooddiscription}>{food.menu_desc}</Text>
               </View>
             </TouchableOpacity>
           )

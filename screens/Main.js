@@ -46,30 +46,30 @@ const images = [
 const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   useEffect(() => {
     const fetchUserInfo = async () => {
       const storedUserInfo = await AsyncStorage.getItem('userInfo');
       if (storedUserInfo) {
-        const userInfo = JSON.parse(storedUserInfo);
         setIsLoggedIn(true);
-        setUserInfo(userInfo);
+        setUserInfo(JSON.parse(storedUserInfo));
       } else {
         setIsLoggedIn(false);
+        setUserInfo(null);
       }
     };
-  
+
     fetchUserInfo();
   }, []);
-
-  const [userInfo, setUserInfo] = useState(null);
   const handleHeartIconPress = async () => {
-    if (userInfo) {
+    console.log(userInfo[0].user_id)
+    if (isLoggedIn) {
       // 사용자가 로그인 상태일 때 수행할 작업
       try {
         // 예를 들어, 사용자 ID를 서버로 보내 관심 매장 목록을 요청하는 경우
-        const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', {id : userInfo.id});
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', {id : userInfo[0].user_id});
         // 서버로부터 받은 데이터를 처리
-       navigation.navigate('FavoritesScreen', { favorites: response.data });
+       navigation.navigate('FavoriteStore', response.data);
       } catch (error) {
         console.error("Error fetching favorites:", error);
       }
@@ -78,6 +78,8 @@ const Main = () => {
       navigation.navigate('HomeLogin');
     }
   };
+
+
   const handleUserIconPress = () => {
     if (isLoggedIn) {
       // 사용자가 로그인 상태면, 개인정보수정 페이지로 네비게이션
@@ -114,7 +116,7 @@ const Main = () => {
 
   const storeList = async (id) => {
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeList', {id : id})
 
       navigation.navigate('Store', response.data)
 
@@ -178,7 +180,7 @@ const Main = () => {
   const Stack = createStackNavigator();
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/search_result', JSON.stringify({
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/search_result', JSON.stringify({
         searchQuery: searchQuery
       }), {
         headers: {

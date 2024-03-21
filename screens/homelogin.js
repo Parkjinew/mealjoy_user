@@ -8,7 +8,8 @@ import {
     SafeAreaView, 
     TouchableWithoutFeedback,
     Keyboard,
-    Text
+    Text,
+    Alert
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
@@ -32,29 +33,30 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
   // 로그인 버튼 핸들러
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/signin', {
-        id: loginInfo.id,
-        password: loginInfo.password,
-      });
-       
-      await AsyncStorage.setItem('userInfo', JSON.stringify(response.data));
-      console.log('로그인 성공:', response.data);
-      // 로그인 성공 후 화면 이동 로직
-      navigation.navigate('Main'); // 예시입니다. 실제로는 Home 대신 목적지 화면의 이름을 사용해야 합니다.
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/signin', {
+            id: loginInfo.id,
+            password: loginInfo.password,
+        });
+        
+        // 서버로부터의 응답이 null인지 확인
+        if (response.data === null || response.data.length === 0) {
+            // 로그인 실패 처리
+            Alert.alert('로그인 실패', '아이디 또는 비밀번호를 확인해주세요.');
+        } else {
+            // 로그인 성공 처리
+            const userInfoString = JSON.stringify(response.data); // 사용자 정보를 문자열로 변환
+            await AsyncStorage.setItem('userInfo', userInfoString); // AsyncStorage에 저장
+            
+            console.log('로그인 성공:', response.data); // 서버로부터 받은 응답 로그에 출력
+            console.log('저장된 사용자 정보:', userInfoString); // 저장된 사용자 정보 로그에 출력
+            Alert.alert('로그인 성공', '환영합니다!')
+            navigation.navigate('Main'); // 화면 이동
+        }
     } catch (error) {
-      console.error('로그인 실패:', error);
-      Alert.alert('로그인 실패', '아이디 또는 비밀번호를 확인해주세요.');
+        console.error('로그인 요청 실패:', error);
+        Alert.alert('로그인 요청 실패', '네트워크 상태를 확인해주세요.');
     }
-  };
-// // 카카오 로그인 핸들러
-// const onKakaoLogin = () => {
-//   navigation.navigate('KakaoLogin');
-// };
-
-// // 회원가입 핸들러
-// const onSignUp = () => {
-//   navigation.navigate('SignUp');
-// };
+};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

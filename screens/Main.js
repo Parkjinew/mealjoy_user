@@ -45,6 +45,26 @@ const images = [
 ];
 const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      setIsLoggedIn(!!token); // !!를 사용하여 token이 있으면 true, 없으면 false로 설정
+    };
+
+    checkLoginStatus();
+  }, []);
+  const handleUserIconPress = () => {
+    if (isLoggedIn) {
+      // 로그인 상태면 사용자 페이지로 이동
+      navigation.navigate('Setting');
+    } else {
+      // 로그인 상태가 아니면 로그인 페이지로 이동
+      navigation.navigate('HomeLogin');
+    }
+  };
+
+
   const [searchQuery, setSearchQuery] = React.useState('');
     const navigation = useNavigation();
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
@@ -235,8 +255,8 @@ const Main = () => {
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('FavoriteStore')}>
           <Icon name="heart" size={24} color="#ff3b30" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-        <FontAwesome6 name="user" size={24} color="#ff3b30" onPress={() => navigation.navigate('Setting')}/>
+        <TouchableOpacity style={styles.tabItem} onPress={handleUserIconPress}>
+        <FontAwesome6 name="user" size={24} color="#ff3b30" />
         </TouchableOpacity>
       </View>
  )}

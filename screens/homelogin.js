@@ -63,7 +63,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
           onChangeText={(value) => handleLoginChange('id', value)}
           value={loginInfo.id}
         />
-          <Text style={styles.inputLabel}>비밀번호*</Text>
+          <Text style={styles.inputLabel2}>비밀번호*</Text>
         <TextInput
           style={styles.input}
           placeholder="비밀번호를 입력하세요 "
@@ -173,9 +173,16 @@ const styles = StyleSheet.create({
     //fontWeight: 'bold',
     marginBottom: 5, // 라벨과 입력 필드 사이의 간격
     // 필요한 다른 스타일을 추가합니다.
+    marginRight:290
+  },
+  inputLabel2: {
+    fontSize: 15, // 라벨의 글자 크기
+    color: 'black', // 라벨의 글자 색상
+    //fontWeight: 'bold',
+    marginBottom: 5, // 라벨과 입력 필드 사이의 간격
+    // 필요한 다른 스타일을 추가합니다.
     marginRight:280
   },
-
   input: {
     // ... other input styles ...
     height: 46,

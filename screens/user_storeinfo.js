@@ -99,7 +99,7 @@ const StoreInfo = ({route}) => {
       <TouchableOpacity style={styles.orderButton}>
         <Text style={styles.orderButtonText}>
           {/* 테이블 수 가져오기 수정필요 */}
-          {store.state === 0 ? '주문하기' : '줄서기'}
+          {store.tableCount === 0 ? '줄서기' : '주문하기'}
         </Text>
       </TouchableOpacity>
 

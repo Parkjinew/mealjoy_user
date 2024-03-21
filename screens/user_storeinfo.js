@@ -19,27 +19,6 @@ const StoreInfo = ({route}) => {
   console.log(store);
   console.log(menu);
 
-  const foodData = [
-    {
-      id: '1',
-      title: '지중해 타코',
-      discription: '매콤한 양념의 타코',
-      rating: '4.1',
-      reviews: '908 리뷰',
-      image: require('../assets/cake.png'),
-      con: '현재 이용가능',
-    },
-    {
-      id: '2',
-      title: '레드 소스 불고기 볼',
-      discription: '바삭하게 튀긴 불고기볼',
-      rating: '4.6',
-      reviews: '420 리뷰',
-      image: require('../assets/cake.png'),
-      con: '품절',
-    },
-    // Add more food items here
-  ];
   const [favorite, setFavorite] = useState(false);
 
   const toggleFavorite = () => {
@@ -100,7 +79,8 @@ const StoreInfo = ({route}) => {
           console.log(typeof(food.image))
         
           return(
-            <TouchableOpacity key={food.menu_seq} style={styles.foodItem}>
+            <View key={food.id} style={styles.foodItem}>
+
               <Image
                   style={styles.foodImage}
                   source={getImageSource(food.menu_img)}
@@ -109,7 +89,7 @@ const StoreInfo = ({route}) => {
                 <Text style={styles.foodTitle}>{food.menu_name}</Text>
                 <Text style={styles.fooddiscription}>{food.menu_desc}</Text>
               </View>
-            </TouchableOpacity>
+              </View>
           )
         })}
         </View>
@@ -117,8 +97,12 @@ const StoreInfo = ({route}) => {
       </ScrollView>
 
       <TouchableOpacity style={styles.orderButton}>
-        <Text style={styles.orderButtonText}>주문하기</Text>
+        <Text style={styles.orderButtonText}>
+          {/* 테이블 수 가져오기 수정필요 */}
+          {store.state === 0 ? '주문하기' : '줄서기'}
+        </Text>
       </TouchableOpacity>
+
 
       
       <View style={styles.menu}>

@@ -79,6 +79,20 @@ const StoreInfo = ({route}) => {
     
   }
 
+  const reservation = async() => {
+    if(isLoggedIn){
+      try{
+        console.log("Reservation");
+      } catch(error){
+        console.error(error);
+      }
+    } else {
+      // 로그인 상태가 아닐 때 로그인 화면으로 이동
+      navigation.navigate('HomeLogin');
+    }
+    
+  }
+
   const handlePress = () => {
     if (store.category_seq === 2 || store.tableCount > 0) {
       order();
@@ -127,7 +141,7 @@ const StoreInfo = ({route}) => {
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
             <Text style={styles.iconText}>예약하기</Text>
           </TouchableOpacity>

@@ -264,10 +264,11 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
       >
         
         {sortedCafes.map((cafe) => (
-          <View key={cafe.store_seq} style={styles.restaurantItem}>
           <TouchableOpacity onPress={() => storeinfo(cafe.store_seq)}>
+          <View key={cafe.store_seq} style={styles.restaurantItem}>
+          
               <Image source={{uri : cafe.imageFilename}} style={styles.restaurantImage} />
-          </TouchableOpacity>
+          
           <View style={styles.restaurantDetailContainer}>
               <View style={styles.restaurantNameAndIcon}>
                   <Text style={styles.restaurantName}>{cafe.store_name}</Text>
@@ -281,7 +282,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
               <Text style={styles.restaurantReviews}>{cafe.reviewCount}개의 리뷰</Text>
           </View>
           </View>
-
+          </TouchableOpacity>
         ))}
       </ScrollView>
 

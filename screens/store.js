@@ -123,22 +123,39 @@ const Divider = () => {
 
 
 const Store = ({route}) => {
-    const navigation = useNavigation();
-  const cafes = route.params;  
-  const [sortOption, setSortOption] = useState("align");
+  const navigation = useNavigation();
+  const cafes = route.params.data;  
+  const category = route.params.id;
+  const alignSet = route.params.align;
+  const [sortOption, setSortOption] = useState(alignSet);  
   const [sortedCafes, setSortedCafes] = useState(cafes);
   const [modalVisible, setModalVisible] = useState(false);
+
 
   const storeList = async (id) => {
     
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeList', {id : id})
 
-      navigation.push('Store', response.data)
+      navigation.push('Store', {data: response.data, id : id, align : "align"})
 
     } catch (error){
       console.error(error);
     }
+  }
+
+  const storeAlign = async(align) => {
+    console.log(align);
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeAlign', {align : align, category : category})
+      console.log(response.data);
+
+      navigation.push('Store', {data: response.data, id : category, align : align})
+
+    } catch(error){
+      console.error(error);
+    }
+
   }
 
 
@@ -192,7 +209,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
         <Divider />
         <View style={styles.subHeaderContainer}>
           <Text style={styles.storeCount}>{totalCafes}개의 매장</Text>
-          <TouchableOpacity onPress={onSortPress}>
+          <TouchableOpacity onPress={onSortPress} >
             <Text style={styles.sortButton}>{optionToText[sortOption]}</Text>
           </TouchableOpacity>
         </View>
@@ -220,6 +237,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
     setSortOption(textToOption[option]);
     setModalVisible(false);
+    storeAlign(textToOption[option]);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Image, Text, StyleSheet, TextInput, TouchableOpacity,
   ScrollView, SafeAreaView, KeyboardAvoidingView, Platform,
@@ -7,9 +7,9 @@ import {
 
 import { FontAwesome5, Entypo, FontAwesome6, FontAwesome } from '@expo/vector-icons';
 import {  Ionicons } from '@expo/vector-icons';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from 'axios';
 
 
 const  initialRestaurants=[
@@ -38,9 +38,6 @@ const initialFavorites = initialRestaurants.reduce((acc, restaurant) => {
 
 const FavoriteStore = () => {
   const navigation = useNavigation();
-
-  
-
   const [favorites, setFavorites] = useState(initialFavorites);
   const [restaurants, setRestaurants] = useState(initialRestaurants);
   const toggleFavorite = (id) => {

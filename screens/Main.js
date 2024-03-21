@@ -252,7 +252,14 @@ const Main = () => {
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
         <FontAwesome name="wechat" size={24} color="#ff3b30" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('FavoriteStore')}>
+        <TouchableOpacity  style={styles.tabItem}
+  onPress={() => {
+    if (isLoggedIn) {
+      navigation.navigate('FavoriteStore');
+    } else {
+      navigation.navigate('HomeLogin');
+    }
+  }}>
           <Icon name="heart" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={handleUserIconPress}>

@@ -114,7 +114,7 @@ const SearchResult = ({ route }) => {
             restaurantItems.push(
                 <View key={item.store_seq} style={styles.restaurantItem}>
                     <TouchableOpacity>
-                        <Image source={require('../assets/cake.png')} style={styles.restaurantImage} />
+                        <Image source={{uri : item.imageFilename}} style={styles.restaurantImage} />
                     </TouchableOpacity>
                     <View style={styles.restaurantDetailContainer}>
                         <View style={styles.restaurantNameAndIcon}>

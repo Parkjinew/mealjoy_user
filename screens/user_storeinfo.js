@@ -93,6 +93,11 @@ const StoreInfo = ({route}) => {
     
   }
 
+  const review = async() => {
+    navigation.navigate("ReviewList")
+    
+  }
+
   const handlePress = () => {
     if (store.category_seq === 2 || store.tableCount > 0) {
       order();
@@ -127,7 +132,7 @@ const StoreInfo = ({route}) => {
         <View style={styles.starContainer}>
           <AntDesign name="star" size={30} color="#FFD700" />
           <Text style={styles.starRating}>{store.averageRating}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => review()}>
           <Text style={styles.reviewCount}>{store.reviewCount}개 리뷰 ▷</Text>
           </TouchableOpacity>
         </View>

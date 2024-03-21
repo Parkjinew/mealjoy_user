@@ -46,6 +46,7 @@ const images = [
 const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [userInfo, setUserInfo] = useState(null);
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -58,7 +59,7 @@ const Main = () => {
         setUserInfo(null);
       }
     };
-
+    
     fetchUserInfo();
   }, []);
   const handleHeartIconPress = async () => {

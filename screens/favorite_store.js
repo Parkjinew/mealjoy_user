@@ -12,24 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
 
-const  initialRestaurants=[
-  {
-      id: '1',
-      name: '밀식초',
-      category: '한식',
-      rating: '9.5',
-      reviews: '908 리뷰',
-      imageUri: require('../assets/joy.png'), // 이미지 경로 예시
-    },
-    {
-        id: '2',
-        name: '밀식초',
-        category: '한식',
-        rating: '9.5',
-        reviews: '908 리뷰',
-        imageUri: require('../assets/coffe.png'), // 이미지 경로 예시
-      },
-];
 
 const initialFavorites = initialRestaurants.reduce((acc, restaurant) => {
   acc[restaurant.id] = true;
@@ -56,21 +38,23 @@ const FavoriteStore = () => {
   };
   
 
-  const renderRestaurant = ({ item }) => (
+  const renderRestaurants = () => {
+    const restaurantItems = [];
+    for (let i = 0; i < restaurants.length; i++) {
+      const item = restaurants[i];
+      const categoryLabel = categoryLabels[item.category_seq] || '기타';
+      restaurantItems.push(
     <View style={styles.restaurantItem}>
-      <TouchableOpacity onPress={() => { /* 이미지 클릭 관련 동작 */ }}>
-        <Image source={item.imageUri} style={styles.restaurantImage} />
+      <TouchableOpacity>
+        <Image source={{uri : item.imageFilename} style={styles.restaurantImage} />
       </TouchableOpacity>
       <View style={styles.restaurantDetailContainer}>
         <View style={styles.restaurantNameAndIcon}>
-          <TouchableOpacity onPress={() => { /* 식당 이름 클릭 관련 동작 */ }}>
+          <TouchableOpacity >
             <Text style={styles.restaurantName}>{item.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.heart} onPress={() => toggleFavorite(item.id)}>
-            <FontAwesome name={favorites[item.id] ? "heart" : "heart-o"} size={24} color="red" />
-          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => { /* 카테고리 클릭 관련 동작 */ }}>
+        <TouchableOpacity >
           <Text style={styles.restaurantcategory}>{item.category}</Text>
           <View style={styles.ratingContainer}>
             <FontAwesome name="star" size={16} color="#FFD700" />
@@ -80,7 +64,7 @@ const FavoriteStore = () => {
         </TouchableOpacity>
       </View>
     </View>
-  );
+  };
 
   
 

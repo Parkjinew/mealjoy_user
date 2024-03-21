@@ -49,7 +49,7 @@ const FavoriteStore = ({route}) => {
       const item = restaurants[i];
       const categoryLabel = categoryLabels[item.category_seq] || '기타';
       restaurantItems.push(
-    <View key={item.store_seq} style={styles.restaurantItem}>
+    <View key={item.store_name} style={styles.restaurantItem}>
       <TouchableOpacity>
         <Image source={{uri : item.store_IMG}} style={styles.restaurantImage} />
       </TouchableOpacity>
@@ -91,7 +91,7 @@ const FavoriteStore = ({route}) => {
           
         </View>
         <View>
-            <Text style={styles.total}>총 개</Text></View> 
+            <Text style={styles.total}>총 {restaurants.length}개</Text></View> 
 
           {renderRestaurants()}
         </ScrollView>

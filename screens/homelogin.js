@@ -33,7 +33,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
   // 로그인 버튼 핸들러
   const handleLogin = async () => {
     try {
-        const response = await axios.post('http://119.200.31.63:8090/botbuddies/signin', {
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/signin', {
             id: loginInfo.id,
             password: loginInfo.password,
         });

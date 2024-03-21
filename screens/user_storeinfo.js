@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Foundation } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 
 const StoreInfo = ({route}) => {
@@ -51,7 +52,7 @@ const StoreInfo = ({route}) => {
     return imageUri ? { uri: imageUri } : require('../assets/logo.png');
   };
 
-  const order = async() => {
+  const order = async(store_seq) => {
     if(isLoggedIn){
       try{
         console.log("order");
@@ -65,10 +66,13 @@ const StoreInfo = ({route}) => {
     
   }
 
-  const waiting = async() => {
+  const waiting = async(store_seq) => {
     if(isLoggedIn){
       try{
         console.log("waiting");
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitState', {userInfo : userInfo, store_seq : store_seq})
+        // navigation.navigate('TableingResult', response.data);
+
       } catch(error){
         console.error(error);
       }
@@ -79,7 +83,7 @@ const StoreInfo = ({route}) => {
     
   }
 
-  const reservation = async() => {
+  const reservation = async(store_seq) => {
     if(isLoggedIn){
       try{
         console.log("Reservation");
@@ -98,11 +102,11 @@ const StoreInfo = ({route}) => {
     
   }
 
-  const handlePress = () => {
+  const handlePress = (store_seq) => {
     if (store.category_seq === 2 || store.tableCount > 0) {
-      order();
+      order(store_seq);
     } else {
-      waiting();
+      waiting(store_seq);
     }
   };
 
@@ -146,7 +150,7 @@ const StoreInfo = ({route}) => {
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation(store.store_Seq)}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
             <Text style={styles.iconText}>예약하기</Text>
           </TouchableOpacity>
@@ -175,7 +179,7 @@ const StoreInfo = ({route}) => {
 
       </ScrollView>
 
-      <TouchableOpacity style={styles.orderButton}  onPress={handlePress}>
+      <TouchableOpacity style={styles.orderButton}  onPress={handlePress(store.store_seq)}>
         <Text style={styles.orderButtonText}>
           {/* 테이블 수 가져오기 수정필요 */}
           {store.category_seq === 2 ? "주문하기" :  store.tableCount === 0 ? '줄서기' : '주문하기'}

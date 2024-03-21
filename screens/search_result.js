@@ -121,6 +121,17 @@ const SearchResult = ({ route }) => {
       
     };
 
+    const storeinfo = async(id) => {
+      try{
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeinfo', {id : id})
+        console.log(response.data);
+        navigation.navigate('StoreInfo', response.data);
+      } catch(error){
+        console.error(error);
+      }
+      
+    }
+    
     const renderRestaurants = () => {
 
       if (restaurants.length === 0) {
@@ -136,10 +147,9 @@ const SearchResult = ({ route }) => {
             const item = restaurants[i];
             const categoryLabel = categoryLabels[item.category_seq] || '기타';
             restaurantItems.push(
+                    <TouchableOpacity onPress={() => storeinfo(item.store_seq)}>
                 <View key={item.store_seq} style={styles.restaurantItem}>
-                    <TouchableOpacity>
                         <Image source={{uri : item.imageFilename}} style={styles.restaurantImage} />
-                    </TouchableOpacity>
                     <View style={styles.restaurantDetailContainer}>
                         <View style={styles.restaurantNameAndIcon}>
                             <Text style={styles.restaurantName}>{item.store_name}</Text>
@@ -153,6 +163,7 @@ const SearchResult = ({ route }) => {
                         <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
                     </View>
                 </View>
+                    </TouchableOpacity>
             );
         }
         return restaurantItems;

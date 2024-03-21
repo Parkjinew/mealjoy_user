@@ -101,6 +101,26 @@ const SearchResult = ({ route }) => {
     
       loadAddress();
     }, []);
+    const categoryLabels = {
+      '1': '한식',
+      '2': '카페/디저트',
+      '3': '중국집',
+      '4': '분식',
+      '5': '버거',
+      '6': '치킨',
+      '7': '피자/양식',
+      '8': '일식/돈까스',
+      '9': '샌드위치',
+      '10': '찜/탕',
+      '11': '족발/보쌈',
+      '12': '샐러드',
+      '13': '아시안',
+      '14': '도시락/죽',
+      '15': '회/초밥',
+      '16': '고기/구이',
+      
+    };
+
     const renderRestaurants = () => {
 
       if (restaurants.length === 0) {
@@ -114,6 +134,7 @@ const SearchResult = ({ route }) => {
         const restaurantItems = [];
         for (let i = 0; i < restaurants.length; i++) {
             const item = restaurants[i];
+            const categoryLabel = categoryLabels[item.category_seq] || '기타';
             restaurantItems.push(
                 <View key={item.store_seq} style={styles.restaurantItem}>
                     <TouchableOpacity>
@@ -124,7 +145,7 @@ const SearchResult = ({ route }) => {
                             <Text style={styles.restaurantName}>{item.store_name}</Text>
                           
                         </View>
-                        <Text style={styles.restaurantCategory}>{item.category_seq}</Text>
+                        <Text style={styles.restaurantCategory}>{categoryLabel}</Text>
                         <View style={styles.restaurantRatingContainer}>
               <FontAwesome name="star" size={16} color="#ffd700" />
                 <Text style={styles.restaurantRating}> {item.averageRating}</Text>
@@ -224,8 +245,12 @@ const SearchResult = ({ route }) => {
         fontSize: 18,
         color: '#666',
     },
+    restaurantCategory:{
+        marginBottom:5
+    },
       restaurantRatingContainer:{
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom:5
       },
       backButton:{
         marginTop:7
@@ -256,6 +281,9 @@ const SearchResult = ({ route }) => {
             borderRadius: 8,
             paddingLeft:15,
             elevation: 3,
+            borderBottomWidth:1,
+            paddingBottom:8,
+            borderColor:'#ddd'
           },
           restaurantImage: {
             width: 120,
@@ -270,6 +298,8 @@ const SearchResult = ({ route }) => {
           restaurantName: {
             fontWeight: 'bold',
             fontSize: 20,
+            marginBottom:10,
+            marginTop:-15
           },
           ratingContainer: {
             flexDirection: 'row',

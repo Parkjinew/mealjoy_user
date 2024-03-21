@@ -49,9 +49,9 @@ const FavoriteStore = ({route}) => {
       const item = restaurants[i];
       const categoryLabel = categoryLabels[item.category_seq] || '기타';
       restaurantItems.push(
-    <View style={styles.restaurantItem}>
+    <View key={item.store_seq} style={styles.restaurantItem}>
       <TouchableOpacity>
-        <Image source={{uri : item.STORE_IMG}} style={styles.restaurantImage} />
+        <Image source={{uri : item.store_IMG}} style={styles.restaurantImage} />
       </TouchableOpacity>
       <View style={styles.restaurantDetailContainer}>
         <View style={styles.restaurantNameAndIcon}>

@@ -59,7 +59,7 @@ const Main = () => {
         setUserInfo(null);
       }
     };
-    
+
     fetchUserInfo();
   }, []);
   const handleHeartIconPress = async () => {
@@ -70,7 +70,7 @@ const Main = () => {
         // 예를 들어, 사용자 ID를 서버로 보내 관심 매장 목록을 요청하는 경우
         const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', {id : userInfo[0].user_id});
         // 서버로부터 받은 데이터를 처리
-       navigation.navigate('FavoriteStore', response.data);
+       navigation.navigate('FavoriteStore', {FavoriteStore : response.data});
       } catch (error) {
         console.error("Error fetching favorites:", error);
       }

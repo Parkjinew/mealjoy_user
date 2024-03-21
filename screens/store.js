@@ -134,11 +134,22 @@ const Store = ({route}) => {
     try{
       const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeList', {id : id})
 
-      navigation.navigate('Store', response.data)
+      navigation.push('Store', response.data)
 
     } catch (error){
       console.error(error);
     }
+  }
+
+
+  const storeinfo = async(id) => {
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : id})
+      navigation.navigate('StoreInfo'. response.data);
+    } catch(error){
+      console.error(error);
+    }
+    
   }
 
   const renderImagesRow = (imagesRow) => {
@@ -231,7 +242,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
         
         {sortedCafes.map((cafe) => (
           <View key={cafe.store_seq} style={styles.restaurantItem}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => StoreInfo(cafe.store_seq)}>
               <Image source={{uri : cafe.imageFilename}} style={styles.restaurantImage} />
           </TouchableOpacity>
           <View style={styles.restaurantDetailContainer}>

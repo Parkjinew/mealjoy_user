@@ -24,7 +24,7 @@ const Nick = () => {
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 */}
       <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+      <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()} >
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>닉네임 변경</Text>
@@ -57,6 +57,9 @@ const Nick = () => {
 };
 
 const styles = StyleSheet.create({
+  backbutton:{
+    zIndex:666
+  },
     nicksetting:{
         backgroundColor:'#efefef',
         alignSelf:'center',

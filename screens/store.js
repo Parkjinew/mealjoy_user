@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   Modal,
+  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
@@ -243,6 +244,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+
       <Header
         totalCafes={sortedCafes.length}
         onSortPress={handleSortPress}
@@ -376,6 +378,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop:Platform.OS === 'android' ? 100 : 0
   },
   iconContainer: {
     marginBottom: 20,

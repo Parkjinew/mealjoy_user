@@ -47,6 +47,28 @@ const images = [
     // ... 더 많은 이미지를 추가할 수 있습니다.
   ];
 
+  const categoryLabels = {
+    '1': '한식',
+    '2': '카페/디저트',
+    '3': '중국집',
+    '4': '분식',
+    '5': '버거',
+    '6': '치킨',
+    '7': '피자/양식',
+    '8': '일식/돈까스',
+    '9': '샌드위치',
+    '10': '찜/탕',
+    '11': '족발/보쌈',
+    '12': '샐러드',
+    '13': '아시안',
+    '14': '도시락/죽',
+    '15': '회/초밥',
+    '16': '고기/구이',
+    
+  };
+
+  
+
 // 정렬 팝업 메뉴 컴포넌트
 const SortMenu = ({ visible, onClose, onSelect }) => {
   return (
@@ -102,7 +124,7 @@ const Divider = () => {
 
 const Store = ({route}) => {
     const navigation = useNavigation();
-  const cafes = route.params;
+  const cafes = route.params;  
   const [sortOption, setSortOption] = useState("ranking");
   const [sortedCafes, setSortedCafes] = useState(cafes);
   const [modalVisible, setModalVisible] = useState(false);
@@ -151,7 +173,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
           showsHorizontalScrollIndicator={false}
         >
           <View>
-              {renderImagesRow(images.slice(0, 16))}
+              {renderImagesRow(images.slice(0, 17))}
           </View>
         </ScrollView>
   
@@ -206,21 +228,26 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
-         {/* 수빈수정 */}
+        
         {sortedCafes.map((cafe) => (
-          <View key={cafe.store_seq} style={styles.cafeContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('StoreInfo', cafe)}>
-            <Image source={cafe.image} style={styles.cafeImage} />
-            <View style={styles.cafeInfo}>
-              <Text style={styles.cafeName}>{cafe.store_name}</Text>
-              <Text style={styles.cafeRating}>{cafe.rating}</Text>
-              <Text style={styles.cafeReviewCount}>
-                {cafe.reviewCount} 리뷰
-              </Text>
-              <Text style={styles.cafeDescription}>{cafe.store_desc}</Text>
+          <View key={cafe.store_seq} style={styles.restaurantItem}>
+          <TouchableOpacity>
+              <Image source={{uri : cafe.imageFilename}} style={styles.restaurantImage} />
+          </TouchableOpacity>
+          <View style={styles.restaurantDetailContainer}>
+              <View style={styles.restaurantNameAndIcon}>
+                  <Text style={styles.restaurantName}>{cafe.store_name}</Text>
+                
+              </View>
+              <Text style={styles.restaurantCategory}>{categoryLabels[cafe.category_seq]}</Text>
+              <View style={styles.restaurantRatingContainer}>
+          <FontAwesome name="star" size={16} color="#ffd700" />
+          <Text style={styles.restaurantRating}> {cafe.averageRating}</Text>
             </View>
-            </TouchableOpacity>
+              <Text style={styles.restaurantReviews}>{cafe.reviewCount}개의 리뷰</Text>
           </View>
+          </View>
+
         ))}
       </ScrollView>
 
@@ -358,39 +385,55 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
   },
-  cafeContainer: {
-    flexDirection: "row",
-    padding: 10,
-    marginLeft: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+  restaurantItem: {
+    flexDirection: 'row',
+    marginVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingLeft:15,
+    borderBottomWidth:1,
+    paddingBottom:16,
+    borderColor:'#ddd'
   },
-  cafeImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
+  restaurantImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 8,
+    marginRight: 10,
+    resizeMode:'cover'
   },
-  cafeInfo: {
-    flex: 1,
-    paddingLeft: 10,
-    justifyContent: "center",
-  },
-  cafeName: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  cafeRating: {
-    fontSize: 16,
-    color: "#ff3b30",
-  },
-  cafeReviewCount: {
-    fontSize: 14,
-    color: "#999",
-  },
-  cafeDescription: {
-    fontSize: 12,
-    color: "#666",
-  },
+
+    restaurantDetailContainer: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+  restaurantNameAndIcon: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+  restaurantName: {
+          fontWeight: 'bold',
+          fontSize: 20,
+          marginBottom:10,
+          marginTop:-15
+        },
+  restaurantcategory:{
+          paddingTop:5,
+          paddingBottom:5,
+      },
+  restaurantRatingContainer:{
+      flexDirection: 'row',
+      marginBottom:5
+    },
+  restaurantRating: {
+          marginLeft: 0,
+          fontSize: 14,
+        },
+  restaurantReviews: {
+          fontSize: 12,
+          color: '#666',
+        },
   centeredView: {
     flex: 1,
     justifyContent: "flex-end",

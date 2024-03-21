@@ -133,7 +133,7 @@ const Main = () => {
   const Stack = createStackNavigator();
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/search_result', JSON.stringify({
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/search_result', JSON.stringify({
         searchQuery: searchQuery
       }), {
         headers: {

@@ -12,7 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useFocusEffect } from '@react-navigation/native';
 const SearchResult = ({ route }) => {
     const navigation = useNavigation();
     const { searchData } = route.params;
@@ -42,18 +42,26 @@ const SearchResult = ({ route }) => {
         };
     }, []);
 
-    const [favorites, setFavorites] = useState({});
 
-    const toggleFavorite = (id) => {
-        setFavorites((currentFavorites) => ({
-            ...currentFavorites,
-            [id]: !currentFavorites[id],
-        }));
-    };
+
+    useFocusEffect(
+      React.useCallback(() => {
+          const loadAddress = async () => {
+              const address = await AsyncStorage.getItem('selectedAddress');
+              if (address) {
+                  setSelectedAddress(address);
+              }
+          };
+
+          loadAddress();
+      }, [])
+  );
+
     const handleSelectAddress = async (addressData) => {
       const address = addressData.default_address;
       await saveAddress(address); // 선택된 주소를 저장
       setSelectedAddress(address);
+    
     };
 
     const saveAddress = async (address) => {

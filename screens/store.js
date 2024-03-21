@@ -132,7 +132,7 @@ const Store = ({route}) => {
   const storeList = async (id) => {
     
     try{
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeList', {id : id})
 
       navigation.push('Store', response.data)
 
@@ -145,7 +145,7 @@ const Store = ({route}) => {
   const storeinfo = async(id) => {
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : id})
-      
+      console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){
       console.error(error);

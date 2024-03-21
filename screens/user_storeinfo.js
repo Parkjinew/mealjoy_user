@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button, Linking  } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -84,7 +84,7 @@ const StoreInfo = ({route}) => {
             <AntDesign name="enviroment" size={20} color="black" />
             <Text style={styles.iconText}>매장위치</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => Linking.openURL(`tel:${store.store_phone}`)}>
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>

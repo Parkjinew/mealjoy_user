@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop:Platform.OS === 'android' ? 100 : 0
+    paddingTop:Platform.OS === 'android' ? 40 : 0
   },
   iconContainer: {
     marginBottom: 20,
@@ -519,6 +519,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   horizontalscrollView: {
+    marginTop: 15,
     maxHeight: 100,
   },
 });

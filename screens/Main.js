@@ -71,7 +71,7 @@ const Main = () => {
 
   const storeList = async (id) => {
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeList', {id : id})
 
       navigation.navigate('Store', response.data)
 

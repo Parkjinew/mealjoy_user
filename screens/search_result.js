@@ -280,9 +280,8 @@ const SearchResult = ({ route }) => {
             backgroundColor: '#fff',
             borderRadius: 8,
             paddingLeft:15,
-            elevation: 3,
             borderBottomWidth:1,
-            paddingBottom:8,
+            paddingBottom:16,
             borderColor:'#ddd'
           },
           restaurantImage: {

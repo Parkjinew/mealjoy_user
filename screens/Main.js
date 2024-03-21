@@ -38,7 +38,8 @@ const images = [
   { id: '15', uri: require('../assets/shushi.png'), label: '회/초밥' },
   { id: '16', uri: require('../assets/meet.png'), label: '고기/구이' },
   {id:'17'},
-  {id:'18'}
+  {id:'18'},
+  {id:'19'}
 
   // ... 더 많은 이미지를 추가할 수 있습니다.
 ];
@@ -143,6 +144,7 @@ const Main = () => {
   
       console.log(response.data);
       navigation.navigate('SearchResult', { searchData: response.data });
+      setSearchQuery('');
     } catch (error) {
       console.error("Error during the request:", error);
     }
@@ -205,6 +207,7 @@ const Main = () => {
       {renderImagesRow(images.slice(4, 8))}
       {renderImagesRow(images.slice(8, 12))}
       {renderImagesRow(images.slice(12, 16))}
+      {renderImagesRow(images.slice(16, 19))}
    </View>
       {/* 메인 컨텐츠 영역 */}
      

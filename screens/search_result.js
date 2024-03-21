@@ -67,8 +67,11 @@ const SearchResult = ({ route }) => {
         }
       });
   
-      // 직접 restaurants 상태를 업데이트하여 검색 결과 반영
+      // 검색 결과를 상태에 반영
       setRestaurants(response.data);
+  
+      // 검색창 내용 지우기
+      setSearchQuery('');
     } catch (error) {
       console.error("Error during the request:", error);
     }

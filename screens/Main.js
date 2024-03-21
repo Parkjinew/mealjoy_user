@@ -47,13 +47,37 @@ const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      const userInfo = await AsyncStorage.getItem('userInfo');
-      setIsLoggedIn(!!userInfo); // userInfo가 있으면 true, 없으면 false
+    const fetchUserInfo = async () => {
+      const storedUserInfo = await AsyncStorage.getItem('userInfo');
+      if (storedUserInfo) {
+        const userInfo = JSON.parse(storedUserInfo);
+        setIsLoggedIn(true);
+        setUserInfo(userInfo);
+      } else {
+        setIsLoggedIn(false);
+      }
     };
-
-    checkLoginStatus();
+  
+    fetchUserInfo();
   }, []);
+
+  const [userInfo, setUserInfo] = useState(null);
+  const handleHeartIconPress = async () => {
+    if (userInfo) {
+      // 사용자가 로그인 상태일 때 수행할 작업
+      try {
+        // 예를 들어, 사용자 ID를 서버로 보내 관심 매장 목록을 요청하는 경우
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', {id : userInfo.id});
+        // 서버로부터 받은 데이터를 처리
+       navigation.navigate('FavoritesScreen', { favorites: response.data });
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
+    } else {
+      // 로그인 상태가 아닐 때 로그인 화면으로 이동
+      navigation.navigate('HomeLogin');
+    }
+  };
   const handleUserIconPress = () => {
     if (isLoggedIn) {
       // 사용자가 로그인 상태면, 개인정보수정 페이지로 네비게이션
@@ -252,14 +276,7 @@ const Main = () => {
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
         <FontAwesome name="wechat" size={24} color="#ff3b30" />
         </TouchableOpacity>
-        <TouchableOpacity  style={styles.tabItem}
-  onPress={() => {
-    if (isLoggedIn) {
-      navigation.navigate('FavoriteStore');
-    } else {
-      navigation.navigate('HomeLogin');
-    }
-  }}>
+        <TouchableOpacity  style={styles.tabItem} onPress={handleHeartIconPress}>
           <Icon name="heart" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={handleUserIconPress}>

@@ -19,7 +19,7 @@ const SearchResult = ({ route }) => {
     console.log(searchData);
     const [selectedAddress, setSelectedAddress] = useState('동구 대명동');
     const [restaurants, setRestaurants] = useState(searchData);
-    
+    const [searchQuery, setSearchQuery] = useState('');
 
     const [keyboardVisible, setKeyboardVisible] = React.useState(false);
     React.useEffect(() => {
@@ -56,6 +56,23 @@ const SearchResult = ({ route }) => {
           loadAddress();
       }, [])
   );
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/search_result', JSON.stringify({
+        searchQuery: searchQuery
+      }), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      // 직접 restaurants 상태를 업데이트하여 검색 결과 반영
+      setRestaurants(response.data);
+    } catch (error) {
+      console.error("Error during the request:", error);
+    }
+  };
 
     const handleSelectAddress = async (addressData) => {
       const address = addressData.default_address;
@@ -144,8 +161,10 @@ const SearchResult = ({ route }) => {
                                 style={styles.searchInput}
                                 placeholder="지역,음식,메뉴검색"
                                 placeholderTextColor="#888"
+                                value={searchQuery}
+                                onChangeText={setSearchQuery}
                             />
-                            <TouchableOpacity onPress={() => navigation.navigate('SearchResult')}>
+                            <TouchableOpacity onPress={handleSearch}>
                                 <EvilIcons name="search" size={24} color="black" style={styles.searchIcon} />
                             </TouchableOpacity>
                         </View>

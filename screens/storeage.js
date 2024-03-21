@@ -37,6 +37,7 @@ export default function ImageUploader() {
         const downloadURL = await uploadImage(result.assets[0].uri);
         console.log('File available at', downloadURL);
         setImage(downloadURL); // 스토리지 URL을 사용하여 이미지를 표시
+        console.log(downloadURL);
       } catch (error) {
         console.error("Upload failed", error);
       }
@@ -56,7 +57,8 @@ export default function ImageUploader() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      {/* {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
+      {<Image source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/northern-net-417806.appspot.com/o/images%2F2024-03-20T10%3A18%3A39.615Z?alt=media&token=de16aedf-6af2-497d-b2db-c99518dd0ae8' }} style={{ width: 200, height: 200 }} />}
     </View>
   );
 }

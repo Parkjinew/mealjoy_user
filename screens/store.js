@@ -264,8 +264,8 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
       >
         
         {sortedCafes.map((cafe) => (
-          <TouchableOpacity onPress={() => storeinfo(cafe.store_seq)}>
-          <View key={cafe.store_seq} style={styles.restaurantItem}>
+          <TouchableOpacity key={cafe.store_seq} onPress={() => storeinfo(cafe.store_seq)}>
+          <View  style={styles.restaurantItem}>
           
               <Image source={{uri : cafe.imageFilename}} style={styles.restaurantImage} />
           

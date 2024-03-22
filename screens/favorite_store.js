@@ -21,7 +21,44 @@ const FavoriteStore = ({route}) => {
   const { FavoriteStore } = route.params;
   console.log(FavoriteStore);
   const [restaurants, setRestaurants] = useState(FavoriteStore);
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
+    fetchUserInfo();
+  }, []);
+
+  const handleHeartIconPress = async () => {
+    console.log(userInfo)
+    if (userInfo) { // userInfo 상태를 통해 로그인 상태 확인
+      try {
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', { id: userInfo[0].user_id });
+        navigation.navigate('FavoriteStore', { FavoriteStore: response.data });
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
+    } else {
+      navigation.navigate('HomeLogin');
+    }
+  };
+  const handleUserIconPress = () => {
+    if (userInfo) {
+      // 사용자가 로그인 상태면, 개인정보수정 페이지로 네비게이션
+      navigation.navigate('SettingsScreen');
+    } else {
+      // 사용자가 로그인 상태가 아니면, 로그인 페이지로 네비게이션
+      navigation.navigate('HomeLogin');
+    }
+  };
 
   const categoryLabels = {
     '1': '한식',
@@ -110,16 +147,16 @@ const FavoriteStore = ({route}) => {
           <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Main')}>
           <Entypo name="home" size={24} color="#ff3b30" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('SearchResult')}>
+        <TouchableOpacity style={styles.tabItem} >
           <FontAwesome name="search" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
           <FontAwesome5 name="robot" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem}>
-          <FontAwesome name="heart" size={24} color="#ff3b30" onPress={() => navigation.navigate('ReviewWrite')}/>
+          <FontAwesome name="heart" size={24} color="#ff3b30" onPress={handleHeartIconPress}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('OpenNaverMap')}>
+        <TouchableOpacity style={styles.tabItem} onPress={handleUserIconPress}>
           <FontAwesome6 name="user" size={24} color="#ff3b30" />
         </TouchableOpacity>
         </View>

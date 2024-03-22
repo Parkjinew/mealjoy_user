@@ -70,7 +70,15 @@ const StoreInfo = ({route}) => {
     if(isLoggedIn){
       try{
         console.log("waiting");
-        const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitState', {userInfo : userInfo, store_seq : store_seq})
+        
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitState', {user_id : userInfo[0].user_id})
+        
+        console.log(response.data);
+
+        if(response.data == 0){
+          console.log("웨이팅 가능");
+        }
+
         // navigation.navigate('TableingResult', response.data);
 
       } catch(error){
@@ -179,7 +187,7 @@ const StoreInfo = ({route}) => {
 
       </ScrollView>
 
-      <TouchableOpacity style={styles.orderButton}  onPress={handlePress(store.store_seq)}>
+      <TouchableOpacity style={styles.orderButton}  onPress={() => handlePress(store.store_seq)}>
         <Text style={styles.orderButtonText}>
           {/* 테이블 수 가져오기 수정필요 */}
           {store.category_seq === 2 ? "주문하기" :  store.tableCount === 0 ? '줄서기' : '주문하기'}

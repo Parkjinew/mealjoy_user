@@ -91,12 +91,12 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
         <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
     <Text style={styles.buttonText}>로그인</Text>
   </TouchableOpacity>
-  <TouchableOpacity style={[styles.button, styles.buttonSignUp]} onPress={onSignUp}>
+  <TouchableOpacity style={[styles.button, styles.buttonSignUp]} onPress={() => navigation.navigate('SignUp')}>
     <Text style={styles.buttonText}>회원가입</Text>
   </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.buttonKakao} onPress={onKakaoLogin}>
+        <TouchableOpacity style={styles.buttonKakao} onPress={() => navigation.navigate('KakaoLogin')}>
         <Image
         source={require('../assets/Large.png')} // 이미지 파일 경로를 확인하세요
         style={styles.kakaoLoginImage}

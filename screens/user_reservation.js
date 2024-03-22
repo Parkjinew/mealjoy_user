@@ -26,7 +26,7 @@ const calendarTheme = {
   selectedDayTextColor: '#ffffff',
 };
 
-const App = () => {
+const Reservation = () => {
     const scrollViewRef = useRef(null);
     const [favorite, setFavorite] = useState(false);
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
@@ -368,4 +368,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Reservation;

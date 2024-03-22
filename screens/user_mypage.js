@@ -170,8 +170,8 @@ const SettingsScreen = () => {
         <HeaderContainer />
         <View style={{ flex: 1 }}>
 
-          <TouchableOpacity>
-          <View style={styles.menuItem}>
+          <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+          <View style={styles.menuItem} >
             <Ionicons name="person-outline" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
@@ -192,8 +192,8 @@ const SettingsScreen = () => {
           </View>
           </TouchableOpacity>
 
-            <TouchableOpacity>
-          <View style={styles.menuItem}>
+            <TouchableOpacity onPress={() => navigation.navigate('Reservation')}>
+          <View style={styles.menuItem} >
             <Octicons name="check-circle" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
@@ -218,8 +218,8 @@ const SettingsScreen = () => {
         </TouchableOpacity>
 
 
-        <TouchableOpacity>
-          <View style={styles.menuItem}>
+        <TouchableOpacity onPress={() => navigation.navigate('ReviewWrite')}>
+          <View style={styles.menuItem} >
             <MaterialIcons name="rate-review" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}

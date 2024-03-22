@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f2f2f2',
     marginBottom: 20, // Add some bottom margin to space out the header
+    paddingTop:60
   },
 
 

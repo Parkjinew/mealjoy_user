@@ -60,7 +60,7 @@ const TableingResult = ({route}) => {
           <Text style={styles.detailValue}>{wait.people_num}명</Text>
         </View> 
         <View style={styles.wait}>
-          <Text style={styles.detailwait}>남은 대기팀 : {wait.count}팀</Text>
+          <Text style={styles.detailwait}>남은 대기팀 : {wait.count-1}팀</Text>
          
         </View>
         <View style={styles.actionRow}>
@@ -76,23 +76,7 @@ const TableingResult = ({route}) => {
       {/* Include icons or images for the navigation bar as needed */}
 
       </ScrollView>
-       <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-        <Entypo name="home" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('SearchResult')}>
-          <Icon name="search" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
-        <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('FavoriteStore')}>
-          <Icon name="heart" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-        <FontAwesome6 name="user" size={24} color="#ff3b30" onPress={() => navigation.navigate('Setting')}/>
-        </TouchableOpacity>
-      </View>
+       
       
     </View>
     </SafeAreaView>
@@ -208,6 +192,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     marginBottom: 5,
+    marginTop: 32,
   },
   headerText: {
     fontSize: 18,

@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-const WatingSetup = () => {
+const WatingSetup = ({route}) => {
   const [inputText, setInputText] = useState('');
   const [count, setCount] = useState(4); // 시작 인원수를 4로 설정합니다.
-  const [waitingCount] = useState(3); // 현재 대기 인원을 3명으로 설정합니다.
+  const data = {route}.route.params;
+  const waitingCount = data.count;
+  const user = data.user;
+  const store = data.store;
+  const navigation = useNavigation();
+  
+  console.log(data);
 
   // 인원수를 증가시키는 함수
   const incrementCount = () => {
@@ -21,17 +29,35 @@ const WatingSetup = () => {
     }
   };
 
+  const wait = async(count) => {
+
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {user_id : user.user_id, store_seq : store.store_seq, people_num : count})
+      navigation.navigate("TableingResult", {waitInfo:response.data, store:store.store_name});
+
+    } catch(error){
+      console.error(error);
+    }
+
+  }
+
   return (
+  
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <AntDesign name="arrowleft" size={24} color="black" />
-        <Text style={styles.headerTitle}>웨이팅</Text>
-      </View>
-      <Text style={styles.waitingCountText}>현재 {waitingCount}명 대기중</Text>
+      <View style={styles.head}>
+        <View>
+          <TouchableOpacity style={styles.backbutton}>
+          <AntDesign name="arrowleft" size={24} color="black" /></TouchableOpacity></View>
+        <View>
+       <Text style={styles.waitingCountText}>현재 {waitingCount}명 대기중</Text>
+          </View>
+          <View></View>
+        </View>
+
       <View style={styles.card}>
         <View style={styles.inputGroup}>
           <Text style={styles.label}>매장명</Text>
-          <Text style={styles.input}>스페셜 나이트 충장점</Text>
+          <Text style={styles.input}>{store.store_name}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.inputGroup}>
@@ -52,7 +78,7 @@ const WatingSetup = () => {
          - 원격 줄서기 신청 후 매장에 연락없이 방문하지 않으면 사용이 제한될 수 있습니다.
         </Text>
         <View style={styles.divider} />
-        <View style={styles.inputGroup}>
+        {/* <View style={styles.inputGroup}>
           <TextInput
             style={styles.textArea}
             multiline
@@ -62,8 +88,8 @@ const WatingSetup = () => {
             placeholder="최대 50자까지 작성 가능"
           />
           <Text style={styles.counter}>요청사항 {inputText.length} / 50</Text>
-        </View>
-        <TouchableOpacity style={styles.button}>
+        </View> */}
+        <TouchableOpacity style={styles.button} onPress={() => wait(count)}>
           <Text style={styles.buttonText}>줄서기</Text>
         </TouchableOpacity>
       </View>
@@ -73,9 +99,18 @@ const WatingSetup = () => {
 
 
 const styles = StyleSheet.create({
+  backbutton:{
+      paddingTop:25,
+      paddingLeft:20
+  },
+  head:{
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop:50
   },
   header: {
     
@@ -187,6 +222,7 @@ const styles = StyleSheet.create({
     textAlign: 'center', // Ensure text is centered
     marginVertical: 20, // Add vertical margin for spacing
     alignSelf: 'center', // Center in the parent view
+    marginLeft:-30
   },
   
 

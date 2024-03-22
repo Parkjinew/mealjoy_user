@@ -159,6 +159,13 @@ const TableingResult = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  noWaitContainer: {
+    alignItems: 'center',
+  },
+  noWaitText:{
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: 'white' // 이 색상은 상태 표시줄 배경색과 일치해야 합니다.

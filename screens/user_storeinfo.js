@@ -92,11 +92,8 @@ const StoreInfo = ({route}) => {
         console.log(response.data);
 
         if(response.data == 0){
-          // const waitRespon = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {user_id : userInfo[0].user_id, store_seq : store_seq})
-                   
-          // navigation.navigate('TableingResult', {waitInfo : waitRespon.data, store : store.store_name});
-
-          setDialogVisible(true);
+          const response = await axios.post('http://211.227.224.159:8090/botbuddies/getCount', {store_seq : store.store_seq})
+          navigation.navigate('WatingSetup', {user: userInfo[0], store: store, count:response.data}); 
 
         } else{
 
@@ -129,25 +126,7 @@ const StoreInfo = ({route}) => {
     
   }
 
-  const handleCancel = () => {
-    setDialogVisible(false);
-  };
-  
-  const handleConfirm = async () => {
-    // 서버에 인원수를 포함하여 wait 요청 보내기
-    const waitResponse = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {
-      user_id: userInfo[0].user_id,
-      store_seq: store.store_seq, // storeSeq 는 현재 선택된 매장의 ID
-      people_num: peopleNum
-    });
-  
-    // 응답 처리 및 다음 페이지로 이동
-    navigation.navigate('TableingResult', {waitInfo: waitResponse.data, store: store.storeName}); // storeName 은 현재 선택된 매장의 이름
-  
-    // 대화상자 숨기기
-    setDialogVisible(false);
-  };
-
+    
 
   const reservation = async(store_seq) => {
     if(isLoggedIn){
@@ -185,18 +164,6 @@ const StoreInfo = ({route}) => {
 
     
     <View style={styles.container}>
-      <Dialog.Container visible={dialogVisible}>
-        <Dialog.Title>인원수 입력</Dialog.Title>
-        <Dialog.Input
-          placeholder="인원수를 입력해주세요"
-          keyboardType="numeric"
-          onChangeText={(text) => setPeopleNum(text)}
-          value={peopleNum}
-        />
-        <Dialog.Button label="취소" onPress={handleCancel} />
-        <Dialog.Button label="확인" onPress={() => handleConfirm()} />
-      </Dialog.Container>
-
       <ScrollView>
         <Image
           style={styles.image}

@@ -27,12 +27,13 @@ const OrderList = ({route}) => {
       for (let i = 0; i < restaurants.length; i++) {
         const item = restaurants[i];
         restaurantItems.push(
-      <View style={styles.menuItem}>
+      <View key={item.id} style={styles.menuItem}>
         <Image source={{uri : item.image_filenames}} style={styles.menuImage} />
         <View style={styles.menuDetails}>
           <Text style={styles.menuTitle}>{item.store_name}</Text>
-          <Text style={styles.menuSubtitle}>아</Text>
-          <Text style={styles.menuPrice}>가격</Text>   
+          <Text style={styles.menuSubtitle}>{item.menu_names}</Text>
+          <Text style={styles.menuPrice}>총 {item.total_amount}원</Text>
+          <Text style={styles.menuSubtitle2}>{item.menu_names}</Text>
         </View>
         <TouchableOpacity >
             <Text style={styles.orderButtonText}>리뷰 남기기</Text>
@@ -45,9 +46,9 @@ const OrderList = ({route}) => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-          
-      <View style={styles.container}>
+        <SafeAreaView style={styles.safeArea}>
+
+        <ScrollView>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backrow}>
@@ -57,7 +58,7 @@ const OrderList = ({route}) => {
           <View style={{ paddingHorizontal: 16 }}></View>
         </View>
         {renderRestaurants()}
-       
+        </ScrollView>
         {/* Tab Bar */}
         <View style={styles.tabBar}>
           <TouchableOpacity style={styles.tabItem}>
@@ -76,18 +77,23 @@ const OrderList = ({route}) => {
             <FontAwesome6 name="user" size={24} color="#ff3b30" />
           </TouchableOpacity>
         </View>
-      </View>
+     
       </SafeAreaView>
     );
   };
   
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff', // 이 배경색은 상단 노치와 하단 제스처 영역의 배경색입니다.
+  },
     backrow:{
       paddingLeft:15
     },
   container: {
     flex: 1,
+    
   },
   header: {
     flexDirection: 'row',// 중앙 정렬을 위해 space-between 사용
@@ -110,6 +116,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeee',
+    paddingTop : 20
   },
   menuImage: {
     width: 80,
@@ -130,6 +137,11 @@ const styles = StyleSheet.create({
     color: '#666666',
     fontSize: 14,
   },
+  menuSubtitle2: {
+    marginTop:0,
+    color: '#666666',
+    fontSize: 14,
+  },
   menuPrice: {
     fontSize: 16,
     color: '#ff3b30',
@@ -145,8 +157,10 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   orderButtonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 14,
+    marginTop:2,
+    
   },
   tabBar: {
     flexDirection: 'row',

@@ -12,6 +12,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Foundation } from '@expo/vector-icons';
 import IMP from 'iamport-react-native'; 
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
@@ -42,18 +44,18 @@ const TableButton = ({ id, selected, onPress }) => (
         onPress={() => onSelect(food.id)}
         activeOpacity={0.6}
       >
-        <Image style={styles.foodImage} source={food.image} />
+        <Image style={styles.foodImage} source={{uri : food.menu_img}} />
         <View style={styles.foodInfo}>
-          <Text style={styles.foodTitle}>{food.title}</Text>
-          <Text style={styles.fooddiscription}>{food.discription}</Text>
-          <Text style={styles.foodprice}>{food.price}</Text>
+          <Text style={styles.foodTitle}>{food.menu_name}</Text>
+          <Text style={styles.fooddiscription}>{food.menu_desc}</Text>
+          <Text style={styles.foodprice}>{food.price}원</Text>
         </View>
         <View style={styles.stepperContainer}>
-          <TouchableOpacity onPress={() => onDecrement(food.id)} style={styles.stepperButton}>
+          <TouchableOpacity onPress={() => onDecrement(food.menu_seq)} style={styles.stepperButton}>
             <Text style={styles.stepperButtonText}>-</Text>
           </TouchableOpacity>
           <Text style={styles.quantityText}>{quantity}</Text>
-          <TouchableOpacity onPress={() => onIncrement(food.id)} style={styles.stepperButton}>
+          <TouchableOpacity onPress={() => onIncrement(food.menu_seq)} style={styles.stepperButton}>
             <Text style={styles.stepperButtonText}>+</Text>
           </TouchableOpacity>
         </View>
@@ -61,9 +63,20 @@ const TableButton = ({ id, selected, onPress }) => (
     );
   };
 
-export default function UserOrder({navigation}){
+  
+
+export default function UserOrder({route}){
+  const navigation = useNavigation();
   const [selectedFoods, setSelectedFoods] = useState([]);
-     const [quantities, setQuantities] = useState({});
+  const [quantities, setQuantities] = useState({});
+
+  const data = {route}.route.params;
+  console.log(data)
+  const user_id = data.user_id;
+  const store = data.store.store;
+  const menu = data.store.menu;
+  const tableList = data.tableList;
+
 
    
 
@@ -84,30 +97,11 @@ export default function UserOrder({navigation}){
           setSelectedFoods([...selectedFoods, foodId]);
         }
       };
-    const foodData = [
-        {
-          id: '1',
-          title: '지중해 타코',
-          discription: '매콤한 양념의 타코',
-          rating: '4.1',
-          price: '20,000원',
-          image: require('../assets/cake.png'),
-        },
-        {
-          id: '2',
-          title: '레드 소스 불고기 볼',
-          discription: '바삭하게 튀긴 불고기볼',
-          rating: '4.6',
-          price: '18,000원',
-          image: require('../assets/cake.png'),
-        },
-        // Add more food items here
-      ];
 
-      const totalPrice = foodData.reduce((acc, food) => {
+      const totalPrice = menu.reduce((acc, food) => {
         // 가격에서 숫자만 추출하고, 수량을 곱합니다.
-        const price = parseInt(food.price.replace(/[^0-9]/g, ""), 10); // '20,000원'에서 '20000'으로 변환
-        const quantity = quantities[food.id] || 0;
+        const price = food.price
+        const quantity = quantities[food.menu_seq] || 0;
         return acc + price * quantity;
       }, 0);
 
@@ -118,24 +112,35 @@ export default function UserOrder({navigation}){
     };
 
 
-  const [favorite, setFavorite] = useState(false);
+    const [tables, setTables] = useState(
+      tableList.map(table => ({
+        id: table.table_num,
+        status: "available",
+        selected: false,
+      }))
+    );
 
-  const toggleFavorite = () => {
-    setFavorite(!favorite);
+    const Payment = async () => {
+      // 주문 데이터 생성: 선택한 메뉴의 menu_seq와 수량
+      const orderDetails = menu.filter(({ menu_seq }) => quantities[menu_seq] > 0)
+          .map(({ menu_seq }) => ({
+              menu_seq,
+              quantity: quantities[menu_seq],
+          }));
+
+      // 여기에 주문 처리 로직 (예: 서버로 주문 데이터 전송) 추가
+      console.log('주문 데이터:', orderDetails);
+
+      try{
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails})
+        navigation.navigate("Payment",{totalPrice:totalPrice});
+      } catch(error){
+        console.error(error);
+      }
+
+      
   };
-
-  const [tables, setTables] = useState([
-    { id: 1, status: "available", selected: false },
-    { id: 2, status: "available", selected: false },
-    { id: 4, status: "available", selected: false },
-    { id: 6, status: "available", selected: false },
-    { id: 8, status: "available", selected: false },
-  ]);
-  
-  
- 
-        
-        
+    
         const TableStatus = ({ number, selected, onToggle }) => (
           <TouchableOpacity
             style={[styles.tableButton, selected && styles.selectedTableButton]}
@@ -161,54 +166,23 @@ export default function UserOrder({navigation}){
             />
           ))}
 
+        
+
           
 
-        return (
+    return (
     <View style={styles.container}>
       <ScrollView>
         <Image
           style={styles.image}
-          source={require('../assets/cake.png')} // Replace with your image path
+          source={{uri: store.imageFilename}} // Replace with your image path
         />
         
         <View style={styles.body}>
 
         <View style={styles.starContainer}>
         <Text style={styles.title}>타코</Text>
-        <TouchableOpacity onPress={toggleFavorite}>
-        <Ionicons
-
-          name={favorite ? "heart" : "heart-outline"}
-          size={30}
-          color={favorite ? "#ff3b30" : "#ff3b30"}
-          style={{ marginTop: 5, marginLeft: 5 }}
-        />
-      </TouchableOpacity>
-        </View>
-        <View style={styles.starContainer}>
-          <AntDesign name="star" size={30} color="#FFD700" />
-          <Text style={styles.starRating}>5.0</Text>
-          <TouchableOpacity>
-          <Text style={styles.reviewCount}>1,111개 리뷰 ▷</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.telContainer}>
-          <TouchableOpacity style={styles.iconContainer}>
-            <AntDesign name="enviroment" size={20} color="black" />
-            <Text style={styles.iconText}>매장위치</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
-            <Foundation name="telephone" size={20} color="black" />
-            <Text style={styles.iconText}>전화번호</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer}>
-            <FontAwesome name="calendar-check-o" size={18} color="black" />
-            <Text style={styles.iconText}>예약하기</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.subtitle}>타코가 맛있는 집</Text>
-        
+        </View>       
         
 
         <View style={styles.tableButtonContainer}>
@@ -223,15 +197,15 @@ export default function UserOrder({navigation}){
       </View>
 
       
-      {foodData.map((food) => (
+      {menu.map((food) => (
   <MenuItem
-    key={food.id}
+    key={food.menu_seq}
     food={food}
-    selected={selectedFoods.includes(food.id)}
-    onSelect={() => toggleFoodSelection(food.id)}
-    onIncrement={() => onIncrement(food.id)}
-    onDecrement={() => onDecrement(food.id)}
-    quantity={quantities[food.id] || 0} // 이미 정의된 prop입니다.
+    selected={selectedFoods.includes(food.menu_seq)}
+    onSelect={() => toggleFoodSelection(food.menu_seq)}
+    onIncrement={() => onIncrement(food.menu_seq)}
+    onDecrement={() => onDecrement(food.menu_seq)}
+    quantity={quantities[food.menu_seq] || 0} // 이미 정의된 prop입니다.
   />
 ))}
 
@@ -242,7 +216,7 @@ export default function UserOrder({navigation}){
 
       </ScrollView>
 
-       <TouchableOpacity style={styles.orderButton} onPress={() => navigation.push('Payment')}>
+       <TouchableOpacity style={styles.orderButton} onPress={() => Payment()}>
         <Text style={styles.orderButtonText} >
           {`${totalPrice.toLocaleString()}원 주문하기`}
         </Text>

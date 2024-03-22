@@ -27,6 +27,8 @@ import StoreInfo from './screens/user_storeinfo';
 import WatingSetup from './screens/wating_setup';
 import ReviewList from './screens/user_review';
 import SettingsScreen from './screens/user_mypage';
+import Payment from './screens/payment';
+
 
 const Stack = createStackNavigator();
 
@@ -55,12 +57,13 @@ export default function App() {
         <Stack.Screen name="ReservaList" component={ReservaList} options={{ headerShown: false }}/>
         <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
         <Stack.Screen name="TableingResult" component={TableingResult} options={{ headerShown: false }}/>
-        <Stack.Screen name="UserOrder " component={UserOrder } options={{ headerShown: false }}/>
+        <Stack.Screen name="UserOrder" component={UserOrder} options={{ headerShown: false }}/>
         <Stack.Screen name="Reservation" component={Reservation} options={{ headerShown: false }}/>
         <Stack.Screen name="StoreInfo" component={StoreInfo} options={{ headerShown: false }}/>
         <Stack.Screen name="WatingSetup" component={WatingSetup} options={{ headerShown: false }}/>
         <Stack.Screen name="ReviewList" component={ReviewList} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -62,7 +62,11 @@ const StoreInfo = ({route}) => {
   const order = async(store_seq) => {
     if(isLoggedIn){
       try{
-        console.log("order");
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : store_seq})
+        const tableList = await axios.post('http://211.227.224.159:8090/botbuddies/getTable', {store_seq : store_seq})
+        
+        navigation.navigate('UserOrder', {user_id:userInfo[0].user_id, store:response.data, tableList:tableList.data})
+        
       } catch(error){
         console.error(error);
       }
@@ -72,6 +76,8 @@ const StoreInfo = ({route}) => {
   }
     
   }
+
+  
 
   const waitPage = async() => {
     try{

@@ -76,10 +76,10 @@ const StoreInfo = ({route}) => {
         console.log(response.data);
 
         if(response.data == 0){
-          const waitRespon = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {user_id : userInfo[0].user_id})
+          const waitRespon = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {user_id : userInfo[0].user_id, store_seq : store_seq})
           
           
-          // navigation.navigate('TableingResult', waitRespon.data);
+          navigation.navigate('TableingResult', {waitInfo : waitRespon.data, store : store.store_name});
         } else{
 
           Alert.alert(

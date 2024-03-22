@@ -28,7 +28,10 @@ const Header = ({ totalCafes, onSortPress }) => {
 
 
 
-const TableingResult = () => {
+const TableingResult = ({route}) => {
+  console.log({route}.route.params);
+
+
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>

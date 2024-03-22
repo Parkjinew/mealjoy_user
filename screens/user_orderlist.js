@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView,
   Platform,TouchableWithoutFeedback,Keyboard } from 'react-native';
@@ -14,33 +14,39 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const renderRestaurants = () => {
-  const restaurantItems = [];
-  for (let i = 0; i < restaurants.length; i++) {
-    const item = restaurants[i];
-    restaurantItems.push(
-  <View style={styles.menuItem}>
-    <Image source={image} style={styles.menuImage} />
-    <View style={styles.menuDetails}>
-      <Text style={styles.menuTitle}>{item.store_name}</Text>
-      <Text style={styles.menuSubtitle}>{subtitle}</Text>
-      <Text style={styles.menuPrice}>{price}</Text>   
-    </View>
-    <TouchableOpacity >
-        <Text style={styles.orderButtonText}>리뷰 남기기</Text>
-      </TouchableOpacity>
-  </View>
-);
-}
-return restaurantItems;
-};
+
 
 
 const OrderList = ({route}) => {
     const navigation = useNavigation();
-    const [restaurants, setRestaurants] = useState();
+    const { OrderList } = route.params;
+    const [restaurants, setRestaurants] = useState(OrderList);
+
+    const renderRestaurants = () => {
+      const restaurantItems = [];
+      for (let i = 0; i < restaurants.length; i++) {
+        const item = restaurants[i];
+        restaurantItems.push(
+      <View style={styles.menuItem}>
+        <Image source={{uri : item.image_filenames}} style={styles.menuImage} />
+        <View style={styles.menuDetails}>
+          <Text style={styles.menuTitle}>{item.store_name}</Text>
+          <Text style={styles.menuSubtitle}>아</Text>
+          <Text style={styles.menuPrice}>가격</Text>   
+        </View>
+        <TouchableOpacity >
+            <Text style={styles.orderButtonText}>리뷰 남기기</Text>
+          </TouchableOpacity>
+      </View>
+    );
+    }
+    return restaurantItems;
+    };
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
+          
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -50,16 +56,8 @@ const OrderList = ({route}) => {
           <Text style={styles.headerTitle}>주문목록</Text>
           <View style={{ paddingHorizontal: 16 }}></View>
         </View>
-  
-        {/* Menu List */}
-        <FlatList
-          data={DATA}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <MenuItem title={item.title} subtitle={item.subtitle} price={item.price} image={item.image} navigation={navigation}/>
-          )}
-        />
-  
+        {renderRestaurants()}
+       
         {/* Tab Bar */}
         <View style={styles.tabBar}>
           <TouchableOpacity style={styles.tabItem}>

@@ -50,7 +50,37 @@ const SettingsScreen = () => {
   const [isChatbotEnabled, setChatbotEnabled] = useState(false); // 챗봇 활성화 상태를 추가
   const [appState, setAppState] = useState(AppState.currentState); // 현재 앱 상태를 저장할 state
   const navigation = useNavigation();
+  const [userInfo, setUserInfo] = useState(null);
 
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
+
+  const orderlist = async () => {
+    console.log(userInfo)
+    if (userInfo) { 
+      try {
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/orderlist', { id: userInfo[0].user_id });
+        navigation.navigate('OrderList', { OrderList: response.data });
+      } catch (error) {
+        console.error("Error fetching OrderList:", error);
+      }
+    } else {
+      navigation.navigate('HomeLogin');
+    }
+  };
 
   // 사용자의 위치 정보 사용 권한 상태를 확인하고 업데이트하는 함수
   const checkLocationPermission = async () => {
@@ -151,7 +181,7 @@ const SettingsScreen = () => {
           </View>
           </TouchableOpacity>
       
-        <TouchableOpacity>
+        <TouchableOpacity  onPress={orderlist}>
           <View style={styles.menuItem}>
           <MaterialIcons name="restaurant-menu" size={24} color="#ff3b30" />
             <Text

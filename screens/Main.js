@@ -84,7 +84,7 @@ const Main = () => {
   const handleUserIconPress = () => {
     if (isLoggedIn) {
       // 사용자가 로그인 상태면, 개인정보수정 페이지로 네비게이션
-      navigation.navigate('Setting');
+      navigation.navigate('SettingsScreen');
     } else {
       // 사용자가 로그인 상태가 아니면, 로그인 페이지로 네비게이션
       navigation.navigate('HomeLogin');

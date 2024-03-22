@@ -22,7 +22,8 @@ import {
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Location from "expo-location";
-
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const HeaderContainer = () => {
   return (
     <View style={styles.headerContainer}>
@@ -41,13 +42,19 @@ const SettingsScreen = () => {
   const [isLocationEnabled, setLocationEnabled] = useState(false); // 위치 정보 사용 상태
   const [isChatbotEnabled, setChatbotEnabled] = useState(false); // 챗봇 활성화 상태를 추가
   const [appState, setAppState] = useState(AppState.currentState); // 현재 앱 상태를 저장할 state
-
+  const navigation = useNavigation();
   // 사용자의 위치 정보 사용 권한 상태를 확인하고 업데이트하는 함수
   const checkLocationPermission = async () => {
     const { status } = await Location.getForegroundPermissionsAsync();
     setLocationEnabled(status === "granted");
   };
-
+  const handleLogout = async () => {
+    // AsyncStorage에서 사용자 정보 제거
+    await AsyncStorage.removeItem('userInfo');
+    Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
+    // 메인 페이지로 이동
+    navigation.navigate('Main');
+  };
   useEffect(() => {
     checkLocationPermission();
 
@@ -201,7 +208,16 @@ const SettingsScreen = () => {
               value={isChatbotEnabled}
             />
           </View>
+          <View style={styles.logoutContainer}>
+       <TouchableOpacity
+     style={styles.logoutButton}
+     onPress={handleLogout}> 
+    <Text style={styles.logoutButtonText}>로그아웃</Text>
+       </TouchableOpacity>
         </View>
+        </View>
+
+        
 
         {/* 탭 바 부분 */}
         <View style={styles.tabBar}>
@@ -227,8 +243,23 @@ const SettingsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  logoutContainer: {
+    alignItems: 'center', // 버튼을 컨테이너의 가운데로 정렬
+    marginTop: 60, // 위쪽 마진 추가
+    marginBottom: 20, // 아래쪽 마진 추가, 필요에 따라 조정
+  },
+  logoutButton: {
+    paddingHorizontal: 20, // 버튼 내부 좌우 패딩
+    paddingVertical: 10, // 버튼 내부 상하 패딩
+    borderRadius: 25, // 버튼의 모서리를 둥글게
+  },
+  logoutButtonText: {
+    color: "black", // 텍스트 색상을 흰색으로
+    fontSize: 16, // 텍스트 크기 설정
+  },
   container: {
     flex: 1,
+    backgroundColor:'white'
   },
 
   menuItem: {
@@ -269,6 +300,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
+    paddingTop:20
   },
   headerText: {
     fontSize: 18,

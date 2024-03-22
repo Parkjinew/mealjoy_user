@@ -27,13 +27,13 @@ const OrderList = ({route}) => {
       for (let i = 0; i < restaurants.length; i++) {
         const item = restaurants[i];
         restaurantItems.push(
-      <View key={item.id} style={styles.menuItem}>
+      <View key={item.store_name} style={styles.menuItem}>
         <Image source={{uri : item.image_filenames}} style={styles.menuImage} />
         <View style={styles.menuDetails}>
           <Text style={styles.menuTitle}>{item.store_name}</Text>
           <Text style={styles.menuSubtitle}>{item.menu_names}</Text>
           <Text style={styles.menuPrice}>총 {item.total_amount}원</Text>
-          <Text style={styles.menuSubtitle2}>{item.menu_names}</Text>
+          <Text style={styles.menuSubtitle2}>24/09/23</Text>
         </View>
         <TouchableOpacity >
             <Text style={styles.orderButtonText}>리뷰 남기기</Text>
@@ -57,6 +57,8 @@ const OrderList = ({route}) => {
           <Text style={styles.headerTitle}>주문목록</Text>
           <View style={{ paddingHorizontal: 16 }}></View>
         </View>
+        <View>
+            <Text style={styles.total}>총 {restaurants.length}개</Text></View> 
         {renderRestaurants()}
         </ScrollView>
         {/* Tab Bar */}

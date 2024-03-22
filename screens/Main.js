@@ -236,7 +236,7 @@ const Main = () => {
     resizeMode="contain"
     style={styles.logo}
   />
-<TouchableOpacity style={styles.bellIcon}>
+<TouchableOpacity style={styles.bellIcon} onPress={() => navigation.navigate('Recomplete')}>
       <Feather name="bell" size={24} color="black" />
     </TouchableOpacity>
   </View>

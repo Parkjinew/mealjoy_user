@@ -210,8 +210,7 @@ const Main = () => {
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
       const storeData = await axios.post('http://211.227.224.159:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
-      
-      navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.store_name})
+      navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);
     }

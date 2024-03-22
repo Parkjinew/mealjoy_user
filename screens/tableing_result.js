@@ -1,22 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const HorizontalDivider = () => {
   return <View style={styles.horizontalDivider} />;
 };
 
 // Header 컴포넌트
-const Header = ({ totalCafes, onSortPress }) => {
+const Header = ({ navigation }) => {
   // 이 함수에서 sortOption과 setSortOption을 제거하였습니다.
   return (
     <View>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => console.log("뒤로 가기")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Main")}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>나의 원격 줄서기 내역 </Text>
@@ -32,15 +34,51 @@ const TableingResult = ({route}) => {
   console.log({route}.route.params);
   const store = {route}.route.params.store;
   const wait = {route}.route.params.waitInfo;
+  const navigation = useNavigation();
+
+  const storeinfo = async(id) => {
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : id})
+      console.log(response.data);
+      navigation.navigate('StoreInfo', response.data);
+    } catch(error){
+      console.error(error);
+    }
+    
+  }
+
+  const waitDel = async() => {
+    if(wait.count < 5){
+      Alert.alert(
+        "줄서기 취소", // 알림 제목
+        "남은 대기팀이 3팀 이하이기 때문에 취소가 불가합니다.", // 알림 메시지
+        [
+          {
+            text: "확인", // 아니요 버튼
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+        ],
+        { cancelable: false }
+      );
+    } else{
+
+    }
+
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
         {/* Your scrollable content */}
-      <Header/>
+      <Header
+        navigation={navigation}
+      />
       <HorizontalDivider />
-      <View style={styles.detailBox}>
+
+      {store ? (
+        <View style={styles.detailBox}>
         <View style={styles.detailRow}>
           <Text style={styles.detailTitle}>{store}</Text>
           <TouchableOpacity style={styles.button}>
@@ -64,14 +102,23 @@ const TableingResult = ({route}) => {
          
         </View>
         <View style={styles.actionRow}>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={styles.actionButton} onPress={() => storeinfo(wait.store_seq)}>
             <Text style={styles.actionButtonText}>매장상세보기</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={styles.actionButton} onPress={() => waitDel()}>
             <Text style={styles.actionButtonText}>대기등록취소</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      ) : (
+        
+        <View style={styles.noWaitContainer}>
+            <Text style={styles.noWaitText}>등록 중인 대기가 없습니다.</Text>
+        </View>
+
+      )}
+      
       {/* Footer navigation bar */}
       {/* Include icons or images for the navigation bar as needed */}
 

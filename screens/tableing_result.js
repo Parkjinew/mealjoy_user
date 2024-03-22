@@ -85,8 +85,11 @@ const TableingResult = ({route}) => {
   const waitDelet  = async() => {
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitDelet', {tabling_seq : wait.tabling_seq})
-      navigation.navigate("TableingResult", {waitInfo : wait, store : store})
-
+      
+      const waitPage = await axios.post('http://211.227.224.159:8090/botbuddies/waitInfo', {user_id : wait.user_id})
+      const storeData = await axios.post('http://211.227.224.159:8090/botbuddies/getStoreName', {store_seq : waitPage.data.store_seq})
+      navigation.push('TableingResult', {waitInfo : waitPage.data, store : storeData.data.store_name})
+    
     } catch(error){
       console.error(error);
     }

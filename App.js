@@ -27,7 +27,7 @@ import StoreInfo from './screens/user_storeinfo';
 import WaitingRegi from './screens/waiting_regi';
 import WatingSetup from './screens/wating_setup';
 import ReviewList from './screens/user_review';
-
+import SettingsScreen from './screens/user_mypage';
 
 const Stack = createStackNavigator();
 
@@ -62,6 +62,7 @@ export default function App() {
         <Stack.Screen name="WaitingRegi" component={WaitingRegi} options={{ headerShown: false }}/>
         <Stack.Screen name="WatingSetup" component={WatingSetup} options={{ headerShown: false }}/>
         <Stack.Screen name="ReviewList" component={ReviewList} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

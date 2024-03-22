@@ -147,8 +147,8 @@ const SearchResult = ({ route }) => {
             const item = restaurants[i];
             const categoryLabel = categoryLabels[item.category_seq] || '기타';
             restaurantItems.push(
-                    <TouchableOpacity onPress={() => storeinfo(item.store_seq)}>
-                <View key={item.store_seq} style={styles.restaurantItem}>
+                    <TouchableOpacity key={item.store_seq} onPress={() => storeinfo(item.store_seq)}>
+                <View style={styles.restaurantItem}>
                         <Image source={{uri : item.imageFilename}} style={styles.restaurantImage} />
                     <View style={styles.restaurantDetailContainer}>
                         <View style={styles.restaurantNameAndIcon}>

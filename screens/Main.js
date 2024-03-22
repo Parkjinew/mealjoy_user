@@ -205,6 +205,18 @@ const Main = () => {
     }
   };
 
+
+  const waitPage = async() => {
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://211.227.224.159:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      
+      navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.store_name})
+    } catch(error){
+      console.error(error);
+    }
+  }
+
   return (
     
     <SafeAreaView style={styles.safeArea}>
@@ -281,7 +293,7 @@ const Main = () => {
         <TouchableOpacity style={styles.tabItem}>
         <Entypo name="home" size={24} color="#ff3b30" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} >
+        <TouchableOpacity style={styles.tabItem} onPress={() => waitPage()} >
         <FontAwesome5 name="stopwatch" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>

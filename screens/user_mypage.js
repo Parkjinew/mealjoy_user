@@ -24,15 +24,22 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import * as Location from "expo-location";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import axios from 'axios';
+
+
+
+
 const HeaderContainer = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => console.log("뒤로 가기 버튼 클릭")}>
-        <Ionicons name="arrow-back" size={24} color="#ff3b30" />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
       <Text style={styles.headerText}>마이페이지</Text>
-      <TouchableOpacity onPress={() => console.log("알림 버튼 클릭")}>
-        <Ionicons name="notifications" size={24} color="#ff3b30" />
+      <TouchableOpacity >
+        <Ionicons name="notifications" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -43,6 +50,8 @@ const SettingsScreen = () => {
   const [isChatbotEnabled, setChatbotEnabled] = useState(false); // 챗봇 활성화 상태를 추가
   const [appState, setAppState] = useState(AppState.currentState); // 현재 앱 상태를 저장할 state
   const navigation = useNavigation();
+
+
   // 사용자의 위치 정보 사용 권한 상태를 확인하고 업데이트하는 함수
   const checkLocationPermission = async () => {
     const { status } = await Location.getForegroundPermissionsAsync();
@@ -130,55 +139,66 @@ const SettingsScreen = () => {
       <View style={{ flex: 1 }}>
         <HeaderContainer />
         <View style={{ flex: 1 }}>
+
+          <TouchableOpacity>
           <View style={styles.menuItem}>
             <Ionicons name="person-outline" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
-              onPress={() => navigateToScreen("Profile")}
             >
               내 정보
             </Text>
           </View>
-
+          </TouchableOpacity>
+      
+        <TouchableOpacity>
           <View style={styles.menuItem}>
-            <FontAwesome name="heart-o" size={24} color="#ff3b30" />
+          <MaterialIcons name="restaurant-menu" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
-              onPress={() => navigateToScreen("Favorites")}
             >
-              관심 매장 목록
+              주문목록
             </Text>
           </View>
+          </TouchableOpacity>
+
+            <TouchableOpacity>
           <View style={styles.menuItem}>
             <Octicons name="check-circle" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
-              onPress={() => navigateToScreen("Profile")}
+         
             >
               예약 목록
             </Text>
           </View>
+            </TouchableOpacity>
 
+
+            <TouchableOpacity>
           <View style={styles.menuItem}>
             <Entypo name="chat" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
-              onPress={() => navigateToScreen("Profile")}
+         
             >
               문의하기
             </Text>
           </View>
+        </TouchableOpacity>
 
+
+        <TouchableOpacity>
           <View style={styles.menuItem}>
             <MaterialIcons name="rate-review" size={24} color="#ff3b30" />
             <Text
               style={styles.menuItemText}
-              onPress={() => navigateToScreen("Profile")}
+           
             >
               리뷰 관리
             </Text>
           </View>
-
+            </TouchableOpacity>
           {/* 추가 메뉴 아이템 여기에... */}
 
           <View style={styles.divider} />
@@ -220,23 +240,7 @@ const SettingsScreen = () => {
         
 
         {/* 탭 바 부분 */}
-        <View style={styles.tabBar}>
-          <TouchableOpacity style={styles.tabItem}>
-            <Entypo name="home" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <Icon name="search" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <Icon name="heart" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <FontAwesome6 name="user" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-        </View>
+       
       </View>
     </SafeAreaView>
   );
@@ -245,7 +249,7 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   logoutContainer: {
     alignItems: 'center', // 버튼을 컨테이너의 가운데로 정렬
-    marginTop: 60, // 위쪽 마진 추가
+    marginTop: 180, // 위쪽 마진 추가
     marginBottom: 20, // 아래쪽 마진 추가, 필요에 따라 조정
   },
   logoutButton: {
@@ -254,8 +258,8 @@ const styles = StyleSheet.create({
     borderRadius: 25, // 버튼의 모서리를 둥글게
   },
   logoutButtonText: {
-    color: "black", // 텍스트 색상을 흰색으로
-    fontSize: 16, // 텍스트 크기 설정
+    color: "gray", // 텍스트 색상을 흰색으로
+    fontSize: 14, // 텍스트 크기 설정
   },
   container: {
     flex: 1,
@@ -300,7 +304,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10,
-    paddingTop:20
+    paddingTop:20,
+    paddingBottom:30
   },
   headerText: {
     fontSize: 18,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button, Linking  } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button, Linking, Alert   } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -76,10 +76,30 @@ const StoreInfo = ({route}) => {
         console.log(response.data);
 
         if(response.data == 0){
-          console.log("웨이팅 가능");
+          const waitRespon = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {user_id : userInfo[0].user_id})
+          
+          
+          // navigation.navigate('TableingResult', waitRespon.data);
+        } else{
+
+          Alert.alert(
+            "줄서기 상태 확인", // 알림 제목
+            "이미 줄서는 중입니다. 테이블링 목록으로 이동하시겠습니까?", // 알림 메시지
+            [
+              {
+                text: "아니요", // 아니요 버튼
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "확인", onPress: () => navigation.navigate('TableingResult') } // 확인 버튼을 누르면 테이블링 페이지로 이동
+            ],
+            { cancelable: false }
+          );
+          
+
         }
 
-        // navigation.navigate('TableingResult', response.data);
+        
 
       } catch(error){
         console.error(error);

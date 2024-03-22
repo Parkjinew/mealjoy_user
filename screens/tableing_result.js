@@ -30,7 +30,8 @@ const Header = ({ totalCafes, onSortPress }) => {
 
 const TableingResult = ({route}) => {
   console.log({route}.route.params);
-
+  const store = {route}.route.params.store;
+  const wait = {route}.route.params.waitInfo;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -41,25 +42,25 @@ const TableingResult = ({route}) => {
       <HorizontalDivider />
       <View style={styles.detailBox}>
         <View style={styles.detailRow}>
-          <Text style={styles.detailTitle}>수빈 초밥</Text>
+          <Text style={styles.detailTitle}>{store}</Text>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>이용예정</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>예약 일시</Text>
-          <Text style={styles.detailValue}>2024-03-06 (수) 19:43</Text>
+          <Text style={styles.detailValue}>{wait.create_at}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>대기번호</Text>
-          <Text style={styles.detailValue}>7번</Text>
+          <Text style={styles.detailValue}>{wait.wait_num}번</Text>
         </View>
-        <View style={styles.detailRow}>
+         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>인원</Text>
-          <Text style={styles.detailValue}>5명</Text>
-        </View>
+          <Text style={styles.detailValue}>{wait.people_num}명</Text>
+        </View> 
         <View style={styles.wait}>
-          <Text style={styles.detailwait}>남은 대기팀 : 2팀</Text>
+          <Text style={styles.detailwait}>남은 대기팀 : {wait.count}팀</Text>
          
         </View>
         <View style={styles.actionRow}>

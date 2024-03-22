@@ -11,62 +11,34 @@ import { Ionicons } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const DATA = [
-  {
-    id: '1',
-    title: '푸르른 간장안의 꽁치',
-    subtitle: '양념갈비비빔밥 외 2개',
-    price: '150,000원',
-    image: require('../assets/coffe.png'), // 로컬 이미지 경로에 맞게 수정하세요
-  },
-  {
-    id: '2',
-    title: '푸르른 간장안의 꽁치',
-    subtitle: '양념갈비비빔밥 외 2개',
-    price: '150,000원',
-    image: require('../assets/cake.png'), // 로컬 이미지 경로에 맞게 수정하세요
-  },
-  {
-    id: '3',
-    title: '푸르른 간장안의 꽁치',
-    subtitle: '양념갈비비빔밥 외 2개',
-    price: '150,000원',
-    image: require('../assets/joy.png'), // 로컬 이미지 경로에 맞게 수정하세요
-  },
-  {
-    id: '4',
-    title: '푸르른 간장안의 꽁치',
-    subtitle: '양념갈비비빔밥 외 2개',
-    price: '150,000원',
-    image: require('../assets/chick.png'), // 로컬 이미지 경로에 맞게 수정하세요
-  },
-
-
-
-  // ... 다른 메뉴 아이템들
-];
-
-const MenuItem = ({ title, subtitle, price, image, navigation }) => (
-  
+const renderRestaurants = () => {
+  const restaurantItems = [];
+  for (let i = 0; i < restaurants.length; i++) {
+    const item = restaurants[i];
+    restaurantItems.push(
   <View style={styles.menuItem}>
-
     <Image source={image} style={styles.menuImage} />
     <View style={styles.menuDetails}>
-      <Text style={styles.menuTitle}>{title}</Text>
+      <Text style={styles.menuTitle}>{item.store_name}</Text>
       <Text style={styles.menuSubtitle}>{subtitle}</Text>
       <Text style={styles.menuPrice}>{price}</Text>   
     </View>
-    <TouchableOpacity style={styles.orderButton}  onPress={() => navigation.navigate('ReviewWrite')} >
+    <TouchableOpacity >
         <Text style={styles.orderButtonText}>리뷰 남기기</Text>
       </TouchableOpacity>
   </View>
-
 );
+}
+return restaurantItems;
+};
 
-const OrderList = () => {
+
+const OrderList = ({route}) => {
     const navigation = useNavigation();
-    
+    const [restaurants, setRestaurants] = useState();
     return (
         <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>

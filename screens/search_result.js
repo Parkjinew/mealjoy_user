@@ -220,26 +220,7 @@ const SearchResult = ({ route }) => {
                 </ScrollView>
             </KeyboardAvoidingView>
 
-            {/* 하단 탭 바 */}
-            {!keyboardVisible && (
-                <View style={styles.tabBar}>
-                    <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Main')}>
-                        <Entypo name="home" size={24} color="#ff3b30" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('SearchResult')}>
-                        <Icon name="search" size={24} color="#ff3b30" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
-                        <FontAwesome name="wechat" size={24} color="#ff3b30" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabItem}>
-                        <Icon name="heart" size={24} color="#ff3b30" onPress={() => navigation.navigate('Store')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tabItem}>
-                        <FontAwesome6 name="user" size={24} color="#ff3b30" />
-                    </TouchableOpacity>
-                </View>
-            )}
+          
 
         </SafeAreaView>
     );

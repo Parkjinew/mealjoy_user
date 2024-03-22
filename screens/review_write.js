@@ -1,16 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, SafeAreaView, TouchableOpacity,Alert, Keyboard, TextInput, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Entypo, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeApp } from 'firebase/app';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-const ReviewWrite = () => {
+
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCIJTUXUiGTqfDHqcxRg_Zmqpj7X8RxrUU",
+  authDomain: "northern-net-417806.firebaseapp.com",
+  projectId: "northern-net-417806",
+  storageBucket: "northern-net-417806.appspot.com",
+  messagingSenderId: "931311955507",
+  appId: "1:931311955507:android:286418ba7a5ba19018fd46"
+};
+
+initializeApp(firebaseConfig);
+const storage = getStorage();
+
+const ReviewWrite = ({ route }) => {
+  const { storeName } = route.params;
   const navigation = useNavigation();
   const [rating, setRating] = useState(3);
   const [photoCount, setPhotoCount] = useState(0);
   const [reviewText, setReviewText] = useState('');
   const [selectedImages, setSelectedImages] = useState([]);
+  const [userInfo, setUserInfo] = useState(null);
+  const [reviewTitle, setReviewTitle] = useState('');
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
+    fetchUserInfo();
+  }, []);
+  
   const handleRemoveImage = (index) => {
     setSelectedImages((currentImages) => currentImages.filter((_, i) => i !== index));
     setPhotoCount(prevCount => prevCount - 1); // 사진 개수 감소
@@ -55,12 +91,56 @@ const ReviewWrite = () => {
     }
   };
 
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
 
-  const handleSubmitReview = () => {
-    Alert.alert("리뷰 작성 완료", "리뷰가 성공적으로 작성되었습니다.");
-    console.log('선택된 사진:', selectedImages);
-    // 여기에서 서버로 데이터를 보내는 로직 등을 추가할 수 있습니다.
-    navigation.goBack();
+    const storageRef = ref(storage, `reviews/${Date.now()}`);
+    const snapshot = await uploadBytes(storageRef, blob);
+    return await getDownloadURL(snapshot.ref);
+  };
+
+  const handleSubmitReview = async () => {
+    
+    const imageUrls = [];
+    for (const imageUri of selectedImages) {
+      try {
+        const downloadURL = await uploadImage(imageUri);
+        imageUrls.push(downloadURL);
+      } catch (error) {
+        console.error("Image upload failed", error);
+        Alert.alert("이미지 업로드 실패", "이미지 업로드 중 문제가 발생했습니다. 다시 시도해주세요.");
+        return;
+      }
+    }
+    console.log(rating, imageUrls)
+    try {
+      // 서버로 POST 요청을 보냅니다. 여기서 'your-server-endpoint'는 실제 서버의 엔드포인트로 대체해야 합니다.
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/reviewWrite', {storeName: storeName, 
+      rating: rating, 
+      photos: imageUrls, 
+      reviewTitle:reviewTitle,
+      reviewText: reviewText, 
+      id:userInfo[0].user_id}, {
+        headers: {
+          'Content-Type': 'application/json'
+          // 필요한 경우 추가 헤더를 여기에 포함시킵니다.
+        }
+      });
+  
+      if (response.status === 200) {
+        // 서버 응답이 성공적인 경우, 사용자에게 알림을 보내고 또는 다른 액션을 취합니다.
+        Alert.alert("리뷰 작성 완료", "리뷰가 성공적으로 작성되었습니다.");
+        navigation.goBack(); // 또는 다른 화면으로 이동
+      } else {
+        // 서버 응답에 문제가 있는 경우, 에러 처리를 합니다.
+        Alert.alert("리뷰 작성 실패", "문제가 발생했습니다. 다시 시도해주세요.");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("리뷰 작성 실패", "네트워크 문제가 발생했습니다. 다시 시도해주세요.");
+    }
+
   };
   return (
     
@@ -82,7 +162,7 @@ const ReviewWrite = () => {
           keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
            
             <View style={styles.rateContainer}>
-              <Text style={styles.rateTitle}>가게에 별점을 남겨주세요!</Text>
+              <Text style={styles.rateTitle}>{storeName}</Text>
               <View style={styles.stars}>
                 {[...Array(5)].map((_, index) => {
                   return (
@@ -113,7 +193,12 @@ const ReviewWrite = () => {
   </View>
 ))}
  </ScrollView>
-        
+            <TextInput
+              style={styles.input2}
+              placeholder="리뷰 제목을 입력해주세요!"
+              value={reviewTitle}
+              onChangeText={setReviewTitle}
+            />
             <TextInput
               style={styles.input}
               placeholder="리뷰를 남겨주세요!"
@@ -128,23 +213,7 @@ const ReviewWrite = () => {
           </KeyboardAvoidingView>
        </ScrollView>
         
-        <View style={styles.tabBar}>
-          <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Main')}>
-            <Entypo name="home" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('SearchResult')}>
-            <FontAwesome name="search" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
-          <FontAwesome name="wechat" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <FontAwesome name="heart" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <FontAwesome6 name="user" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-        </View>
+      
       </SafeAreaView>
     </TouchableWithoutFeedback>
     
@@ -209,6 +278,14 @@ const styles = StyleSheet.create({
   photoUploadContainer: {
     alignItems: 'center',
     marginBottom: 40,
+  },
+  input2:{
+    borderWidth: 1,
+    borderColor: '#cccccc',
+    borderRadius: 5,
+    padding: 10,
+    height: 50,
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,

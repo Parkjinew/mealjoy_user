@@ -27,18 +27,37 @@ const OrderList = ({route}) => {
       for (let i = 0; i < restaurants.length; i++) {
         const item = restaurants[i];
         restaurantItems.push(
-      <View key={item.store_name} style={styles.menuItem}>
+         <View key={item.order_num}> 
+      <View  style={styles.menuItem}>
         <Image source={{uri : item.image_filenames}} style={styles.menuImage} />
         <View style={styles.menuDetails}>
           <Text style={styles.menuTitle}>{item.store_name}</Text>
           <Text style={styles.menuSubtitle}>{item.menu_names}</Text>
           <Text style={styles.menuPrice}>총 {item.total_amount}원</Text>
-          <Text style={styles.menuSubtitle2}>24/09/23</Text>
+          <Text style={styles.menuSubtitle2}>주문일시 : {item.order_at}</Text>
         </View>
-        <TouchableOpacity >
+      </View>
+       {item.review_seq === 0 ? (
+      <View style={styles.review}>
+     
+        <TouchableOpacity style={styles.review2} onPress={() => {
+    navigation.navigate('ReviewWrite', {storeName: item.store_name});
+  }}>
             <Text style={styles.orderButtonText}>리뷰 남기기</Text>
           </TouchableOpacity>
+        
+      </View>):(
+            <View style={styles.review}>  
+            <View style={styles.review3}>
+                <Text style={styles.orderButtonText}>리뷰 작성 완료</Text>
+              </View>
+            
+          </View>
+             )}
+
+
       </View>
+            
     );
     }
     return restaurantItems;
@@ -62,23 +81,7 @@ const OrderList = ({route}) => {
         {renderRestaurants()}
         </ScrollView>
         {/* Tab Bar */}
-        <View style={styles.tabBar}>
-          <TouchableOpacity style={styles.tabItem}>
-            <Entypo name="home" size={24} color="#ff3b30" onPress={() => navigation.navigate('Main')}/>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('SearchResult')}>
-            <Icon name="search" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
-          <FontAwesome name="wechat" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <Icon name="heart" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tabItem}>
-            <FontAwesome6 name="user" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-        </View>
+    
      
       </SafeAreaView>
     );
@@ -86,6 +89,13 @@ const OrderList = ({route}) => {
   
 
 const styles = StyleSheet.create({
+  total:{
+    fontSize:15,
+    fontWeight: 'bold',
+    marginLeft:22,
+    marginTop:20,
+   
+},
   safeArea: {
     flex: 1,
     backgroundColor: '#fff', // 이 배경색은 상단 노치와 하단 제스처 영역의 배경색입니다.
@@ -113,11 +123,16 @@ const styles = StyleSheet.create({
     flex:1,
     paddingRight:15
   },
+  review:{
+    borderBottomWidth: 1,
+    borderBottomColor: '#eeeeee',
+    paddingBottom:10
+  },
+ 
   menuItem: {
     flexDirection: 'row',
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eeeeee',
+
     paddingTop : 20
   },
   menuImage: {
@@ -158,11 +173,30 @@ const styles = StyleSheet.create({
     height:40,
     marginTop:15
   },
+  review3:{
+    backgroundColor: 'gray', // 버튼 배경색
+    borderRadius: 20,
+    paddingVertical: 10, // 상하 패딩
+    justifyContent: 'center', // 내부 텍스트 센터 정렬
+    alignItems: 'center', // 내부 텍스트 센터 정렬
+    marginHorizontal: 100, // 좌우 마진
+    marginVertical: 10, // 상하 마진
+  },
+  review2:{
+    backgroundColor: '#ff3b30', // 버튼 배경색
+    borderRadius: 20,
+    paddingVertical: 10, // 상하 패딩
+    justifyContent: 'center', // 내부 텍스트 센터 정렬
+    alignItems: 'center', // 내부 텍스트 센터 정렬
+    marginHorizontal: 100, // 좌우 마진
+    marginVertical: 10, // 상하 마진
+  },
   orderButtonText: {
-    color: 'black',
-    fontSize: 14,
+    color: 'white',
+    fontSize: 17,
     marginTop:2,
-    
+    alignSelf:"center",
+   
   },
   tabBar: {
     flexDirection: 'row',

@@ -50,7 +50,7 @@ const TableingResult = ({route}) => {
   const waitDel = async() => {
     if(wait.count < 5){
       Alert.alert(
-        "줄서기 취소", // 알림 제목
+        "대기 취소 불가", // 알림 제목
         "남은 대기팀이 3팀 이하이기 때문에 취소가 불가합니다.", // 알림 메시지
         [
           {
@@ -63,8 +63,33 @@ const TableingResult = ({route}) => {
       );
     } else{
 
+      Alert.alert(
+        "대기 취소", // 알림 제목
+        "정말 취소하시겠습니까?", // 알림 메시지
+        [
+          {
+            text: "아니요", // 아니요 버튼
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "확인", onPress: () => waitDelet() } // 확인 버튼을 누르면 테이블링 페이지로 이동
+        ],
+        { cancelable: false }
+      );
+
+
     }
 
+  }
+
+  const waitDelet  = async() => {
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitDelet', {tabling_seq : wait.tabling_seq})
+      navigation.navigate("TableingResult", {waitInfo : wait, store : store})
+
+    } catch(error){
+      console.error(error);
+    }
   }
 
   return (

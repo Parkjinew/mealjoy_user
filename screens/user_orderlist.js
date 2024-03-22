@@ -57,6 +57,8 @@ const OrderList = ({route}) => {
           <Text style={styles.headerTitle}>주문목록</Text>
           <View style={{ paddingHorizontal: 16 }}></View>
         </View>
+        <View>
+            <Text style={styles.total}>총 {restaurants.length}개</Text></View> 
         {renderRestaurants()}
         </ScrollView>
         {/* Tab Bar */}

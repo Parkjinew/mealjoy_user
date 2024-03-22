@@ -22,12 +22,24 @@ const OrderList = ({route}) => {
     const { OrderList } = route.params;
     const [restaurants, setRestaurants] = useState(OrderList);
 
+    const storeinfo = async(id) => {
+      try{
+        const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeinfo', {id : id})
+        console.log(response.data);
+        navigation.navigate('StoreInfo', response.data);
+      } catch(error){
+        console.error(error);
+      }
+      
+    }
+    
     const renderRestaurants = () => {
       const restaurantItems = [];
       for (let i = 0; i < restaurants.length; i++) {
         const item = restaurants[i];
         restaurantItems.push(
          <View key={item.order_num}> 
+         <TouchableOpacity onPress={() => storeinfo(item.store_seq)}>
       <View  style={styles.menuItem}>
         <Image source={{uri : item.image_filenames}} style={styles.menuImage} />
         <View style={styles.menuDetails}>
@@ -37,6 +49,7 @@ const OrderList = ({route}) => {
           <Text style={styles.menuSubtitle2}>주문일시 : {item.order_at}</Text>
         </View>
       </View>
+      </TouchableOpacity>
        {item.review_seq === 0 ? (
       <View style={styles.review}>
      
@@ -69,7 +82,8 @@ const OrderList = ({route}) => {
 
         <ScrollView>
         {/* Header */}
-        <View style={styles.header}>
+       
+          <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backrow}>
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>

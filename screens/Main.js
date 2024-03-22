@@ -140,7 +140,15 @@ const Main = () => {
   
   // 주소 로드
   const isFocused = useIsFocused();
+  useEffect(() => {
+    // 포커스가 될 때마다 호출됩니다.
+    const checkLoginStatus = async () => {
+      const userInfo = await AsyncStorage.getItem('userInfo');
+      setIsLoggedIn(!!userInfo); // userInfo가 있으면 true, 없으면 false
+    };
 
+    checkLoginStatus();
+  }, [isFocused]);
   useEffect(() => {
     if (isFocused) {
       const loadAddress = async () => {

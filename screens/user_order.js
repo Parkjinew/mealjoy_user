@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert, Button } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -71,7 +71,6 @@ export default function UserOrder({route}){
   const [quantities, setQuantities] = useState({});
 
   const data = {route}.route.params;
-  console.log(data)
   const user_id = data.user_id;
   const store = data.store.store;
   const menu = data.store.menu;
@@ -105,6 +104,11 @@ export default function UserOrder({route}){
         return acc + price * quantity;
       }, 0);
 
+      const totalCount = menu.reduce((acc, food) => {
+        const quantity = quantities[food.menu_seq] || 0;
+        return acc + quantity;
+      }, 0);
+
     const [selectedTable, setSelectedTable] = useState(null);
 
     const toggleTableStatus = (id) => {
@@ -120,6 +124,44 @@ export default function UserOrder({route}){
       }))
     );
 
+   
+
+    const orderF = async() => {
+      if(selectedTable == 2){
+        Alert.alert(
+          "메뉴 주문", // 알림 제목
+          "1인분 이상 주문해주세요.", // 알림 메시지
+          [
+            {
+              text: "확인", // 아니요 버튼
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            }              
+          ],
+          { cancelable: false }
+        );
+      } else{
+        Alert.alert(
+          "메뉴 주문", // 알림 제목
+          `${selectedTable-2}인분 이상 주문해주세요.`, // 알림 메시지
+          [
+            {
+              text: "확인", // 아니요 버튼
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            }              
+          ],
+          { cancelable: false }
+        );
+      }
+    };
+
+    const orderT = async(orderDetails) => {
+      console.log("주문가능");
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails, selectedTable:selectedTable})
+      navigation.navigate("Payment",{totalPrice:totalPrice});
+    }
+
     const Payment = async () => {
       // 주문 데이터 생성: 선택한 메뉴의 menu_seq와 수량
       const orderDetails = menu.filter(({ menu_seq }) => quantities[menu_seq] > 0)
@@ -128,12 +170,39 @@ export default function UserOrder({route}){
               quantity: quantities[menu_seq],
           }));
 
-      // 여기에 주문 처리 로직 (예: 서버로 주문 데이터 전송) 추가
-      console.log('주문 데이터:', orderDetails);
-
       try{
-        const response = await axios.post('http://211.227.224.159:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails})
-        navigation.navigate("Payment",{totalPrice:totalPrice});
+        console.log(totalCount);
+        if(selectedTable != null){  
+          if(selectedTable == 2){
+            if(totalCount >=1){
+              orderT(orderDetails);
+            }else{
+              orderF();
+            }
+    
+          } else{
+            if(totalCount >= selectedTable -2){
+              orderT(orderDetails);
+            }else{
+              orderF();
+            }
+          }
+
+        }else{
+          Alert.alert(
+            "테이블 선택", // 알림 제목
+            "테이블을 선택해주세요.", // 알림 메시지
+            [
+              {
+                text: "확인", // 아니요 버튼
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              }              
+            ],
+            { cancelable: false }
+          );
+          
+        }
       } catch(error){
         console.error(error);
       }

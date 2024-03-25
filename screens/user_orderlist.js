@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback  } from "react";
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView,
   Platform,TouchableWithoutFeedback,Keyboard } from 'react-native';
@@ -13,6 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -21,6 +22,8 @@ const OrderList = ({route}) => {
     const navigation = useNavigation();
     const { OrderList } = route.params;
     const [restaurants, setRestaurants] = useState(OrderList);
+
+
 
     const storeinfo = async(id) => {
       try{
@@ -32,7 +35,8 @@ const OrderList = ({route}) => {
       }
       
     }
-    
+ 
+
     const renderRestaurants = () => {
       const restaurantItems = [];
       for (let i = 0; i < restaurants.length; i++) {
@@ -54,7 +58,7 @@ const OrderList = ({route}) => {
       <View style={styles.review}>
      
         <TouchableOpacity style={styles.review2} onPress={() => {
-    navigation.navigate('ReviewWrite', {storeName: item.store_name});
+    navigation.navigate('ReviewWrite', {orderNum: item.order_num, storeName: item.store_name});
   }}>
             <Text style={styles.orderButtonText}>리뷰 남기기</Text>
           </TouchableOpacity>

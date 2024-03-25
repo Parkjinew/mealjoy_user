@@ -148,10 +148,10 @@ const FavoriteStore = ({route}) => {
           <Entypo name="home" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} >
-          <FontAwesome name="search" size={24} color="#ff3b30" />
+        <FontAwesome6 name="users-line" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
-          <FontAwesome5 name="robot" size={24} color="#ff3b30" />
+        <Ionicons name="chatbubbles" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem}>
           <FontAwesome name="heart" size={24} color="#ff3b30" onPress={handleHeartIconPress}/>

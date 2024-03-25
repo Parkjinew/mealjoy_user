@@ -196,9 +196,7 @@ const ChatBot = () => {
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <View style={styles.logoContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
+
         <Image
           source={require('../assets/logo.png')}
           resizeMode="contain"
@@ -250,10 +248,10 @@ const ChatBot = () => {
           <Entypo name="home" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem}>
-          <FontAwesome name="search" size={24} color="#ff3b30" />
+        <FontAwesome6 name="users-line" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem}>
-        <FontAwesome name="wechat" size={24} color="#ff3b30" />
+        <Ionicons name="chatbubbles" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem}>
           <FontAwesome name="heart" size={24} color="#ff3b30" onPress={handleHeartIconPress} />
@@ -285,9 +283,9 @@ const styles = StyleSheet.create({
     marginTop: 7
   },
   logoContainer: {
-    flexDirection: 'row',
     paddingTop: Platform.OS === 'android' ? 50 : 10,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    alignItems:'center',
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
     marginBottom: 0

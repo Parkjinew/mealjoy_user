@@ -275,7 +275,7 @@ const SettingsScreen = () => {
             <Switch
               trackColor={{ false: "#767577", true: "#767577" }}
               thumbColor={isChatbotEnabled ? "#ff3b30" : "white"}
-              ios_backgroundColor="#3e3e3e"
+              ios_backgroundColor={isChatbotEnabled ? "#767577" : "white"}
               onValueChange={toggleChatbotSwitch}
               value={isChatbotEnabled}
             />

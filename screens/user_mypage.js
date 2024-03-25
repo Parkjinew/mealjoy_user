@@ -82,6 +82,19 @@ const SettingsScreen = () => {
     }
   };
 
+  const handleReviewManagement = async () => {
+    // 서버로부터 데이터를 받아오는 로직 구현
+    try {
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/reviewModify', {  id: userInfo[0].user_id });
+      navigation.navigate('ReviewModify', { reviewModify: response.data });
+    } catch (error) {
+      console.error("Error fetching Review Management data:", error);
+      // 오류 처리 로직, 필요에 따라 사용자에게 알림 등
+    }
+  };
+  
+
+
   // 사용자의 위치 정보 사용 권한 상태를 확인하고 업데이트하는 함수
   const checkLocationPermission = async () => {
     const { status } = await Location.getForegroundPermissionsAsync();
@@ -218,7 +231,7 @@ const SettingsScreen = () => {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => navigation.navigate('ReviewModify')}>
+        <TouchableOpacity onPress={() => handleReviewManagement(userInfo[0].user_id)}>
           <View style={styles.menuItem} >
             <MaterialIcons name="rate-review" size={24} color="#ff3b30" />
             <Text

@@ -117,7 +117,7 @@ const Main = () => {
 
   const storeList = async (id) => {
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeList', {id : id})
 
       navigation.navigate('Store', {data: response.data, id : id, align:"align"})
 
@@ -208,8 +208,8 @@ const Main = () => {
 
   const waitPage = async() => {
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
-      const storeData = await axios.post('http://211.227.224.159:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://119.200.31.63:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);
@@ -293,10 +293,10 @@ const Main = () => {
         <Entypo name="home" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => waitPage()} >
-        <FontAwesome5 name="stopwatch" size={24} color="#ff3b30" />
+        <FontAwesome6 name="users-line" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('ChatBot')}>
-        <FontAwesome name="wechat" size={24} color="#ff3b30" />
+        <Ionicons name="chatbubbles" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity  style={styles.tabItem} onPress={handleHeartIconPress}>
           <Icon name="heart" size={24} color="#ff3b30" />

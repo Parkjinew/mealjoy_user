@@ -1,12 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
-const Recomplete = () => {
+const Recomplete = ({route}) => {
+  const data = {route}.route.params;
+  const user_id = data.user_id;
+  const store_seq = data.store_seq;
+  const store_name = data.store_name;
+  const reserve_name = data.reserve_name;
+  const reserve_date = data.reserve_date;
+  const reserve_time = data.reserve_time;
+  const reserve_num = data.reserve_num;
+  const navigation = useNavigation();
+
+
   const showCancelConfirmation = () => {
     Alert.alert(
       '예약 취소',
-      '정말 예약을 취소하시겠습니까? \n 결제 금액이 있다면 취소 시점에 따라 100% 환급이 안될 수 있습니다. \n매장의 환급정책을 확인 후 취소 해주세요\n\n참고) 예약 취소시 복귀 불가 ',
+      '정말 예약을 취소하시겠습니까? \n\n참고) 예약 취소시 복귀 불가 ',
 
       [
         {
@@ -14,11 +27,49 @@ const Recomplete = () => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: '예', onPress: () => console.log('OK Pressed') },
+        { text: '예', onPress: () => cancelReserve() },
       ],
       { cancelable: false },
     );
   };
+
+  
+
+  const cancelReserve = async() => {
+    const today = new Date();
+    const formattedToday = `${today.getFullYear()}-${('0' + (today.getMonth() + 1)).slice(-2)}-${('0' + today.getDate()).slice(-2)}`;
+    if(formattedToday == reserve_date){
+      Alert.alert(
+        '예약 취소 불가',
+        '당일 예약 취소가 불가합니다.',
+  
+        [
+          {
+            text: '확인',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        { cancelable: false },
+      );
+    } else{
+      try{
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/cancelReserve', 
+        { 
+          user_id:user_id,
+          store_seq:store_seq,
+          reserve_name:reserve_name,
+          reserve_date:reserve_date,
+          reserve_time:reserve_time,
+          reserve_num:reserve_num});
+
+        navigation.navigate('Main');
+
+      } catch(error){
+        console.error(error)
+      }
+    }
+    };
   
   return (
     <ScrollView style={styles.container}>
@@ -29,29 +80,28 @@ const Recomplete = () => {
       <View style={styles.infoBox}>
         <View style={styles.infoRow}>
           <Text style={styles.infoTitle}>매장명</Text>
-          <Text style={styles.info}>비진도 해물뚝배기</Text>
+          <Text style={styles.info}>{store_name}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoTitle}>예약자명</Text>
+          <Text style={styles.info}>{reserve_name}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoTitle}>인원</Text>
-          <Text style={styles.info}>2명</Text>
+          <Text style={styles.info}>{reserve_num}명</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoTitle}>예약일시</Text>
-          <Text style={styles.info}>03월 21일 (목) 12:15</Text>
+          <Text style={styles.info}>{reserve_date} {reserve_time}</Text>
         </View>
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>요청사항</Text>
-        <Text style={styles.sectionContent}>좋은 자리로 부탁드립니다.</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>안내사항</Text>
         <Text style={styles.sectionContent}>
-            - 환급
-          {'\n'}- 예약 보증금은 이용예정일 전 일까지 취소시 환급받을 수 있습니다.
-          {'\n'}- 매장마다 메뉴 결제 금액 100% 환급 기준시간이 상이하므로 꼭 확인해주세요
-          {'\n'}- 예약 정보 변경 및 당일 취소
-          {'\n'}- 예약 정보 변경 또는 이용 예정일 당일에 취소를 원하는 경우 매장에 미리 알려주세요  
+          - 예약 정보 변경 및 예약 취소
+          {'\n'}- 예약 정보 변경 또는 예약 취소를 원하는 경우 매장에 미리 알려주세요  
+          {'\n'}- 당일 취소는 불가합니다
+          {'\n'}- 매장 상황에 따라 예약이 거절될 수 있습니다
         </Text>
       
         <TouchableOpacity style={styles.cancelButton} onPress={showCancelConfirmation}>

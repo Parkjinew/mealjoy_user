@@ -23,7 +23,6 @@ const StoreInfo = ({route}) => {
   const store = data.store;
   const menu = data.menu;
   console.log(store);
-  console.log(menu);
 
   const [favorite, setFavorite] = useState(false);
 
@@ -134,10 +133,12 @@ const StoreInfo = ({route}) => {
 
     
 
-  const reservation = async(store_seq) => {
+  const reservation = async() => {
     if(isLoggedIn){
       try{
         console.log("Reservation");
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/getReserv', {store_seq : store.store_seq})
+        navigation.navigate("Reservation", {user:userInfo[0], store:store, reserveInfo:response.data});
       } catch(error){
         console.error(error);
       }
@@ -153,12 +154,30 @@ const StoreInfo = ({route}) => {
     
   }
 
-  const handlePress = (store_seq) => {
-    if (store.category_seq === 2 || store.tableCount > 0) {
-      order(store_seq);
-    } else {
-      waiting(store_seq);
+  const handlePress = (store_seq, open_state) => {
+    if(open_state == '0'){
+
+      Alert.alert(
+        "매장 오픈 전", // 알림 제목
+        `오픈 시간 : ${store.open_time} ~ ${store.end_time}`, // 알림 메시지
+        [
+          {
+            text: "확인", // 아니요 버튼
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },          
+        ],
+        { cancelable: false }
+      );
+
+    }else{
+      if (store.category_seq === 2 || store.tableCount > 0) {
+        order(store_seq);
+      } else {
+        waiting(store_seq);
+      }
     }
+    
   };
 
   
@@ -206,7 +225,7 @@ const StoreInfo = ({route}) => {
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation(store.store_Seq)}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
             <Text style={styles.iconText}>예약하기</Text>
           </TouchableOpacity>
@@ -235,12 +254,14 @@ const StoreInfo = ({route}) => {
 
       </ScrollView>
 
-      <TouchableOpacity style={styles.orderButton}  onPress={() => handlePress(store.store_seq)}>
-        <Text style={styles.orderButtonText}>
-          {/* 테이블 수 가져오기 수정필요 */}
-          {store.category_seq === 2 ? "주문하기" :  store.tableCount === 0 ? '줄서기' : '주문하기'}
-        </Text>
-      </TouchableOpacity>
+      {/* {store.open_state === '1' && ( */}
+        <TouchableOpacity style={store.open_state === '0' ? styles.endTimeButton : styles.orderButton} onPress={() => handlePress(store.store_seq, store.open_state)}>
+          <Text style={styles.orderButtonText}>
+            {store.open_state === '0' ? "오픈 전" : (store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기')}
+            {/* {store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기'} */}
+          </Text>
+        </TouchableOpacity>
+      {/* )} */}
 
 
       
@@ -363,6 +384,16 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     alignItems: 'center',
+  },
+  endTimeButton:{
+    backgroundColor: '#BDBDBD', // 버튼 배경색
+    borderRadius: 20, // 버튼 모서리 둥글기
+    paddingVertical: 10, // 상하 패딩
+    paddingHorizontal: 20, // 좌우 패딩
+    justifyContent: 'center', // 내부 텍스트 센터 정렬
+    alignItems: 'center', // 내부 텍스트 센터 정렬
+    marginHorizontal: 20, // 좌우 마진
+    marginVertical: 10, // 상하 마진
   },
   orderButton: {
     backgroundColor: '#ff3b30', // 버튼 배경색

@@ -133,6 +133,8 @@ const Store = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const scrollViewRef = useRef();
 
+  console.log(cafes)
+
 
   const storeList = async (id) => {
     
@@ -267,11 +269,11 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
           <TouchableOpacity key={cafe.store_seq} onPress={() => storeinfo(cafe.store_seq)}>
           <View  style={styles.restaurantItem}>
           
-              <Image source={{uri : cafe.imageFilename}} style={styles.restaurantImage} />
+              <Image source={{uri : cafe.imageFilename}} style={cafe.open_state==='0'? styles.restaurantImage2 :styles.restaurantImage} />
           
           <View style={styles.restaurantDetailContainer}>
               <View style={styles.restaurantNameAndIcon}>
-                  <Text style={styles.restaurantName}>{cafe.store_name}</Text>
+                  <Text style={cafe.open_state==='0'? styles.restaurantName2 : styles.restaurantName}>{cafe.store_name}</Text>
                 
               </View>
               <Text style={styles.restaurantCategory}>{categoryLabels[cafe.category_seq]}</Text>
@@ -431,6 +433,15 @@ const styles = StyleSheet.create({
     paddingBottom:16,
     borderColor:'#ddd'
   },
+  restaurantImage2:{
+    width: 120,
+    height: 120,
+    borderRadius: 8,
+    marginRight: 10,
+    resizeMode:'cover',
+    opacity:0.5
+    
+  },
   restaurantImage: {
     width: 120,
     height: 120,
@@ -447,6 +458,13 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+    },
+    restaurantName2:{
+      fontWeight: 'bold',
+      fontSize: 20,
+      marginBottom:10,
+      marginTop:-15,
+      color:'gray'
     },
   restaurantName: {
           fontWeight: 'bold',

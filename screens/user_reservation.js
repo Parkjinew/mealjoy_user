@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert  } from 'react-native';
 import { FontAwesome, AntDesign, Foundation, Entypo, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { LocaleConfig, Calendar } from 'react-native-calendars';
 import moment from 'moment';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 LocaleConfig.locales['ko'] = {
   monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -26,7 +28,7 @@ const calendarTheme = {
   selectedDayTextColor: '#ffffff',
 };
 
-const Reservation = () => {
+const Reservation = ({route}) => {
     const scrollViewRef = useRef(null);
     const [favorite, setFavorite] = useState(false);
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
@@ -34,16 +36,133 @@ const Reservation = () => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [guestCount, setGuestCount] = useState("0");
     const [reserverName, setReserverName] = useState('');
+    const data = {route}.route.params;
+    const user = data.user;
+    const store = data.store;
+    const navigation = useNavigation();
+    const reserveInfo = data.reserveInfo;
+    
+
+    const reserveDateTime = reserveInfo.map(info => ({
+      reserve_date:info.reserve_date,
+      reserve_time:moment(info.reserve_time, "HH:mm:ss").format("HH:mm")
+    }));
+
+    console.log(reserveDateTime)
 
     const toggleFavorite = () => {
         setFavorite(!favorite);
     };
 
   const handleReservation = () => {
-    // '예약하기' 버튼 클릭 시, 날짜와 시간 포함한 모든 정보를 한 번에 알림 창으로 표시
-    alert(`날짜: ${selectedDate}, 시간: ${selectedTimeSlot}, 인원수: ${guestCount}, 예약자: ${reserverName}`);
-    console.log(`날짜: ${selectedDate}, 시간: ${selectedTimeSlot}, 인원수: ${guestCount}, 예약자: ${reserverName}`);
+    console.log(selectedDate)
+    console.log(selectedTimeSlot)
+    
+    if(selectedTimeSlot == null){
+      Alert.alert(
+        "예약시간 확인", // 알림 제목
+        "예약시간을 선택해주세요", // 알림 메시지
+        [
+          {
+            text: "확인", // 아니요 버튼
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+        ],
+        { cancelable: false }
+      );
+    } else{
+      if(guestCount == 0){
+        Alert.alert(
+          "인원수 확인", // 알림 제목
+          "인원수를 입력해주세요", // 알림 메시지
+          [
+            {
+              text: "확인", // 아니요 버튼
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+          ],
+          { cancelable: false }
+        );
+      } else{
+        if(reserverName == ''){
+          Alert.alert(
+            "예약자명 확인", // 알림 제목
+            "예약자명을 입력해주세요.", // 알림 메시지
+            [
+              {
+                text: "확인", // 아니요 버튼
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+            ],
+            { cancelable: false }
+          );
+          
+        } else{
+          console.log(`날짜: ${selectedDate}, 시간: ${selectedTimeSlot}, 인원수: ${guestCount}, 예약자: ${reserverName}`);
+
+          const reserva_info={
+            user_id:user.user_id,
+            store_seq:store.store_seq,
+            reserve_name:reserverName,
+            reserve_date:selectedDate,
+            reserve_time:selectedTimeSlot,
+            reserve_num:guestCount
+          }
+
+          Alert.alert(
+            "예약 확인", // 알림 제목
+            `날짜: ${selectedDate}, 시간: ${selectedTimeSlot}, 인원수: ${guestCount}, 예약자: ${reserverName}`, // 알림 메시지
+            [
+              {
+                text: "취소", // 아니요 버튼
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              {text: "예약",
+              onPress: () => reserva(reserva_info)
+            }
+            ],
+            { cancelable: false }
+          );
+      
+        }
+      }
+    }
+    
+   
   };
+
+
+  const reserva = async(reserva_info) => {
+    console.log(reserva_info)
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/reservation', 
+      {
+        user_id:user.user_id,
+        store_seq:store.store_seq,
+        reserve_name:reserverName,
+        reserve_date:selectedDate,
+        reserve_time:selectedTimeSlot,
+        reserve_num:guestCount
+      });
+      navigation.navigate("Recomplete", 
+      { 
+        user_id:user.user_id,
+        store_seq:store.store_seq,
+        store_name:store.store_name,
+        reserve_name:reserverName,
+        reserve_date:selectedDate,
+        reserve_time:selectedTimeSlot,
+        reserve_num:guestCount});
+    }catch(error){
+      console.error(error)
+    }
+  };
+
+
 
     useEffect(() => {
         if (scrollViewRef.current) {
@@ -54,7 +173,21 @@ const Reservation = () => {
 const onDayPress = (day) => {
     setSelectedDate(day.dateString);
     setSelectedTimeSlot(null);
-    setTimeSlots(['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30']);
+    // setTimeSlots(['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30']);
+
+    // 모든 가능한 시간 슬롯
+    const allTimeSlots = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
+
+    const availableTimeSlots = allTimeSlots.filter(timeSlot => 
+      !reserveDateTime.some(reserve => 
+        reserve.reserve_date === day.dateString && reserve.reserve_time === timeSlot
+      )
+    );
+
+    console.log(availableTimeSlots)
+
+    setTimeSlots(availableTimeSlots);
+
     // 날짜 선택 후 스크롤 이동
     setTimeout(() => scrollToBottom(), 100);
   };
@@ -85,38 +218,12 @@ const onDayPress = (day) => {
       >
         <Image
           style={styles.image}
-          source={require('../assets/cake.png')} // Replace with your image path
+          source={{uri:store.imageFilename}} // Replace with your image path
         />
         <View style={styles.body}>
           <View style={styles.starContainer}>
-            <Text style={styles.title}>타코</Text>
-            <TouchableOpacity onPress={toggleFavorite}>
-              <FontAwesome 
-                name={favorite ? "heart" : "heart-o"}
-                size={30}
-                color={favorite ? "#ff3b30" : "#ff3b30"}
-                style={{ marginTop: 5, marginLeft: 5 }}
-              />
-            </TouchableOpacity>
+            <Text style={styles.title}>{store.store_name}</Text>
           </View>
-          <View style={styles.starContainer}>
-            <AntDesign name="star" size={30} color="#FFD700" />
-            <Text style={styles.starRating}>5.0</Text>
-            <TouchableOpacity>
-              <Text style={styles.reviewCount}>1,111개 리뷰 ▷</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.telContainer}>
-            <TouchableOpacity style={styles.iconContainer}>
-              <AntDesign name="enviroment" size={20} color="black" />
-              <Text style={styles.iconText}>매장위치</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconContainer}>
-              <Foundation name="telephone" size={20} color="black" />
-              <Text style={styles.iconText}>전화번호</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.subtitle}>타코가 맛있는 집</Text>
         </View>
         <Calendar
           style={styles.calendar}
@@ -126,6 +233,7 @@ const onDayPress = (day) => {
           monthFormat={'M월'}
           onMonthChange={(month) => {console.log(month)}}
           markedDates={markedDates}
+          minDate={moment().add(1, 'days').format('YYYY-MM-DD')}
         />
         
         

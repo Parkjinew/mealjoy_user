@@ -67,7 +67,7 @@ export default function Payment({route}) {
         userCode={userCode}
         loading={<ActivityIndicator size="large" color="#0000ff" />} // ActivityIndicator를 사용하여 로딩 표시
         data={params}
-        callback={(response) => navigation.replace('Main')} // 결제 후 응답을 PaymentResult 화면으로 전달
+        callback={(response) => navigation.navigate('Reservation')} // 결제 후 응답을 PaymentResult 화면으로 전달
       />
     </SafeAreaView>
   );

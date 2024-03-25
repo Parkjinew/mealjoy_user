@@ -47,96 +47,6 @@ const Header = () => {
 };
 
 
-const reviewsData2 = [
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: [require('../assets/cake.png'),
-    require('../assets/cake.png'),
-    require('../assets/cake.png')],
-    reviewText: "정말 맛있어요 ",
-    owner: "맛있게 드쇼"
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: require('../assets/cake.png'),
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  {
-    customerName: "고객1",
-    rating: 5,
-    imageUri: "string",
-    reviewText: "정말 맛있어요",
-  },
-  // ... 더 많은 리뷰들
-];
 const ReviewCard = ({ review }) => {
     // 별점을 렌더링하는 함수
     const renderStars = () => {
@@ -155,21 +65,19 @@ const ReviewCard = ({ review }) => {
   
       const imagesArray = Array.isArray(review.reviewImg) ? review.reviewImg : [review.reviewImg];
       
-      console.log("image", imagesArray)
-  
+      
       return (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {imagesArray.map((img) => {
-            // // URI가 문자열이 아니라면, 즉 로컬 이미지 리소스라면 그대로 사용
-            // if (typeof uri !== 'string') {
-            //   return <Image key={uri.img_seq} source={uri} style={styles.reviewImage} />;
-            // }
-            // // 원격 이미지 URI 처리 (예시로 http 또는 https로 시작하는 경우만 유효하다고 가정)
-            // if (uri.imageFilename.startsWith('http') || uri.imageFilename.startsWith('https')) {
-            //   return <Image key={uri.img_seq} source={{ uri:uri.imageFilename }} style={styles.reviewImage} />;
-            // }
-            // return null; // 유효하지 않은 경우 렌더링하지 않음
-            <Image key={img.img_seq} source={{uri : img.imageFilename}} style={styles.reviewImage} />
+            // URI가 문자열이 아니라면, 즉 로컬 이미지 리소스라면 그대로 사용
+            if (typeof img.imageFilename !== 'string') {
+              return <Image key={img.img_seq} source={{uri:img.img_filename}} style={styles.reviewImage} />;
+            }
+            // 원격 이미지 URI 처리 (예시로 http 또는 https로 시작하는 경우만 유효하다고 가정)
+            if (img.imageFilename.startsWith('http') || img.imageFilename.startsWith('https')) {
+              return <Image key={img.img_seq} source={{uri:img.img_filename}} style={styles.reviewImage} />;
+            }
+            return null; // 유효하지 않은 경우 렌더링하지 않음
           })}
           
         </ScrollView>
@@ -221,13 +129,6 @@ const RatingSummary = ({ reviews }) => {
   );
 };
 
-const reviewsData = [
-  { rating: 5, count: 5825 },
-  { rating: 4, count: 3181 },
-  { rating: 3, count: 0 },
-  { rating: 2, count: 0 },
-  { rating: 1, count: 0 },
-];
 
 const ReviewList = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -239,8 +140,35 @@ const ReviewList = ({route}) => {
   const [filter, setFilter] = useState("all"); // 'all' 또는 'replied'
   const [displayLimit, setDisplayLimit] = useState(10); // 초기에 보여질 리뷰 수
 
-  const reviewList = {route}.route.params.reviewList;
-  console.log(reviewList[0])
+  const reviewData = {route}.route.params.reviewList;
+  const [reviewList, setreviewList] = useState(reviewData);
+
+  const reviewsData = [  
+    { rating: 5, count: 0 },
+    { rating: 4, count: 0 },
+    { rating: 3, count: 0 },
+    { rating: 2, count: 0 },
+    { rating: 1, count: 0 },
+  ];
+
+  const updateReviewCounts = (reviewsData, reviewList) => {
+    // reviewsData의 구조를 그대로 복사하여 새로운 배열을 만듭니다.
+    const updatedReviewsData = reviewsData.map(review => ({ ...review }));
+  
+    // reviewList를 순회하면서 각 리뷰의 score에 해당하는 rating을 찾아 count를 1 증가시킵니다.
+    reviewList.forEach(reviews => {
+      const score = reviews.review.score;
+      const reviewDataIndex = updatedReviewsData.findIndex(data => data.rating === score);
+      if (reviewDataIndex !== -1) {
+        updatedReviewsData[reviewDataIndex].count += 1;
+      }
+    });
+  
+    return updatedReviewsData;
+  };
+
+  const updatedReviewsData = updateReviewCounts(reviewsData, reviewList);
+  console.log(updatedReviewsData);
 
 
   // 리뷰 데이터에서 답변이 있는 리뷰만 필터링하는 함수
@@ -320,10 +248,10 @@ const ReviewList = ({route}) => {
     <SafeAreaView style={styles.safeArea}>
     <Header />
     <ScrollView>
-      <RatingSummary reviews={reviewsData} />
+      <RatingSummary reviews={updatedReviewsData} />
       <View style={styles.divider} />
       <View style={styles.headerContainer}>
-        <Text style={styles.subText}>최근 리뷰 10개</Text>
+        <Text style={styles.subText}>최근 리뷰 {reviewList.length}개</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.sortButtonContainer}>
           <Text style={styles.sortButtonText}>최신순</Text>
           <MaterialIcons name="keyboard-arrow-down" size={24} color="#ff3b30" />
@@ -476,8 +404,8 @@ const styles = StyleSheet.create({
 
     },
     reviewImage: {
-      width: 150, // 이미지 크기에 맞게 조절해주세요.
-      height: 150, // 이미지 크기에 맞게 조절해주세요.
+      width: 100, // 이미지 크기에 맞게 조절해주세요.
+      height: 100, // 이미지 크기에 맞게 조절해주세요.
       resizeMode: "cover",
       marginVertical: 5,
       marginRight: 10,

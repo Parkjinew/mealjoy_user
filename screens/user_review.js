@@ -91,6 +91,7 @@ const ReviewCard = ({ review }) => {
           {renderStars()}
         </View>
         {renderImages()}
+        <Text style={styles.reviewTitleText}>{review.review.title}</Text>
         <Text style={styles.reviewText}>{review.review.details}</Text>
         {review.review.answer && ( // owner 정보가 있을 때만 렌더링
           <View style={styles.ownerContainer}>
@@ -396,6 +397,10 @@ const styles = StyleSheet.create({
 
     },
     customerName: {
+      fontWeight: "bold",
+      fontSize: 18,
+    },
+    reviewTitleText:{
       fontWeight: "bold",
       fontSize: 18,
     },

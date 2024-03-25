@@ -40,6 +40,15 @@ const Reservation = ({route}) => {
     const user = data.user;
     const store = data.store;
     const navigation = useNavigation();
+    const reserveInfo = data.reserveInfo;
+    
+
+    const reserveDateTime = reserveInfo.map(info => ({
+      reserve_date:info.reserve_date,
+      reserve_time:moment(info.reserve_time, "HH:mm:ss").format("HH:mm")
+    }));
+
+    console.log(reserveDateTime)
 
     const toggleFavorite = () => {
         setFavorite(!favorite);
@@ -164,7 +173,21 @@ const Reservation = ({route}) => {
 const onDayPress = (day) => {
     setSelectedDate(day.dateString);
     setSelectedTimeSlot(null);
-    setTimeSlots(['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30']);
+    // setTimeSlots(['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30']);
+
+    // 모든 가능한 시간 슬롯
+    const allTimeSlots = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
+
+    const availableTimeSlots = allTimeSlots.filter(timeSlot => 
+      !reserveDateTime.some(reserve => 
+        reserve.reserve_date === day.dateString && reserve.reserve_time === timeSlot
+      )
+    );
+
+    console.log(availableTimeSlots)
+
+    setTimeSlots(availableTimeSlots);
+
     // 날짜 선택 후 스크롤 이동
     setTimeout(() => scrollToBottom(), 100);
   };

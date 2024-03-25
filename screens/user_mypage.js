@@ -192,7 +192,7 @@ const SettingsScreen = () => {
           </View>
           </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Reservation')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ReservaList')}>
           <View style={styles.menuItem} >
             <Octicons name="check-circle" size={24} color="#ff3b30" />
             <Text
@@ -218,7 +218,7 @@ const SettingsScreen = () => {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => navigation.navigate('ReviewWrite')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ReviewModify')}>
           <View style={styles.menuItem} >
             <MaterialIcons name="rate-review" size={24} color="#ff3b30" />
             <Text

@@ -24,7 +24,7 @@ initializeApp(firebaseConfig);
 const storage = getStorage();
 
 const ReviewWrite = ({ route }) => {
-  const { storeName } = route.params;
+  const { orderNum, storeName } = route.params;
   const navigation = useNavigation();
   const [rating, setRating] = useState(3);
   const [photoCount, setPhotoCount] = useState(0);
@@ -116,7 +116,8 @@ const ReviewWrite = ({ route }) => {
     console.log(rating, imageUrls)
     try {
       // 서버로 POST 요청을 보냅니다. 여기서 'your-server-endpoint'는 실제 서버의 엔드포인트로 대체해야 합니다.
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/reviewWrite', {storeName: storeName, 
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/reviewWrite', {orderNum: orderNum,
+      storeName : storeName, 
       rating: rating, 
       photos: imageUrls, 
       reviewTitle:reviewTitle,
@@ -131,7 +132,7 @@ const ReviewWrite = ({ route }) => {
       if (response.status === 200) {
         // 서버 응답이 성공적인 경우, 사용자에게 알림을 보내고 또는 다른 액션을 취합니다.
         Alert.alert("리뷰 작성 완료", "리뷰가 성공적으로 작성되었습니다.");
-        navigation.goBack(); // 또는 다른 화면으로 이동
+        navigation.navigate('Main'); // 또는 다른 화면으로 이동
       } else {
         // 서버 응답에 문제가 있는 경우, 에러 처리를 합니다.
         Alert.alert("리뷰 작성 실패", "문제가 발생했습니다. 다시 시도해주세요.");

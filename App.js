@@ -28,7 +28,7 @@ import WatingSetup from './screens/wating_setup';
 import ReviewList from './screens/user_review';
 import SettingsScreen from './screens/user_mypage';
 import Payment from './screens/payment';
-
+import ReviewModify from './screens/review_modify';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +64,7 @@ export default function App() {
         <Stack.Screen name="ReviewList" component={ReviewList} options={{ headerShown: false }}/>
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
+        <Stack.Screen name="ReviewModify" component={ReviewModify} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

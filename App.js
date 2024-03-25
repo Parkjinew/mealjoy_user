@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Main from "./screens/Main";
@@ -35,22 +36,30 @@ const Stack = createStackNavigator();
 
 
 export default function App() {
-  const [initialRouteName, setInitialRouteName] = useState('Main');
+  const [initialRouteName, setInitialRouteName] = useState(null); // 초기값을 null로 설정
 
   useEffect(() => {
-    const getInitialRoute = async () => {
+    async function getInitialRouteName() {
       try {
         const chatbotEnabled = await AsyncStorage.getItem('chatbotEnabled');
-        if (chatbotEnabled !== null && JSON.parse(chatbotEnabled) === true) {
-          setInitialRouteName('ChatBot'); // 챗봇 활성화가 true이면 'ChatBot'을 초기 라우트로 설정
+        if (chatbotEnabled !== null && JSON.parse(chatbotEnabled)) {
+          setInitialRouteName('ChatBot'); // 챗봇이 활성화되어 있으면 'ChatBot'으로 설정
+        } else {
+          setInitialRouteName('Main'); // 그렇지 않으면 'Main'으로 설정
         }
       } catch (error) {
-        console.error("Could not fetch chatbot setting:", error);
+        console.error("Error fetching initial route name:", error);
+        setInitialRouteName('Main'); // 에러 발생 시 'Main'으로 설정
       }
-    };
+    }
 
-    getInitialRoute();
+    getInitialRouteName();
   }, []);
+
+  if (initialRouteName === null) {
+    // 초기 라우트 이름이 설정되기 전에 로딩 인디케이터를 보여줍니다.
+    return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator size="large" /></View>;
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRouteName}>

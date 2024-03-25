@@ -140,7 +140,7 @@ const reviewsData2 = [
 const ReviewCard = ({ review }) => {
     // 별점을 렌더링하는 함수
     const renderStars = () => {
-        return Array.from({ length: review.rating }, (_, i) => (
+        return Array.from({ length: review.review.score }, (_, i) => (
           <AntDesign key={i} name="star" size={24} color="#ffd700" />
         ));
       };
@@ -149,24 +149,27 @@ const ReviewCard = ({ review }) => {
     // 이미지를 렌더링하는 함수
     const renderImages = () => {
         // 이미지 URI 배열이 주어지지 않았거나 비어있으면 아무것도 렌더링하지 않습니다.
-        if (!review.imageUri || review.imageUri.length === 0) {
+        if (!review.reviewImg || review.reviewImg.length === 0) {
           return null;
         }
   
-      const imagesArray = Array.isArray(review.imageUri) ? review.imageUri : [review.imageUri];
+      const imagesArray = Array.isArray(review.reviewImg) ? review.reviewImg : [review.reviewImg];
+      
+      console.log("image", imagesArray)
   
       return (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {imagesArray.map((uri, index) => {
-            // URI가 문자열이 아니라면, 즉 로컬 이미지 리소스라면 그대로 사용
-            if (typeof uri !== 'string') {
-              return <Image key={index} source={uri} style={styles.reviewImage} />;
-            }
-            // 원격 이미지 URI 처리 (예시로 http 또는 https로 시작하는 경우만 유효하다고 가정)
-            if (uri.startsWith('http') || uri.startsWith('https')) {
-              return <Image key={index} source={{ uri }} style={styles.reviewImage} />;
-            }
-            return null; // 유효하지 않은 경우 렌더링하지 않음
+          {imagesArray.map((img) => {
+            // // URI가 문자열이 아니라면, 즉 로컬 이미지 리소스라면 그대로 사용
+            // if (typeof uri !== 'string') {
+            //   return <Image key={uri.img_seq} source={uri} style={styles.reviewImage} />;
+            // }
+            // // 원격 이미지 URI 처리 (예시로 http 또는 https로 시작하는 경우만 유효하다고 가정)
+            // if (uri.imageFilename.startsWith('http') || uri.imageFilename.startsWith('https')) {
+            //   return <Image key={uri.img_seq} source={{ uri:uri.imageFilename }} style={styles.reviewImage} />;
+            // }
+            // return null; // 유효하지 않은 경우 렌더링하지 않음
+            <Image key={img.img_seq} source={{uri : img.imageFilename}} style={styles.reviewImage} />
           })}
           
         </ScrollView>
@@ -175,16 +178,16 @@ const ReviewCard = ({ review }) => {
   
     return (
         <View style={styles.reviewCard}>
-        <Text style={styles.customerName}>{review.customerName}</Text>
+        <Text style={styles.customerName}>{review.review.user_id}</Text>
         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
           {renderStars()}
         </View>
         {renderImages()}
-        <Text style={styles.reviewText}>{review.reviewText}</Text>
-        {review.owner && ( // owner 정보가 있을 때만 렌더링
+        <Text style={styles.reviewText}>{review.review.details}</Text>
+        {review.review.answer && ( // owner 정보가 있을 때만 렌더링
           <View style={styles.ownerContainer}>
             <Text style={styles.ownername}>사장님</Text>
-            <Text style={styles.ownerText}>{review.owner}</Text>
+            <Text style={styles.ownerText}>{review.review.answer}</Text>
           </View>
         )}
       </View>
@@ -226,7 +229,7 @@ const reviewsData = [
   { rating: 1, count: 0 },
 ];
 
-const App = () => {
+const ReviewList = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -236,11 +239,15 @@ const App = () => {
   const [filter, setFilter] = useState("all"); // 'all' 또는 'replied'
   const [displayLimit, setDisplayLimit] = useState(10); // 초기에 보여질 리뷰 수
 
+  const reviewList = {route}.route.params.reviewList;
+  console.log(reviewList[0])
+
+
   // 리뷰 데이터에서 답변이 있는 리뷰만 필터링하는 함수
-  const repliedReviews = reviewsData2.filter((review) => review.ownerResponse);
+  const repliedReviews = reviewList.filter((review) => review.review.answer);
 
   // 현재 필터에 따라 보여줄 리뷰 리스트를 결정하는 함수
-  const displayedReviews = filter === "all" ? reviewsData2 : repliedReviews;
+  const displayedReviews = filter === "all" ? reviewList : repliedReviews;
 
 
   const [sortOption, setSortOption] = useState("ranking"); // 기본 정렬 옵션을 '랭킹순'으로 설정합니다.
@@ -322,10 +329,10 @@ const App = () => {
           <MaterialIcons name="keyboard-arrow-down" size={24} color="#ff3b30" />
         </TouchableOpacity>
       </View>
-      {displayedReviews.slice(0, displayLimit).map((review, index) => (
-          <ReviewCard key={index} review={review} />
+      {displayedReviews.slice(0, displayLimit).map((review) => (
+          <ReviewCard key={review.review.review_seq} review={review} />
           ))}
-        {reviewsData2.length > displayLimit && (
+        {reviewList.length > displayLimit && (
             <TouchableOpacity onPress={handleShowMore} style={styles.showMoreButton}>
             <Text style={styles.showMoreButtonText}>+     더보기</Text>
           </TouchableOpacity>
@@ -614,4 +621,4 @@ const styles = StyleSheet.create({
     }
       
   });
-export default App;
+export default ReviewList;

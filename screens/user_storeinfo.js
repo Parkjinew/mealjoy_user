@@ -150,7 +150,8 @@ const StoreInfo = ({route}) => {
   }
 
   const review = async() => {
-    navigation.navigate("ReviewList")
+    const response = await axios.post('http://211.227.224.159:8090/botbuddies/reviewPage',{store_seq:store.store_seq})
+    navigation.navigate("ReviewList", {reviewList:response.data})
     
   }
 

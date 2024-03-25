@@ -67,6 +67,16 @@ const SettingsScreen = () => {
     fetchUserInfo();
   }, []);
 
+  useEffect(() => {
+    const getChatbotSetting = async () => {
+      const chatbotSetting = await AsyncStorage.getItem('chatbotEnabled');
+      if (chatbotSetting !== null) {
+        setChatbotEnabled(JSON.parse(chatbotSetting));
+      }
+    };
+
+    getChatbotSetting();
+  }, []);
 
   const orderlist = async () => {
     console.log(userInfo)
@@ -170,12 +180,10 @@ const SettingsScreen = () => {
     }
   };
 
-  const toggleChatbotSwitch = () => {
-    setChatbotEnabled(!isChatbotEnabled);
-    console.log(
-      "챗봇 활성화 상태:",
-      !isChatbotEnabled ? "활성화됨" : "비활성화됨"
-    );
+  const toggleChatbotSwitch = async () => {
+    const newState = !isChatbotEnabled;
+    setChatbotEnabled(newState);
+    await AsyncStorage.setItem('chatbotEnabled', JSON.stringify(newState));
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -259,6 +267,7 @@ const SettingsScreen = () => {
           </View>
 
           {/* 챗봇 활성화 스위치 */}
+
           <View style={styles.infoManagementContainer}>
             <Text style={styles.infoManagementText}>
               메인페이지 챗봇 비활성화

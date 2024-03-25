@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,Image,Alert } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 // 상단 헤더 컴포넌트
 const Header = () => {
     const navigation = useNavigation();
@@ -19,6 +20,40 @@ const Header = () => {
     };
 // 각 리뷰 아이템을 표시하는 컴포넌트
 const ReviewItem = ({ review, onEdit, onDelete }) => {
+    const navigation = useNavigation();
+
+    const handleDelete = async () => {
+        console.log(review.review_seq)
+        try {
+          // 서버에 DELETE 요청을 보냅니다. 주소와 세부 설정은 실제 환경에 맞게 조정해야 합니다.
+          const response = await axios.post('http://119.200.31.63:8090/botbuddies/reviewDelete',{reviewSeq: review.review_seq});
+    
+          if (response.status >= 200 && response.status < 300) {
+            // 요청이 성공적으로 처리되면 상위 컴포넌트의 삭제 핸들러를 호출
+            Alert.alert('리뷰삭제', '리뷰가 삭제되었습니다.', [
+                {
+                  text: 'OK',
+                  onPress: () => navigation.replace('ReviewModify'), // 'ReviewScreen'은 현재 화면의 이름으로 대체하세요.
+                },
+              ]);
+            onDelete(review.review_seq);
+
+          } else {
+            // 서버에서 오류 응답을 받은 경우
+            console.error('Failed to delete the review.');
+          }
+        } catch (error) {
+          // 네트워크 오류 등의 예외 처리
+          console.error('Error:', error);
+        }
+      };
+
+
+
+
+
+
+
     const imageUris = review.image_filenames 
                       ? review.image_filenames.split(",").filter(uri => uri && uri.trim() !== "").slice(0, 3) 
                       : [];
@@ -47,7 +82,7 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
           <TouchableOpacity onPress={onEdit} style={styles.editButton}>
             <Text style={styles.buttonText}>수정</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+          <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
             <Text style={styles.buttonText}>삭제</Text>
           </TouchableOpacity>
         </View>
@@ -70,13 +105,13 @@ const ReviewModify = ({ route }) => {
     // 리뷰 수정 로직
   };
 
-  const handleDeleteReview = (id) => {
-    // 리뷰 삭제 로직
+  const handleDeleteReview = (reviewSeq) => {
+    setReviews(reviews.filter(review => review.review_seq !== reviewSeq));
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-  <Header onBackPress={handleBackPress} />
+  <Header />
   <ScrollView style={styles.scrollView}>
     {reviews.map((review, index) => (
       <ReviewItem
@@ -115,11 +150,13 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         marginBottom: 8,
+        marginTop:10
     },
     image: {
         width: 100,
         height: 100,
         borderRadius: 8,
+        marginRight: 6,
     },
     imagePlaceholder: {
         width: 100,

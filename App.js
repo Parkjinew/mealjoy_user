@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Main from "./screens/Main";
@@ -29,14 +29,31 @@ import ReviewList from './screens/user_review';
 import SettingsScreen from './screens/user_mypage';
 import Payment from './screens/payment';
 import ReviewModify from './screens/review_modify';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 
 
 export default function App() {
+  const [initialRouteName, setInitialRouteName] = useState('Main');
+
+  useEffect(() => {
+    const getInitialRoute = async () => {
+      try {
+        const chatbotEnabled = await AsyncStorage.getItem('chatbotEnabled');
+        if (chatbotEnabled !== null && JSON.parse(chatbotEnabled) === true) {
+          setInitialRouteName('ChatBot'); // 챗봇 활성화가 true이면 'ChatBot'을 초기 라우트로 설정
+        }
+      } catch (error) {
+        console.error("Could not fetch chatbot setting:", error);
+      }
+    };
+
+    getInitialRoute();
+  }, []);
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator initialRouteName={initialRouteName}>
         <Stack.Screen name="Main" component={Main} options={{ headerShown: false }}/>
         <Stack.Screen name="SearchResult" component={SearchResult} options={{ headerShown: false }}/>
         <Stack.Screen name="AddressChange" component={AddressChange} options={{ headerShown: false }} />

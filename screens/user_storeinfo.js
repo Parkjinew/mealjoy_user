@@ -23,7 +23,6 @@ const StoreInfo = ({route}) => {
   const store = data.store;
   const menu = data.menu;
   console.log(store);
-  console.log(menu);
 
   const [favorite, setFavorite] = useState(false);
 
@@ -134,10 +133,11 @@ const StoreInfo = ({route}) => {
 
     
 
-  const reservation = async(store_seq) => {
+  const reservation = async() => {
     if(isLoggedIn){
       try{
         console.log("Reservation");
+        navigation.navigate("Reservation", {user:userInfo[0], store:store});
       } catch(error){
         console.error(error);
       }
@@ -206,7 +206,7 @@ const StoreInfo = ({route}) => {
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation(store.store_Seq)}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
             <Text style={styles.iconText}>예약하기</Text>
           </TouchableOpacity>
@@ -235,12 +235,13 @@ const StoreInfo = ({route}) => {
 
       </ScrollView>
 
-      <TouchableOpacity style={styles.orderButton}  onPress={() => handlePress(store.store_seq)}>
-        <Text style={styles.orderButtonText}>
-          {/* 테이블 수 가져오기 수정필요 */}
-          {store.category_seq === 2 ? "주문하기" :  store.tableCount === 0 ? '줄서기' : '주문하기'}
-        </Text>
-      </TouchableOpacity>
+      {store.open_state === '1' && (
+        <TouchableOpacity style={styles.orderButton} onPress={() => handlePress(store.store_seq)}>
+          <Text style={styles.orderButtonText}>
+            {store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기'}
+          </Text>
+        </TouchableOpacity>
+      )}
 
 
       

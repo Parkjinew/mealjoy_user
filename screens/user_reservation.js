@@ -15,6 +15,8 @@ LocaleConfig.locales['ko'] = {
   dayNamesShort: ['일','월','화','수','목','금','토'],
   today: '오늘'
 };
+
+
 LocaleConfig.defaultLocale = 'ko';
 
 const calendarTheme = {
@@ -41,6 +43,8 @@ const Reservation = ({route}) => {
     const store = data.store;
     const navigation = useNavigation();
     const reserveInfo = data.reserveInfo;
+
+    const allTimeSlots = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
     
 
     const reserveDateTime = reserveInfo.map(info => ({
@@ -245,7 +249,7 @@ const onDayPress = (day) => {
         styles.timeSlotButton,
         selectedTimeSlot === time && styles.selectedTimeSlotButton
       ]}
-      onPress={() => selectTimeSlot(time)}
+      onPress={() => {selectTimeSlot(time)}}
     >
       <Text style={[
         styles.timeSlotText,

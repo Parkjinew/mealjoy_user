@@ -30,12 +30,7 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
     
           if (response.status >= 200 && response.status < 300) {
             // 요청이 성공적으로 처리되면 상위 컴포넌트의 삭제 핸들러를 호출
-            Alert.alert('리뷰삭제', '리뷰가 삭제되었습니다.', [
-                {
-                  text: 'OK',
-                  onPress: () => navigation.replace('ReviewModify'), // 'ReviewScreen'은 현재 화면의 이름으로 대체하세요.
-                },
-              ]);
+            Alert.alert('리뷰삭제', '리뷰가 삭제되었습니다.');
             onDelete(review.review_seq);
 
           } else {
@@ -193,7 +188,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 13,
     padding: 16,
     marginBottom: 16,
     marginHorizontal: 16,

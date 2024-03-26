@@ -288,23 +288,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
         ))}
       </ScrollView>
 
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Entypo name="home" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Icon name="search" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-        <FontAwesome name="wechat" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Icon name="heart" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <FontAwesome6 name="user" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-      </View>
+      
     </SafeAreaView>
   );
 };

@@ -250,7 +250,7 @@ export default function UserOrder({route}){
         <View style={styles.body}>
 
         <View style={styles.starContainer}>
-        <Text style={styles.title}>타코</Text>
+        <Text style={styles.title}>{store.store_name}</Text>
         </View>       
         
 
@@ -284,31 +284,12 @@ export default function UserOrder({route}){
         </View>
 
       </ScrollView>
-
+          <SafeAreaView>
        <TouchableOpacity style={styles.orderButton} onPress={() => Payment()}>
         <Text style={styles.orderButtonText} >
           {`${totalPrice.toLocaleString()}원 주문하기`}
         </Text>
       </TouchableOpacity> 
-
-      <SafeAreaView>
-      <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuItem}>
-          <Entypo name="home" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Icon name="search" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Icon name="heart" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <FontAwesome6 name="user" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-      </View>
       </SafeAreaView>
     </View>
   );

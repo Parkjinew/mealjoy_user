@@ -256,34 +256,22 @@ const StoreInfo = ({route}) => {
       </ScrollView>
 
       {/* {store.open_state === '1' && ( */}
+      <SafeAreaView>
         <TouchableOpacity style={store.open_state === '0' ? styles.endTimeButton : styles.orderButton} onPress={() => handlePress(store.store_seq, store.open_state)}>
           <Text style={styles.orderButtonText}>
             {store.open_state === '0' ? "오픈 전" : (store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기')}
             {/* {store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기'} */}
           </Text>
         </TouchableOpacity>
+        </SafeAreaView>
       {/* )} */}
 
 
       
-      <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuItem}>
-          <Entypo name="home" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Icon name="search" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <Icon name="heart" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
-          <FontAwesome6 name="user" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-      </View>
+     
     </View>
+
+
   );
 };
 

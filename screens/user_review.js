@@ -278,23 +278,7 @@ const ReviewList = ({route}) => {
 
       {/* 탭 바 부분 */}
 
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Entypo name="home" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Icon name="search" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Icon name="heart" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <FontAwesome6 name="user" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-      </View>
+      
     </SafeAreaView>
   );
 };
@@ -313,7 +297,7 @@ const styles = StyleSheet.create({
     headerText: {
       fontSize: 20,
       fontWeight: "bold",
-      marginRight: 170,
+      marginRight: 160,
     },
     tabBar: {
       height: 60,

@@ -293,33 +293,19 @@ const onDayPress = (day) => {
   </View>
 )}
       </ScrollView>
+      <SafeAreaView style={styles.safe}>
       <TouchableOpacity style={styles.orderButton} onPress={handleReservation}>
         <Text style={styles.orderButtonText}>예약하기</Text>
       </TouchableOpacity>
-      <SafeAreaView>
-        <View style={styles.menu}>
-          <TouchableOpacity style={styles.menuItem}>
-            <Entypo name="home" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="search" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <Icon name="heart" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <FontAwesome6 name="user" size={24} color="#ff3b30" />
-          </TouchableOpacity>
-        </View>
       </SafeAreaView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  safe:{
+    paddingTop: -65
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -439,6 +425,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', // 내부 텍스트 센터 정렬
     marginHorizontal: 20, // 좌우 마진
     marginVertical: 10, // 상하 마진
+    marginTop:-5
   },
   orderButtonText: {
     color: 'white', // 텍스트 색상

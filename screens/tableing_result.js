@@ -21,7 +21,10 @@ const Header = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Main")}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
+        <View style={styles.headerText2}>
         <Text style={styles.headerText}>나의 원격 줄서기 내역 </Text>
+        </View>
+        <View></View>
       </View>
       <View style={styles.divider} />
     </View>
@@ -203,6 +206,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  headerText2: {
+    marginLeft:-20
+  },
   detailBox: {
     alignSelf: 'center', // 컴포넌트를 부모의 중앙에 배치
     width: '90%', // 전체 가로 너비의 90%를 차지하도록 설정
@@ -271,10 +277,10 @@ const styles = StyleSheet.create({
   },
   headerContainer: { //여기조절(원격줄서기 내역)
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent:'space-between',
     padding: 10,
     marginBottom: 5,
-    marginTop: 32,
+    marginTop: 0,
   },
   headerText: {
     fontSize: 18,

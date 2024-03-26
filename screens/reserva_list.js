@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Alert } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 const HorizontalDivider = () => {
   return <View style={styles.horizontalDivider} />;
 };
@@ -17,123 +18,151 @@ const Card = ({ children }) => {
 
 // Header 컴포넌트
 const Header = ({ totalCafes, onSortPress }) => {
+  const navigation = useNavigation();
   // 이 함수에서 sortOption과 setSortOption을 제거하였습니다.
   return (
-    <View>
-      
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => console.log("뒤로 가기")}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
+
         <Text style={styles.headerText}>나의 예약 내역 리스트</Text>
+        <View style={{ width: 24 }}></View>
       </View>
-      <View style={styles.divider} />
-    </View>
+
   );
+};
+const now = new Date();
+
+// 예약 일시 문자열을 Date 객체로 변환하는 함수
+const parseDateTime = (dateString, timeString) => {
+  const [year, month, day] = dateString.split('-').map(Number);
+  const [hour, minute] = timeString.split(':').map(Number);
+  return new Date(year, month - 1, day, hour, minute);
 };
 
 
-const ReservaList = () => {
+const ReservaList = ({route}) => {
+  const navigation = useNavigation();
+  const { ReservaList } = route.params;
+  const [reservations, setReservations] = useState(ReservaList);
+  const formatTime = (timeString) => {
+    const parts = timeString.split(':'); // "18:00:00"을 ":"로 분리하여 ["18", "00", "00"] 얻음
+    return `${parts[0]}:${parts[1]}`; // 시와 분만 사용하여 "18:00" 반환
+  };
+
+  const cancelReservation = async (reservationId) => {
+   
+    try {
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/reserveCancel', { id: reservationId });
+      console.log(response.data);
+      // StoreInfo 페이지로 이동하면서 서버로부터 받은 응답 데이터를 넘깁니다.
+      const updatedReservations = reservations.filter(reservation => reservation.reserve_seq !== reservationId);
+      setReservations(updatedReservations);
+
+      // 예약 목록이 업데이트되면 화면이 자동으로 새로고침됨
+      Alert.alert("예약 취소 완료", "선택하신 예약이 취소되었습니다.");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 예약 취소 확인 다이얼로그 표시
+  const showCancelConfirmation = (reservationId) => {
+    Alert.alert(
+      '예약 취소', // Alert 제목
+      '정말 예약을 취소하시겠습니까?', // 메시지
+      [
+        {
+          text: '취소',
+          onPress: () => console.log('취소 버튼 클릭'),
+          style: 'cancel',
+        },
+        {
+          text: '확인',
+          onPress: () => cancelReservation(reservationId), // 예약 취소 처리 함수 호출
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {/* Your scrollable content */}
-      <Header/>
-      <HorizontalDivider />
-      <Card>
-      {/* 첫 번째 예약리스트 항목 */}
-      <View style={styles.detailBox}>
-        {/* 첫 번째 예약 상세 정보 */}
-          {/* ... */}
-        <View style={styles.detailRow}>
-          <Text style={styles.detailTitle}>홍콩반점</Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>이용예정</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>예약 일시</Text>
-          <Text style={styles.detailValue}>2024-03-06 (수) 19:43</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>요청사항</Text>
-          <Text style={styles.detailValue}>내용없음</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>인원</Text>
-          <Text style={styles.detailValue}>5명</Text>
-        </View>
-       
-        <View style={styles.actionRow}>
-          <TouchableOpacity style={styles.actionButton}>
-            <Text style={styles.actionButtonText}>매장상세보기</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
-            <Text style={styles.actionButtonText}>예약취소</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      </Card>
-      <Card>
-        {/* ... 추가 예약 항목들 ... */}
-        {/* 두 번째 예약리스트 항목 */}
-        <View style={styles.detailBox}>
-          {/* 두 번째 예약 상세 정보, 텍스트를 원하는 대로 변경하세요 */}
-          <View style={styles.detailRow}>
-            <Text style={styles.detailTitle}>센세이스시</Text>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>이용완료</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>예약 일시</Text>
-            <Text style={styles.detailValue}>2024-03-05 (목) 12:00</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>요청사항</Text>
-            <Text style={styles.detailValue}>초밥 위에 생강 추가</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>인원</Text>
-            <Text style={styles.detailValue}>8명</Text>
-          </View>
-          <View style={styles.actionRow}>
-            <TouchableOpacity style={styles.actionButton}>
-              <Text style={styles.actionButtonText}>매장상세보기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <Text style={styles.actionButtonText}>리뷰쓰기</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        </Card>
+        <Header />
+        <HorizontalDivider />
+        {reservations.length > 0 ? (
+        reservations.map((reservation, index) => {
+           const reservationDateTime = parseDateTime(reservation.reserve_date, reservation.reserve_time);
+           const isPast = reservationDateTime < now;
+           const statusText = isPast ? "이용완료" : (reservation.state === 0 ? "예약대기" : "예약완료");
+           const opacityStyle = isPast ? {opacity: 0.5} : {}; // 과거 예약일 경우 투명도 조절
+           const storeinfo = async () => {
+            try {
+              const response = await axios.post('http://119.200.31.63:8090/botbuddies/storeinfo', { id: reservation.store_seq });
+              console.log(response.data);
+              // StoreInfo 페이지로 이동하면서 서버로부터 받은 응답 데이터를 넘깁니다.
+              navigation.navigate('StoreInfo', response.data);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+           return (
+          <Card key={index} style={{...styles.card, ...opacityStyle}}>
+            <View style={styles.detailBox}>
+              <View style={styles.detailRow}>
+                <Text style={styles.detailTitle}>{reservation.store_name}</Text>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>{statusText}</Text>
+                </View>
+              </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>예약 일시</Text>
+                <Text style={styles.detailValue}>{reservation.reserve_date} {formatTime(reservation.reserve_time)}</Text>
+              </View>
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>인원</Text>
+                <Text style={styles.detailValue}>{reservation.reserve_num}명</Text>
+              </View>
+              <View style={styles.actionRow}>
+                <TouchableOpacity style={styles.actionButton} onPress={storeinfo}>
+                  <Text style={styles.actionButtonText}>매장상세보기</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton}
+              onPress={() => showCancelConfirmation(reservation.reserve_seq)}>
+                  <Text style={styles.actionButtonText}>예약취소</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Card>
+        );
+           })):(<View style={styles.noReservationsContainer}>
+            <Text style={styles.noReservationsText}>예약 내역이 없습니다.</Text>
+          </View>)}
+
       </ScrollView>
-        {/* ...하단 탭 바... */}
-      
-      <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem} >
-          <Entypo name="home" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Icon name="search" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} >
-          <FontAwesome5 name="robot" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} >
-          <Icon name="heart" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <FontAwesome6 name="user" size={24} color="#ff3b30" />
-        </TouchableOpacity>
-      </View>
     </View>
-    </SafeAreaView>
+  </SafeAreaView>
+  
   );
+
+  
 };
 
 const styles = StyleSheet.create({
+  noReservationsContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20, // 메시지가 너무 화면 가장자리에 붙지 않도록 패딩 추가
+    paddingTop:60
+  },
+  noReservationsText: {
+    fontSize: 18,
+    color: 'grey',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: 'white' // 이 색상은 상태 표시줄 배경색과 일치해야 합니다.
@@ -144,11 +173,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 18,
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: '#ff3b30', // 빨간색 테두리를 회색으로 변경합니다.
+    borderColor: 'white', // 빨간색 테두리를 회색으로 변경합니다.
     backgroundColor: 'white', // 카드 배경색을 흰색으로 설정합니다.
     padding: 10, // 내부 패딩을 추가하여 내용과 테두리 사이에 공간을 만듭니다.
     marginBottom: 10, // 다음 카드와의 간격
-  
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    // Android 그림자 스타일
+    elevation: 4,
     
     // width, height는 대부분 상황에 따라 조정이 필요합니다.
     // 예를 들어, flex를 사용하거나 padding과 margin으로 크기를 조정할 수 있습니다.
@@ -159,23 +196,18 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: 'space-between', // 왼쪽에 아이콘, 오른쪽에 텍스트를 배치하기 위해 변경
+    justifyContent: 'center', // 중앙에 정렬하기 위해 이 속성을 'center'로 설정합니다.
     paddingHorizontal: 10,
-    paddingVertical: 5, // 위아래 패딩을 추가하여 헤더의 높이를 조절합니다.
-  
-    
+    paddingVertical: 5,
+    borderBottomWidth: 1, // 밑줄 추가
+    borderColor:'#ffff',
+    paddingBottom:20,
+    paddingTop:20
   },
   scrollView: {
     flex: 1,
   },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    marginBottom: 20,
-    borderBottomWidth: 1, // 밑줄 추가
-   
-  },
+
   detailBox: {
     padding: 16,
     borderRadius: 5, // 둥근 모서리 추가
@@ -209,12 +241,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#white',
   },
-  headerText: {
-    fontWeight: "bold",
-    fontSize: 18,
-    flex: 1, // 이전 marginLeft를 제거하고 flex를 사용하여 텍스트를 중앙에 위치시킵니다.
-    textAlign: 'center', // 텍스트를 중앙으로 정렬합니다.
-  },
+
 
    // 예약 상세 정보를 감싸는 박스에 검은색 테두리를 추가합니다.(2개감싸져잇어서 이걸 fff로 해두니사라짐 ㅠ)
    detailBox: {
@@ -284,30 +311,16 @@ const styles = StyleSheet.create({
   actionButtonText: {
     color: 'black',
   },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    marginBottom: 30,
-  },
-  headerText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft : 129,
-  },
+
+
  // ...기존의 스타일들...
- headerContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  justifyContent: 'center', // 중앙 정렬을 위해 추가
-  padding: 10,
-},
-headerText: {
-  fontSize: 18,
+
+
+ headerText: {
   fontWeight: "bold",
-  // marginLeft을 제거하고 아래 스타일 추가
-  textAlign: 'left', // 텍스트 중앙 정렬
-  flex: 1, // 컨테이너에서 남은 공간을 모두 차지하도록
+  fontSize: 18,
+  textAlign: 'center', // 텍스트를 중앙으로 정렬합니다.
+  flex: 1, // 텍스트가 컨테이너에서 가능한 모든 공간을 차지하도록 합니다.
 },
 // ...기존의 스타일들...
 

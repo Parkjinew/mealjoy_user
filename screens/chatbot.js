@@ -140,9 +140,12 @@ const ChatBot = () => {
           
 
         } else if(response.data.text=="매장검색"){
-          console.log(response.data.keword)
+          const searchStoreResponse = await axios.post("http://211.227.224.159:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
           
-      }else{
+      
+      
+      
+        }else{
 
           const botMessage = {
             id: String(messages.length + 2), // ID 업데이트 주의

@@ -210,14 +210,22 @@ const styles = StyleSheet.create({
     marginLeft:-20
   },
   detailBox: {
-    alignSelf: 'center', // 컴포넌트를 부모의 중앙에 배치
-    width: '90%', // 전체 가로 너비의 90%를 차지하도록 설정
+    alignSelf: 'center',
+    width: '90%',
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ff3b30',
-    padding: 30, // 내부 여백을 늘림
-    marginTop: 70, // 상단 여백 추가
-    marginBottom: 60, // 하단 여백 추가
+    padding: 30,
+    marginTop: 70,
+    marginBottom: 60,
+    backgroundColor: 'white', // 그림자가 보이려면 배경색이 있어야 합니다.
+    
+    // iOS용 그림자 스타일
+    shadowColor: '#000', // 그림자 색
+    shadowOffset: { width: 0, height: 2 }, // 그림자 방향 (이 경우 아래로)
+    shadowOpacity: 0.25, // 그림자 투명도
+    shadowRadius: 3.84, // 그림자 블러 반경
+    
+    // Android용 그림자 스타일
+    elevation: 5, // Android에서는 elevation으로 그림자를 조절
   },
 
   wait: {

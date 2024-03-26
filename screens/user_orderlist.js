@@ -39,6 +39,14 @@ const OrderList = ({route}) => {
 
     const renderRestaurants = () => {
       const restaurantItems = [];
+
+      if (restaurants.length === 0) {
+        return (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>주문 내역이 없습니다.</Text>
+          </View>
+        );
+      }
       for (let i = 0; i < restaurants.length; i++) {
         const item = restaurants[i];
         restaurantItems.push(

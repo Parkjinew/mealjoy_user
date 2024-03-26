@@ -91,10 +91,7 @@ const ReviewModify = ({ route }) => {
   const [reviews, setReviews] = useState(route.params?.reviewModify || []);
 
 
-  const handleBackPress = () => {
-    // 뒤로 가기 동작 처리
-    navigation.goBack();
-  };
+
 
   const handleEditReview = (id, updatedReview) => {
     // 리뷰 수정 로직
@@ -108,20 +105,38 @@ const ReviewModify = ({ route }) => {
     <SafeAreaView style={styles.safeArea}>
   <Header />
   <ScrollView style={styles.scrollView}>
-    {reviews.map((review, index) => (
+  {reviews.length > 0 ? (
+    reviews.map((review) => (
       <ReviewItem
         key={review.review_seq} // 고유 ID를 key로 사용하는 것이 좋습니다.
         review={review}
         onEdit={() => handleEditReview(review.review_seq, review)}
         onDelete={() => handleDeleteReview(review.review_seq)}
       />
-    ))}
+    ))
+  ):(
+    <View style={styles.noReviewsContainer}>
+            <Text style={styles.noReviewsText}>작성한 리뷰가 없습니다.</Text>
+          </View>
+  )
+  }
   </ScrollView>
 </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  noReviewsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 45, // 또는 적절한 값으로 조정
+    
+  },
+  noReviewsText: {
+    fontSize: 17,
+    color: '#666',
+  },
     empty:{
             marginBottom:-20
     },

@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
 import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Setting = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          // 저장된 userInfo가 있으면 JSON으로 파싱하여 상태를 업데이트합니다.
+          setUserInfo(JSON.parse(storedUserInfo));
+        }
+      } catch (error) {
+        console.log(error);
+        // 에러 처리 로직을 추가할 수 있습니다.
+      }
+    };
+    
+    fetchUserInfo();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,23 +46,19 @@ const Setting = () => {
         
         <View style={styles.edge}>
         <View style={styles.infoItem}>
-          <Text style={styles.infoText}>이름</Text>
-          <Text style={styles.valueText}>박지뉴</Text>
-          <View></View>
-        </View>
-    
-        <View style={styles.infoItem}>
-          <Text style={styles.infoText}>이메일</Text>
-          <Text style={styles.valueText}>jaecholoves@naver.com</Text>
-          <View></View>
+          <Text style={styles.infoText}>아이디</Text>
+          <Text style={styles.valueText}>{userInfo?.[0]?.user_id}</Text>
+          <Ionicons name="chevron-forward-outline" size={24} color="white" />
         </View>
         <TouchableOpacity style={styles.infoItem} onPress={() => navigation.navigate('Nick')}>
           <Text style={styles.infoText}>닉네임</Text>
+          <Text style={styles.valueText}>{userInfo?.[0]?.user_nick}</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
+
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoItem} onPress={() => navigation.navigate('Number')}>
           <Text style={styles.infoText}>휴대폰 번호</Text>
-          <Text style={styles.valueText}>010-1234-1234</Text>
+          <Text style={styles.valueText}>{userInfo?.[0]?.user_phone}</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </TouchableOpacity>
 
@@ -92,8 +107,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
+
   },
   headerTitle: {
     flex: 1,
@@ -116,18 +130,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#efefef',
-  },
-  headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
+
+
   infoContainer: {
     marginVertical: 20,
   },

@@ -117,7 +117,7 @@ const SettingsScreen = () => {
       // 오류 처리 로직, 필요에 따라 사용자에게 알림 등
     }
   };
-  
+ 
 
 
   // 사용자의 위치 정보 사용 권한 상태를 확인하고 업데이트하는 함수
@@ -206,7 +206,7 @@ const SettingsScreen = () => {
         <HeaderContainer />
         <View style={{ flex: 1 }}>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
+          <TouchableOpacity onPress={()=> navigation.navigate("Setting")}>
           <View style={styles.menuItem} >
             <Ionicons name="person-outline" size={24} color="#ff3b30" />
             <Text
@@ -274,8 +274,8 @@ const SettingsScreen = () => {
             <Text style={styles.infoManagementText}>위치 정보 허용</Text>
             <Switch
               trackColor={{ false: "#767577", true: "#767577" }}
-              thumbColor={isLocationEnabled ? "#ff3b30" : "white"}
-              ios_backgroundColor="#3e3e3e"
+              thumbColor={isLocationEnabled ? "white" : "white"}
+              ios_backgroundColor={isLocationEnabled ? "#767577" : "white"}
               onValueChange={toggleLocationSwitch}
               value={isLocationEnabled}
             />
@@ -289,7 +289,7 @@ const SettingsScreen = () => {
             </Text>
             <Switch
               trackColor={{ false: "#767577", true: "#767577" }}
-              thumbColor={isChatbotEnabled ? "#ff3b30" : "white"}
+              thumbColor={isChatbotEnabled ? "white" : "white"}
               ios_backgroundColor={isChatbotEnabled ? "#767577" : "white"}
               onValueChange={toggleChatbotSwitch}
               value={isChatbotEnabled}

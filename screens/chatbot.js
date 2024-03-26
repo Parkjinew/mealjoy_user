@@ -139,7 +139,11 @@ const ChatBot = () => {
           }
           
 
-        }else{
+        } else if(response.data.text=="매장검색"){
+          console.log(response.data.keword)
+          
+      }else{
+
           const botMessage = {
             id: String(messages.length + 2), // ID 업데이트 주의
             text: response.data.text,

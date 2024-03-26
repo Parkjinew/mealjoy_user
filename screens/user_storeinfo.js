@@ -155,6 +155,13 @@ const StoreInfo = ({route}) => {
     
   }
 
+  const openMap = (searchQuery) => {
+    const encodedQuery = encodeURIComponent(searchQuery);
+    const url = `https://map.naver.com/v5/search/${encodedQuery}`;
+  
+    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+  };
+
   const handlePress = (store_seq, open_state) => {
     if(open_state == '0'){
 
@@ -218,7 +225,7 @@ const StoreInfo = ({route}) => {
         </View>
 
         <View style={styles.telContainer}>
-          <TouchableOpacity style={styles.iconContainer}>
+          <TouchableOpacity style={styles.iconContainer} onPress={() => openMap(store.store_name)}>
             <AntDesign name="enviroment" size={20} color="black" />
             <Text style={styles.iconText}>매장위치</Text>
           </TouchableOpacity>

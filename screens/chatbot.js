@@ -149,6 +149,7 @@ const ChatBot = () => {
               id: String(`${index + messages.length + 2}`),
               text: `${store.store_name} - ${store.store_addr}`,
               storeId: store.store_seq, // 매장의 상세 정보를 조회할 때 사용할 ID
+              img : store.imageFilename,
               isUser: false,
             }));
         
@@ -272,7 +273,12 @@ const ChatBot = () => {
             <View style={[styles.messageContainer, item.isUser ? styles.userMessageContainer : styles.botMessageContainer]}>
               {!item.isUser && <Image source={require('../assets/joy.png')} style={styles.userAvatar} />}
               <View style={styles.messageBubble}>
+                <View>
+                  {item.img && <Image source={{uri : item.img}} style={styles.imgStyle}  />}
+                </View>
+                <View>
                 <Text style={styles.messageText}>{item.text}</Text>
+                </View>
               </View>
               {item.isUser && <Image source={item.userAvatar} style={styles.userAvatar} />}
             </View>
@@ -368,6 +374,11 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     alignSelf:'flex-start'
+  },
+  imgStyle:{
+    width: 100,
+    height: 100,
+    marginBottom: 10
   },
   messageBubble: {
     marginLeft: 10,

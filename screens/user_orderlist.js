@@ -57,7 +57,7 @@ const OrderList = ({route}) => {
         <View style={styles.menuDetails}>
           <Text style={styles.menuTitle}>{item.store_name}</Text>
           <Text style={styles.menuSubtitle}>{item.menu_names}</Text>
-          <Text style={styles.menuPrice}>총 {item.total_amount}원</Text>
+          <Text style={styles.menuPrice}>총 {item.total_amount.toLocaleString()}원</Text>
           <Text style={styles.menuSubtitle2}>주문일시 : {item.order_at}</Text>
         </View>
       </View>

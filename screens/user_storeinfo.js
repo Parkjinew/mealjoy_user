@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   title: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: 'bold',
     marginTop: 5,
   },

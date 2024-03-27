@@ -75,7 +75,7 @@ export default function UserOrder({route}){
   const store = data.store.store;
   const menu = data.store.menu;
   const tableList = data.tableList;
-  console.log(tableList)
+  console.log(store)
 
    
 
@@ -127,7 +127,7 @@ export default function UserOrder({route}){
    
 
     const orderF = async() => {
-      if(selectedTable == 2){
+      if(selectedTable == 2 || store.category_seq==2){
         Alert.alert(
           "메뉴 주문", // 알림 제목
           "1인분 이상 주문해주세요.", // 알림 메시지
@@ -158,7 +158,13 @@ export default function UserOrder({route}){
 
     const orderT = async(orderDetails) => {
       console.log("주문가능");
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails, selectedTable:selectedTable})
+      if(store.category_seq==2){
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/paycafe', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails})
+        
+      }else{
+        const response = await axios.post('http://211.227.224.159:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails, selectedTable:selectedTable})
+      }
+      
       navigation.navigate("Payment",{totalPrice:totalPrice});
     }
 
@@ -172,37 +178,48 @@ export default function UserOrder({route}){
 
       try{
         console.log(totalCount);
-        if(selectedTable != null){  
-          if(selectedTable == 2){
-            if(totalCount >=1){
-              orderT(orderDetails);
-            }else{
-              orderF();
+        if(store.category_seq == 2){
+          if(totalCount >=1){
+            orderT(orderDetails);
+          }else{
+            orderF();
+          }
+        }else{
+
+          if(selectedTable != null){  
+            if(selectedTable == 2){
+              if(totalCount >=1){
+                orderT(orderDetails);
+              }else{
+                orderF();
+              }
+      
+            } else{
+              if(totalCount >= selectedTable -2){
+                orderT(orderDetails);
+              }else{
+                orderF();
+              }
             }
-    
-          } else{
-            if(totalCount >= selectedTable -2){
-              orderT(orderDetails);
-            }else{
-              orderF();
-            }
+  
+          }else{
+            Alert.alert(
+              "테이블 선택", // 알림 제목
+              "테이블을 선택해주세요.", // 알림 메시지
+              [
+                {
+                  text: "확인", // 아니요 버튼
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel"
+                }              
+              ],
+              { cancelable: false }
+            );
+            
           }
 
-        }else{
-          Alert.alert(
-            "테이블 선택", // 알림 제목
-            "테이블을 선택해주세요.", // 알림 메시지
-            [
-              {
-                text: "확인", // 아니요 버튼
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              }              
-            ],
-            { cancelable: false }
-          );
-          
         }
+        
       } catch(error){
         console.error(error);
       }

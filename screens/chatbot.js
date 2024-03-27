@@ -147,7 +147,10 @@ const ChatBot = () => {
           if (searchStoreResponse.data && searchStoreResponse.data.length > 0) {
             const botMessage =  searchStoreResponse.data.map((store, index) => ({
               id: String(`${index + messages.length + 2}`),
-              text: `${store.store_name} - ${store.store_addr}`,
+              text: `${store.store_name}`,
+              average:`${store.averageRating}`,
+              reviewCount:`${store.reviewCount}`,
+              desc:`${store.store_desc}`,
               storeId: store.store_seq, // 매장의 상세 정보를 조회할 때 사용할 ID
               img : store.imageFilename,
               isUser: false,
@@ -189,6 +192,8 @@ const ChatBot = () => {
       console.error('Error sending message:', error);
     }
   };
+
+  
 
 
   useEffect(() => {
@@ -235,6 +240,16 @@ const ChatBot = () => {
     
   }
 
+  const waitPage = async() => {
+    try{
+      const response = await axios.post('http://119.200.31.63:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://119.200.31.63:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
+    } catch(error){
+      console.error(error);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -272,14 +287,33 @@ const ChatBot = () => {
           >
             <View style={[styles.messageContainer, item.isUser ? styles.userMessageContainer : styles.botMessageContainer]}>
               {!item.isUser && <Image source={require('../assets/joy.png')} style={styles.userAvatar} />}
-              <View style={styles.messageBubble}>
-                <View>
+              {!item.storeId &&<View style={styles.messageBubble}>
+                {/* <View>
                   {item.img && <Image source={{uri : item.img}} style={styles.imgStyle}  />}
-                </View>
+                </View> */}
                 <View>
-                <Text style={styles.messageText}>{item.text}</Text>
+                 <Text style={styles.messageText}>{item.text}</Text>
                 </View>
+                </View>}
+
+                {item.storeId &&
+                  <View  style={styles.restaurantItem}>
+              
+                  <Image source={{uri : item.img}} style={styles.restaurantImage} />
+              
+              <View style={styles.restaurantDetailContainer}>
+                  <View style={styles.restaurantNameAndIcon}>
+                      <Text style={styles.restaurantName}>{item.text}</Text>
+                    
+                  </View>
+                  <View style={styles.restaurantRatingContainer}>
+              <FontAwesome name="star" size={16} color="#ffd700" />
+              <Text style={styles.restaurantRating}> {item.average}</Text>
+                </View>
+                  <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
               </View>
+              </View>  }
+
               {item.isUser && <Image source={item.userAvatar} style={styles.userAvatar} />}
             </View>
           </TouchableOpacity>
@@ -305,7 +339,7 @@ const ChatBot = () => {
         <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Main')}>
           <Entypo name="home" size={24} color="#ff3b30" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => waitPage()}>
         <FontAwesome6 name="users-line" size={24} color="#ff3b30" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem}>
@@ -375,17 +409,56 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignSelf:'flex-start'
   },
-  imgStyle:{
-    width: 100,
-    height: 100,
-    marginBottom: 10
+  restaurantItem: {
+    flexDirection: 'row',
+    marginVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingLeft:15,
+    borderBottomWidth:1,
+    paddingBottom:16,
+    borderColor:'#ddd'
+  },
+  restaurantImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 8,
+    marginRight: 10,
+    resizeMode:'cover'
+  },
+  restaurantDetailContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  restaurantNameAndIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  restaurantNameAndIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  restaurantRatingContainer:{
+    flexDirection: 'row',
+    marginBottom:5
+  },
+  restaurantRating: {
+    marginLeft: 0,
+    fontSize: 14,
+  },
+  restaurantReviews: {
+    fontSize: 12,
+    color: '#666',
   },
   messageBubble: {
     marginLeft: 10,
     padding: 10,
     backgroundColor: '#e5e5e5',
     borderRadius: 20,
-    alignSelf:'flex-start'
+    alignSelf:'flex-start',
+    alignItems:"center"
   },
   messageText: {
     fontSize: 16,

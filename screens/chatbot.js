@@ -142,8 +142,30 @@ const ChatBot = () => {
         } else if(response.data.text=="매장검색"){
           const searchStoreResponse = await axios.post("http://211.227.224.159:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
           
-      
-      
+          console.log("데이터 " ,searchStoreResponse.data)
+
+          if (searchStoreResponse.data && searchStoreResponse.data.length > 0) {
+            const botMessage =  searchStoreResponse.data.map((store, index) => ({
+              id: String(`${index + messages.length + 2}`),
+              text: `${store.store_name} - ${store.store_addr}`,
+              storeId: store.store_seq, // 매장의 상세 정보를 조회할 때 사용할 ID
+              isUser: false,
+            }));
+        
+            updatedMessages = [...updatedMessages, ...botMessage];
+            setMessages(updatedMessages);
+
+          } else {
+            // 검색된 매장이 없을 경우
+            const botMessage = {
+              id: String(messages.length + 2),
+              text: "검색된 매장이 없습니다.",
+              isUser: false,
+            };
+            updatedMessages = [...updatedMessages, botMessage];
+            setMessages(updatedMessages);
+
+          }
       
         }else{
 
@@ -172,6 +194,8 @@ const ChatBot = () => {
     if (flatListRef.current) {
       setTimeout(() => flatListRef.current.scrollToEnd({ animated: true }), 50);
     }
+    
+    console.log("messages", messages)
   }, [messages]);
 
   // 채팅 내역을 자동으로 지우는 함수
@@ -199,6 +223,17 @@ const ChatBot = () => {
     return () => clearTimeout(deleteTimer);
   }, []);
 
+  const storeinfo = async(id) => {
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : id})
+      console.log(response.data);
+      navigation.navigate('StoreInfo', response.data);
+    } catch(error){
+      console.error(error);
+    }
+    
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -216,15 +251,24 @@ const ChatBot = () => {
         style={styles.flexContainer}
         keyboardVerticalOffset={Platform.select({ios: 0, android: 0})}
       >
-        {/* Message List */}
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={item => item.id.toString()}
-          onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
-          onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
-          ListFooterComponent={<View style={styles.empty} />}
-          renderItem={({ item }) => (
+
+      <FlatList
+        ref={flatListRef}
+        data={messages}
+        keyExtractor={item => item.id}
+        onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
+        onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+        ListFooterComponent={<View style={styles.empty} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => {
+              console.log("선택")
+              if (item.storeId) {
+                storeinfo(item.storeId);
+                console.log(item.storeId)
+              }
+            }}
+          >
             <View style={[styles.messageContainer, item.isUser ? styles.userMessageContainer : styles.botMessageContainer]}>
               {!item.isUser && <Image source={require('../assets/joy.png')} style={styles.userAvatar} />}
               <View style={styles.messageBubble}>
@@ -232,8 +276,9 @@ const ChatBot = () => {
               </View>
               {item.isUser && <Image source={item.userAvatar} style={styles.userAvatar} />}
             </View>
-          )}
-        />
+          </TouchableOpacity>
+        )}
+      />
 
         {/* Message Input */}
         <View style={styles.inputContainer}>

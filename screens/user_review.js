@@ -23,6 +23,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import axios from 'axios';
 
 
 
@@ -143,7 +144,7 @@ const ReviewList = ({route}) => {
 
   const reviewData = {route}.route.params.reviewList;
   const [reviewList, setreviewList] = useState(reviewData);
-
+  const store_seq = {route}.route.params.store_seq
   const reviewsData = [  
     { rating: 5, count: 0 },
     { rating: 4, count: 0 },
@@ -179,7 +180,7 @@ const ReviewList = ({route}) => {
   const displayedReviews = filter === "all" ? reviewList : repliedReviews;
 
 
-  const [sortOption, setSortOption] = useState("ranking"); // 기본 정렬 옵션을 '랭킹순'으로 설정합니다.
+  const [sortOption, setSortOption] = useState("최신순"); // 기본 정렬 옵션을 '랭킹순'으로 설정합니다.
   
   const handleShowMore = () => {
     setDisplayLimit((prevLimit) => prevLimit + 10); // 현재 표시 제한을 10 증가
@@ -194,12 +195,20 @@ const ReviewList = ({route}) => {
   };
 
   // 정렬 옵션 선택 시 이벤트 핸들러
-  const handleSelectSortOption = (option) => {
+  const handleSelectSortOption = async(option) => {
     console.log(`선택된 정렬 옵션: ${option}`);
     // sortOption 상태를 업데이트합니다.
     // 여기서는 예시로 상태를 로그로 출력하고 있습니다.
     // 실제 애플리케이션에서는 이 상태를 바탕으로 리뷰 목록을 정렬해야 합니다.
     setSortOption(option);
+
+    try{
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/reviewAlign',{option:option, store_seq:store_seq})
+      setreviewList(response.data)
+
+    }catch(error){
+      console.error(error);
+    }
 
     // 모달을 닫습니다.
     setModalVisible(false);
@@ -254,7 +263,7 @@ const ReviewList = ({route}) => {
       <View style={styles.headerContainer}>
         <Text style={styles.subText}>최근 리뷰 {reviewList.length}개</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.sortButtonContainer}>
-          <Text style={styles.sortButtonText}>최신순</Text>
+          <Text style={styles.sortButtonText}>{sortOption}</Text>
           <MaterialIcons name="keyboard-arrow-down" size={24} color="#ff3b30" />
         </TouchableOpacity>
       </View>

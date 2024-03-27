@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
 import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const Setting = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [userInfo, setUserInfo] = useState(null);
+
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -28,6 +30,25 @@ const Setting = () => {
     
     fetchUserInfo();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // 페이지가 포커스 될 때마다 사용자 정보를 새로 불러옵니다.
+      fetchUserInfo();
+    }, [])
+  );
+
+  const fetchUserInfo = async () => {
+    try {
+      const storedUserInfo = await AsyncStorage.getItem('userInfo');
+      if (storedUserInfo) {
+        setUserInfo(JSON.parse(storedUserInfo));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,7 +78,7 @@ const Setting = () => {
 
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoItem} onPress={() => navigation.navigate('Number')}>
-          <Text style={styles.infoText}>휴대폰 번호</Text>
+          <Text style={styles.infoText}>휴대폰</Text>
           <Text style={styles.valueText}>{userInfo?.[0]?.user_phone}</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </TouchableOpacity>

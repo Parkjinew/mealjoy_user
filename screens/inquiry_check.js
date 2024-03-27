@@ -23,8 +23,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 // Header 컴포넌트
-const Header = ({ navigation }) => {
-
+const Header = () => {
+    const navigation = useNavigation();
   return (
     <View>
       <View style={styles.headerContainer}>
@@ -42,13 +42,15 @@ const Header = ({ navigation }) => {
 const InquiryCheck = ({route}) => {
     const { inquiryCheck } = route.params;
     const [inquiry, setinquiry] = useState(inquiryCheck);
-  const navigation = useNavigation();
+  
 
-
+    const hasInquiries = inquiry && inquiry.length > 0;
   return (
     <SafeAreaView style={styles.safeArea}>
+         <Header />
     <ScrollView style={styles.inquiryContainer}>
-            {inquiry.map((inquiry, index) => (
+    {hasInquiries ? (
+            inquiry.map((inquiry, index) => (
                 <View key={index} style={styles.inquiryItem}>
                     {/* 문의 제목 */}
                     <Text style={styles.inquiryTitle}>문의 제목</Text>
@@ -62,11 +64,14 @@ const InquiryCheck = ({route}) => {
                     {inquiry.answer && (
                         <View style={styles.answerContainer}>
                             <Text style={styles.inquiryTitle}>관리자 답변</Text>
-                            <Text style={styles.inquiryContent}>{inquiry.answer}</Text>
+                            <Text style={styles.inquiryContent2}>{inquiry.answer}</Text>
                         </View>
                     )}
                 </View>
-            ))}
+            ))
+            ) : (
+                <Text style={styles.noInquiriesText}>문의내역이 없습니다.</Text>
+            )}
         </ScrollView>
         </SafeAreaView>
   );
@@ -75,20 +80,44 @@ const InquiryCheck = ({route}) => {
 
 
 const styles = StyleSheet.create({
+
     inquiryContainer: {
         flex: 1,
         backgroundColor: "#fff",
+        
     },
     inquiryItem: {
         padding: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: "#eee",
-        marginBottom: 10,
+        backgroundColor: "#fff",
+        marginBottom: 30,
+        marginHorizontal: 10,
+        borderRadius: 5,
+        // iOS 그림자
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 1.5,
+        // Android 그림자
+        elevation: 3,
+    },
+    noInquiriesText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginVertical: 20,
+    },
+    // 스크롤뷰 스타일 추가
+    scrollView: {
+        flex: 1,
     },
     inquiryTitle: {
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 10,
+    },
+    inquiryContent2: {
+        fontSize: 16,
+        marginBottom: 10,
+        lineHeight: 24,
     },
     inquiryContent: {
         fontSize: 16,
@@ -97,9 +126,21 @@ const styles = StyleSheet.create({
     },
     answerContainer: {
         marginTop: 10,
-        padding: 10,
-        backgroundColor: "#f0f0f0",
-        borderRadius: 5,
+        paddingHorizontal: 15, // 좌우 패딩 조정
+        paddingVertical: 10, // 상하 패딩 조정
+        backgroundColor: "#e0f7fa", // 말풍선 배경색 설정
+        borderRadius: 20, // 테두리 둥글게 설정
+        alignSelf: 'flex-start', // 말풍선을 왼쪽 정렬
+        // iOS 전용 그림자
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 1.5,
+        // Android 전용 그림자
+        elevation: 2,
     },
   safeArea: {
     flex: 1,
@@ -109,7 +150,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent:"space-between",
     padding: 10,
-    marginBottom: 30,
+    marginBottom: 5,
     marginTop:10
   },
   headerText: {

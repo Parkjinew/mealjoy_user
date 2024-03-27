@@ -1,23 +1,52 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View,Alert, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image } from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Number = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [number, setNumber] = useState('');
   const [inputText, setInputText] = useState('');
+  const [userInfo, setUserInfo] = useState(null);
 
-  const handleNumberChange = () => {
-    // 이 함수에서는 닉네임을 변경하는 로직을 구현합니다.
-    // 예를 들어, 서버로 닉네임을 보내는 코드나, 로컬 상태를 업데이트하는 코드가 위치할 수 있습니다.
-    setNumber(inputText);
-    // 닉네임 변경 후에 원하는 동작 수행, 예를 들어 홈 화면으로 이동
-    // navigation.navigate('Home');
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          // 저장된 userInfo가 있으면 JSON으로 파싱하여 상태를 업데이트합니다.
+          setUserInfo(JSON.parse(storedUserInfo));
+        }
+      } catch (error) {
+        console.log(error);
+        // 에러 처리 로직을 추가할 수 있습니다.
+      }
+    };
+    
+    fetchUserInfo();
+  }, []);
+
+  const numbersetting = async () => {
+    // 서버로부터 데이터를 받아오는 로직 구현
+    try {
+      await axios.post('http://119.200.31.63:8090/botbuddies/numbersetting', {  id: userInfo[0].user_id,
+      inputText:inputText });
+      const updatedUserInfo = { ...userInfo[0], user_phone: inputText }; // 닉네임 변경
+      await AsyncStorage.setItem('userInfo', JSON.stringify([updatedUserInfo])); // AsyncStorage 업데이트
+      setUserInfo([updatedUserInfo]); // 애플리케이션 상태 업데이트
+      // 사용자에게 성공 메시지 표시
+      Alert.alert("닉네임 변경", "닉네임이 성공적으로 변경되었습니다.", [{
+        text: "확인", onPress: () => navigation.navigate('Setting')
+      }]);
+    } catch (error) {
+      console.error("Error fetching Review Management data:", error);
+      // 오류 처리 로직, 필요에 따라 사용자에게 알림 등
+    }
   };
+  
   return (
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 */}
@@ -37,7 +66,7 @@ const Number = () => {
         <View style={styles.numbersetting}>
         <TextInput
             style={styles.input}
-            placeholder="01012345678"
+            placeholder={userInfo?.[0]?.user_phone}
             value={inputText}
             onChangeText={setInputText}
             keyboardType="numeric"
@@ -47,8 +76,8 @@ const Number = () => {
       </ScrollView>
 
       <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem} onPress={handleNumberChange}>
-        <Text style={styles.setting}>인증번호 받기</Text>
+        <TouchableOpacity style={styles.tabItem} onPress={numbersetting}>
+        <Text style={styles.setting}>변경 하기</Text>
         </TouchableOpacity>
       </View>
       

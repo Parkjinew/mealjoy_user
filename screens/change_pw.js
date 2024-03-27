@@ -1,30 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Alert } from 'react-native';
 import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChangePassword = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
-  const handleChangePassword = () => {
-    // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
-    if (newPassword === confirmPassword) {
-      // 일치하면 비밀번호 변경 로직 수행
-      // 여기에 비밀번호 변경 로직을 작성하세요.
-      Alert.alert('비밀번호가 성공적으로 변경되었습니다.');
-       navigation.navigate('Setting');
-    } else {
-      // 일치하지 않으면 알림 표시
-      Alert.alert('새 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          // 저장된 userInfo가 있으면 JSON으로 파싱하여 상태를 업데이트합니다.
+          setUserInfo(JSON.parse(storedUserInfo));
+        }
+      } catch (error) {
+        console.log(error);
+        // 에러 처리 로직을 추가할 수 있습니다.
+      }
+    };
+    
+    fetchUserInfo();
+  }, []);
+
+  const isButtonDisabled = newPassword !== confirmPassword;
+
+
+  const pwsetting = async () => {
+    // 서버로부터 데이터를 받아오는 로직 구현
+    try {
+      await axios.post('http://119.200.31.63:8090/botbuddies/pwsetting', {  id: userInfo[0].user_id,
+      inputText:inputText });
+      const updatedUserInfo = { ...userInfo[0], user_phone: inputText }; // 닉네임 변경
+      await AsyncStorage.setItem('userInfo', JSON.stringify([updatedUserInfo])); // AsyncStorage 업데이트
+      setUserInfo([updatedUserInfo]); // 애플리케이션 상태 업데이트
+      // 사용자에게 성공 메시지 표시
+      Alert.alert("닉네임 변경", "닉네임이 성공적으로 변경되었습니다.", [{
+        text: "확인", onPress: () => navigation.navigate('Setting')
+      }]);
+    } catch (error) {
+      console.error("Error fetching Review Management data:", error);
+      // 오류 처리 로직, 필요에 따라 사용자에게 알림 등
     }
   };
+
+ 
 return (
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 */}
@@ -63,7 +92,10 @@ return (
       </ScrollView>
 
       <View style={styles.tabBar}>
-        <TouchableOpacity style={styles.tabItem} onPress={handleChangePassword}>
+      <TouchableOpacity
+          style={[styles.tabItem, isButtonDisabled && styles.disabledButton]}
+          disabled={isButtonDisabled} // 비활성화 여부
+        >
         <Text style={styles.setting}>변경 완료</Text>
         </TouchableOpacity>
       </View>

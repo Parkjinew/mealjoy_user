@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView,Alert, ScrollView, TextInput, Image } from 'react-native';
 import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
-
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import md5 from 'react-native-md5';
 const Password = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [inputPassword, setInputPassword] = useState('');
-  const storedPassword = '123456';
+
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          // 저장된 userInfo가 있으면 JSON으로 파싱하여 상태를 업데이트합니다.
+          setUserInfo(JSON.parse(storedUserInfo));
+        }
+      } catch (error) {
+        console.log(error);
+        // 에러 처리 로직을 추가할 수 있습니다.
+      }
+    };
+    
+    fetchUserInfo();
+  }, []);
+
+
+
   const handlePasswordChange = () => {
     // 비밀번호가 일치하는지 확인
-    if (inputPassword === storedPassword) {
+    if (md5.hex_md5(inputPassword) === userInfo[0].user_pw) {
       // 일치하면 비밀번호 변경 페이지로 이동
       navigation.navigate('ChangePassword'); // 변경할 비밀번호 페이지의 스택 내비게이션 이름으로 변경해야 함
     } else {
@@ -38,12 +60,7 @@ const Password = () => {
         <View style={styles.infoItem}>
           <Text style={styles.infoText}>안전한 변경을 위해 현재 비밀번호를 확인할게요</Text>  
         </View>
-        <View style={styles.search}>
-            <TouchableOpacity style={styles.passwordRecovery} onPress={() => console.log('비밀번호 찾기')}> 
-                <Text style={styles.find}>비밀번호 찾기</Text>
-                <Ionicons name="chevron-forward-outline" size={17} color="gray" />
-            </TouchableOpacity>
-        </View>
+       
 
         <View style={styles.nicksetting}>
         <TextInput

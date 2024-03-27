@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
 answerTitle: {
     fontWeight: "bold",
     marginBottom: 5,
-    color: '#00796b', // 제목 색상 변경
+    color: 'black', // 제목 색상 변경
 },
 answerContent: {
     lineHeight: 20, // 줄간격
@@ -173,7 +173,8 @@ answerContent: {
         justifyContent: 'space-between', // 좌우 버튼과 타이틀 간 공간 동등 배분
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomColor: '#ffff',
+        
       },
       headerTitleContainer: {
         position: 'absolute', // 타이틀을 헤더 중앙에 절대 위치
@@ -181,6 +182,7 @@ answerContent: {
         right: 0,
         alignItems: 'center',
         justifyContent: 'center',
+      
       },
     imageContainer: {
         flexDirection: 'row',

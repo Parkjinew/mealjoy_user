@@ -38,7 +38,7 @@ const Number = () => {
       await AsyncStorage.setItem('userInfo', JSON.stringify([updatedUserInfo])); // AsyncStorage 업데이트
       setUserInfo([updatedUserInfo]); // 애플리케이션 상태 업데이트
       // 사용자에게 성공 메시지 표시
-      Alert.alert("닉네임 변경", "닉네임이 성공적으로 변경되었습니다.", [{
+      Alert.alert("전화번호 변경", "전화번호가 성공적으로 변경되었습니다.", [{
         text: "확인", onPress: () => navigation.navigate('Setting')
       }]);
     } catch (error) {

@@ -7,7 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import md5 from 'react-native-md5';
 const ChangePassword = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
@@ -39,12 +39,13 @@ const ChangePassword = () => {
     // 서버로부터 데이터를 받아오는 로직 구현
     try {
       await axios.post('http://119.200.31.63:8090/botbuddies/pwsetting', {  id: userInfo[0].user_id,
-      inputText:inputText });
-      const updatedUserInfo = { ...userInfo[0], user_phone: inputText }; // 닉네임 변경
+      newPassword:newPassword });
+      console.log(md5.hex_md5(newPassword), userInfo[0].user_id)
+      const updatedUserInfo = { ...userInfo[0], user_pw: md5.hex_md5(newPassword) }; // 닉네임 변경
       await AsyncStorage.setItem('userInfo', JSON.stringify([updatedUserInfo])); // AsyncStorage 업데이트
       setUserInfo([updatedUserInfo]); // 애플리케이션 상태 업데이트
       // 사용자에게 성공 메시지 표시
-      Alert.alert("닉네임 변경", "닉네임이 성공적으로 변경되었습니다.", [{
+      Alert.alert("비밀번호 변경", "비밀번호가 성공적으로 변경되었습니다.", [{
         text: "확인", onPress: () => navigation.navigate('Setting')
       }]);
     } catch (error) {
@@ -94,7 +95,7 @@ return (
       <View style={styles.tabBar}>
       <TouchableOpacity
           style={[styles.tabItem, isButtonDisabled && styles.disabledButton]}
-          disabled={isButtonDisabled} // 비활성화 여부
+          disabled={isButtonDisabled} onPress={pwsetting} // 비활성화 여부
         >
         <Text style={styles.setting}>변경 완료</Text>
         </TouchableOpacity>

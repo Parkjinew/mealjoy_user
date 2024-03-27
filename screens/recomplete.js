@@ -74,10 +74,14 @@ const Recomplete = ({route}) => {
   return (
     <ScrollView style={styles.container}>
       
-      <TouchableOpacity style={styles.header} onPress={()=>navigation.navigate("Main")}>
+      <View style={styles.header}>
+      <TouchableOpacity  onPress={()=>navigation.navigate("Main")}>
       <AntDesign name="arrowleft" size={24} color="black" />
-        <Text style={styles.headerText}>예약 완료</Text>
       </TouchableOpacity>
+        <Text style={styles.headerText}>예약 완료</Text>
+        <AntDesign name="arrowleft" size={24} color="white" />
+        </View>
+
       <View style={styles.infoBox}>
         <View style={styles.infoRow}>
           <Text style={styles.infoTitle}>매장명</Text>
@@ -128,10 +132,13 @@ const styles = StyleSheet.create({
     
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent:"space-between",
     padding: 20,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#ffff',
     marginBottom: 20, // Add some bottom margin to space out the header
-    paddingTop:60
+    paddingTop:60,
+    borderBottomWidth:1,
+    borderColor:"#eeeeee"
   },
 
 
@@ -177,6 +184,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize:17
   },
 });
 

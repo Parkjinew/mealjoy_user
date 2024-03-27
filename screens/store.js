@@ -81,7 +81,7 @@ const SortMenu = ({ visible, onClose, onSelect }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          {["정렬", "거리순", "평점순", "리뷰순"].map((option) => (
+          {["등록순 정렬", "거리순", "평점순", "리뷰순"].map((option) => (
             <TouchableOpacity
               key={option}
               style={styles.modalButton}
@@ -199,7 +199,7 @@ const Store = ({route}) => {
   // Header 컴포넌트
 const Header = ({ totalCafes, onSortPress, sortOption }) => {
     const optionToText = {
-      align: "정렬",
+      align: "등록순 정렬",
       distance: "거리순",
       rating: "평점순",
       review: "리뷰순",
@@ -221,8 +221,8 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
         <Divider />
         <View style={styles.subHeaderContainer}>
           <Text style={styles.storeCount}>{totalCafes}개의 매장</Text>
-          <TouchableOpacity onPress={onSortPress} >
-            <Text style={styles.sortButton}>{optionToText[sortOption]}</Text>
+          <TouchableOpacity onPress={onSortPress} style={styles.sortButton}>
+            <Text style={styles.atten}>{optionToText[sortOption]}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -241,7 +241,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
   const handleSelectSortOption = (option) => {
     const textToOption = {
-      "정렬": "align",
+      "등록순 정렬": "align",
       "거리순": "distance",
       "평점순": "rating",
       "리뷰순": "review",
@@ -305,6 +305,9 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
 
 const styles = StyleSheet.create({
+  atten:{
+    color:"black"
+  },
   backbutton:{
     marginBottom:12
   },
@@ -373,10 +376,9 @@ const styles = StyleSheet.create({
   },
   sortButton: {
     marginLeft: 8,
-    padding: 8,
+    padding: 10,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ff3b30",
+    backgroundColor:"lightgray"
   },
   selectedSortButton: {
     backgroundColor: "#ff3b30",

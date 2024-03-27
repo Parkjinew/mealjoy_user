@@ -19,7 +19,7 @@ import {
 } from "@expo/vector-icons";
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import { Feather } from '@expo/vector-icons';
 
 
 const images = [
@@ -101,14 +101,21 @@ const SortMenu = ({ visible, onClose, onSelect }) => {
 
 // HeaderContainer 컴포넌트
 const HeaderContainer = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => console.log("뒤로 가기")}>
-        <Ionicons name="arrow-back" size={24} color="#ff3b30" />
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backbutton}>
+        <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
-      <Text style={styles.headerText}>현재 위치</Text>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}> 
+      <Image
+    source={require('../assets/logo.png')}
+    resizeMode="contain"
+    style={styles.logo}
+  />
+  </View>
       <TouchableOpacity onPress={() => console.log("알림")}>
-        <Ionicons name="notifications" size={24} color="#ff3b30" />
+      <Feather name="bell" style={styles.bellIcon} size={24} color="black" />
       </TouchableOpacity>
     </View>
   );
@@ -298,6 +305,23 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
 
 const styles = StyleSheet.create({
+  backbutton:{
+    marginBottom:12
+  },
+  bellIcon: {
+    marginLeft:Platform.OS === 'android' ? -15 : -8,
+    marginBottom:10
+// 벨 아이콘과 검색창 사이의 간격 조정
+    // marginTop으로 벨 아이콘의 위치를 미세 조정할 수 있음
+    // 벨 아이콘을 살짝 위로 올림
+  },
+  logo: {
+    width: 300, // 로고의 너비. 필요에 따라 조절하세요.
+    height: 150, // 로고의 높이. 필요에 따라 조절하세요.
+    marginBottom: -40, // 로고와 검색 입력란 사이의 마진을 조절합니다.
+    marginTop : -60,
+
+  },
     imagesRow: {
         flexDirection: 'row',
         justifyContent: 'space-around',

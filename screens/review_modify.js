@@ -14,7 +14,7 @@ const Header = () => {
     <View style={styles.headerTitleContainer}>
     <Text style={styles.headerTitle}>리뷰 수정</Text>
     </View>
-    <View style={styles.backButton} />
+    <View  />
   </View>
 );
     };
@@ -138,10 +138,10 @@ const styles = StyleSheet.create({
 
     paddingVertical: 10, // 상하 패딩 조정
     paddingHorizontal: 15, // 좌우 패딩 조정
-    backgroundColor: "#e0f7fa", // 배경색 변경
-    borderRadius: 20, // 모서리 둥근 정도 조정
+    backgroundColor: "#eeeeee", // 배경색 변경
+    borderRadius: 10, // 모서리 둥근 정도 조정
     alignSelf: 'flex-start', // 컨테이너를 시작 부분에 정렬
-    maxWidth: '80%', // 최대 너비 설정
+    width: "100%", // 최대 너비 설정
    
 },
 answerTitle: {
@@ -173,7 +173,9 @@ answerContent: {
         justifyContent: 'space-between', // 좌우 버튼과 타이틀 간 공간 동등 배분
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#ffff',
+        borderBottomColor: '#eeeeee',
+        paddingBottom:24,
+        paddingTop:-30
         
       },
       headerTitleContainer: {
@@ -213,16 +215,12 @@ answerContent: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
+
   backButton: {
     marginRight: 10,
-    zIndex:666
+    zIndex:666,
+    marginTop:20
+  
   },
   headerTitle: {
     fontSize: 20,

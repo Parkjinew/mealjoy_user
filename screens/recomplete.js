@@ -73,10 +73,11 @@ const Recomplete = ({route}) => {
   
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      
+      <TouchableOpacity style={styles.header} onPress={()=>navigation.navigate("Main")}>
       <AntDesign name="arrowleft" size={24} color="black" />
         <Text style={styles.headerText}>예약 완료</Text>
-      </View>
+      </TouchableOpacity>
       <View style={styles.infoBox}>
         <View style={styles.infoRow}>
           <Text style={styles.infoTitle}>매장명</Text>

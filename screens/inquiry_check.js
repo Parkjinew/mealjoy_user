@@ -125,11 +125,12 @@ const styles = StyleSheet.create({
         lineHeight: 24,
     },
     answerContainer: {
+      width:"100%",
         marginTop: 10,
         paddingHorizontal: 15, // 좌우 패딩 조정
         paddingVertical: 10, // 상하 패딩 조정
-        backgroundColor: "#e0f7fa", // 말풍선 배경색 설정
-        borderRadius: 20, // 테두리 둥글게 설정
+        backgroundColor: "#eeeeee", // 말풍선 배경색 설정
+        borderRadius: 10, // 테두리 둥글게 설정
         alignSelf: 'flex-start', // 말풍선을 왼쪽 정렬
         // iOS 전용 그림자
         shadowColor: "#000",
@@ -151,7 +152,10 @@ const styles = StyleSheet.create({
     justifyContent:"space-between",
     padding: 10,
     marginBottom: 5,
-    marginTop:10
+    marginTop:10,
+    paddingBottom:20,
+    borderBottomWidth:1,
+    borderColor:"#eeeeee"
   },
   headerText: {
     fontSize: 18,

@@ -151,7 +151,7 @@ const StoreInfo = ({route}) => {
 
   const review = async() => {
     const response = await axios.post('http://211.227.224.159:8090/botbuddies/reviewPage',{store_seq:store.store_seq})
-    navigation.navigate("ReviewList", {reviewList:response.data})
+    navigation.navigate("ReviewList", {reviewList:response.data, store_seq:store.store_seq})
     
   }
 
@@ -233,10 +233,10 @@ const StoreInfo = ({route}) => {
             <Foundation name="telephone" size={20} color="black" />
             <Text style={styles.iconText}>전화번호</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
+          {store.category_seq!=2 &&<TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
             <Text style={styles.iconText}>예약하기</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
         <Text style={styles.subtitle}>{store.store_desc}</Text>
         

@@ -81,7 +81,14 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
             <Text style={styles.buttonText}>삭제</Text>
           </TouchableOpacity>
         </View>
+        {review.answer && review.answer.trim().length > 0 && (
+          <View style={styles.answerContainer}>
+            <Text style={styles.answerTitle}>사장님</Text>
+            <Text style={styles.answerContent}>{review.answer}</Text>
+          </View>
+        )}
       </View>
+
     );
   };
 
@@ -126,6 +133,26 @@ const ReviewModify = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+  answerContainer: {
+    marginTop: 10,
+
+    paddingVertical: 10, // 상하 패딩 조정
+    paddingHorizontal: 15, // 좌우 패딩 조정
+    backgroundColor: "#e0f7fa", // 배경색 변경
+    borderRadius: 20, // 모서리 둥근 정도 조정
+    alignSelf: 'flex-start', // 컨테이너를 시작 부분에 정렬
+    maxWidth: '80%', // 최대 너비 설정
+   
+},
+answerTitle: {
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: '#00796b', // 제목 색상 변경
+},
+answerContent: {
+    lineHeight: 20, // 줄간격
+    color: '#004d40', // 내용 색상 변경
+},
   noReviewsContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -193,6 +220,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 10,
+    zIndex:666
   },
   headerTitle: {
     fontSize: 20,

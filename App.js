@@ -32,7 +32,7 @@ import Payment from './screens/payment';
 import ReviewModify from './screens/review_modify';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserInquiry from './screens/user_inquiry';
-
+import InquiryCheck from './screens/inquiry_check';
 const Stack = createStackNavigator();
 
 
@@ -93,6 +93,7 @@ export default function App() {
         <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
         <Stack.Screen name="ReviewModify" component={ReviewModify} options={{ headerShown: false }}/>
         <Stack.Screen name="UserInquiry" component={UserInquiry} options={{ headerShown: false }}/>
+        <Stack.Screen name="InquiryCheck" component={InquiryCheck} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

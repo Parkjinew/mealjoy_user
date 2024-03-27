@@ -38,20 +38,50 @@ const StoreInfo = ({route}) => {
     const fetchUserInfo = async () => {
       const storedUserInfo = await AsyncStorage.getItem('userInfo');
       if (storedUserInfo) {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
         setIsLoggedIn(true);
-        setUserInfo(JSON.parse(storedUserInfo));
+        setUserInfo(parsedUserInfo);
+        
+        try{
+          // userInfo 상태 대신 바로 parsedUserInfo를 사용합니다.
+          // parsedUserInfo가 배열인지 객체인지에 따라 접근 방식을 조정해야 할 수 있습니다.
+          const response = await axios.post("http://211.227.224.159:8090/botbuddies/LikeTF", {
+            user_id : parsedUserInfo[0].user_id, // 여기를 적절히 조정하세요.
+            store_seq: store.store_seq // store는 상위 컴포넌트나 상태에서 정의되어야 합니다.
+          });
+          setFavorite(response.data)
+        } catch(error) {
+          console.error(error)
+        }
+  
       } else {
         setIsLoggedIn(false);
         setUserInfo(null);
       }
     };
-
+  
     fetchUserInfo();
-  }, []);
+  }, []);  
   
 
-  const toggleFavorite = () => {
-    setFavorite(!favorite);
+  const toggleFavorite = async() => {
+    if(isLoggedIn){
+      setFavorite(!favorite);
+      try{
+        console.log("like")
+        const response = await axios.post("http://211.227.224.159:8090/botbuddies/Like", {
+            user_id : userInfo[0].user_id, 
+            store_seq: store.store_seq,
+            like: favorite
+          });
+
+      } catch(error){
+        console.error(error)
+      }
+    } else{
+      navigation.navigate('HomeLogin');
+    }
+    
   };
 
   const getImageSource = (imageUri) => {

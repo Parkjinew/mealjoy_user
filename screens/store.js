@@ -166,6 +166,7 @@ const Store = ({route}) => {
   const storeinfo = async(id) => {
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : id})
+      
       console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){

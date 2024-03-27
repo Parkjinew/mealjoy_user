@@ -241,7 +241,7 @@ const SettingsScreen = () => {
             </TouchableOpacity>
 
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> navigation.navigate("UserInquiry")}>
           <View style={styles.menuItem}>
             <Entypo name="chat" size={24} color="#ff3b30" />
             <Text

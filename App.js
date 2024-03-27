@@ -31,6 +31,7 @@ import SettingsScreen from './screens/user_mypage';
 import Payment from './screens/payment';
 import ReviewModify from './screens/review_modify';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserInquiry from './screens/user_inquiry';
 
 const Stack = createStackNavigator();
 
@@ -91,6 +92,7 @@ export default function App() {
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
         <Stack.Screen name="ReviewModify" component={ReviewModify} options={{ headerShown: false }}/>
+        <Stack.Screen name="UserInquiry" component={UserInquiry} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

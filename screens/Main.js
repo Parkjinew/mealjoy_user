@@ -359,8 +359,8 @@ const Main = () => {
      
         {/* 대형 프로모션 카드 */}
         <TouchableOpacity style={styles.promotionCard}>
-          <Text style={styles.promotionText}>오늘의 할인</Text>
-          <Text style={styles.promotionSubtext}>테이크아웃시 3000원 할인!</Text>
+          <Text style={styles.promotionText}>챗봇 밀조이 셰프!!!</Text>
+          <Text style={styles.promotionSubtext}>하단 탭 가운데 아이콘을 눌러보세요!!</Text>
         </TouchableOpacity>    
  </View>
  </ScrollView>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView,SafeAreaView,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, Alert,
   Platform,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome } from '@expo/vector-icons';
@@ -125,7 +125,38 @@ const Main = () => {
       console.error(error);
     }
   }
-
+  const showChangeAddressPopup = () => {
+    Alert.alert(
+      "주소 변경",
+      "주소를 변경하시겠습니까?",
+      [
+        {
+          text: "현재 위치로 설정",
+          onPress: () => {
+            console.log("현재 위치로 주소 설정");
+            // 현재 위치를 사용하여 주소를 설정하는 로직을 여기에 추가하세요.
+          },
+        },
+        {
+          text: "직접 주소 설정하기",
+          onPress: () => {
+            console.log("직접 주소 설정 화면으로 이동");
+            // 직접 주소 설정 화면으로 이동하는 로직을 여기에 추가하세요.
+            navigation.navigate('AddressChange', {
+              onSelect: handleSelectAddress,
+            });
+          },
+        },
+        {
+          text: "취소",
+          onPress: () => console.log("주소 변경 취소"),
+          style: "cancel",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+  
   const handleSelectAddress = async (addressData) => {
     const address = addressData.default_address;
     
@@ -257,11 +288,7 @@ const Main = () => {
         <View style={styles.dropdownContainer}>
         <TouchableOpacity
   style={styles.dropdown}
-  onPress={() => {
-    navigation.navigate('AddressChange', {
-      onSelect: handleSelectAddress,
-    });
-  }}
+  onPress={showChangeAddressPopup }
 >
           <Text style={styles.dropdownText}>{selectedAddress} ▼</Text>
         </TouchableOpacity>

@@ -65,7 +65,6 @@ const Main = () => {
     fetchUserInfo();
   }, []);
   const handleHeartIconPress = async () => {
-    console.log(userInfo[0].user_id)
     if (isLoggedIn) {
       // 사용자가 로그인 상태일 때 수행할 작업
       try {

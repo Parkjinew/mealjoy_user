@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 0,
+    marginBottom:-20,
     left: 0,
     flexDirection: 'row',
     alignItems: 'center',

@@ -12,7 +12,7 @@ const Header = () => {
       <Ionicons name="arrow-back" size={24} color="black" />
     </TouchableOpacity>
     <View style={styles.headerTitleContainer}>
-    <Text style={styles.headerTitle}>리뷰 수정</Text>
+    <Text style={styles.headerTitle}>리뷰 관리</Text>
     </View>
     <View  />
   </View>

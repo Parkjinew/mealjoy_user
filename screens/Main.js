@@ -126,7 +126,7 @@ const Main = () => {
       console.error(error);
     }
   }
-
+                                                                                                                          
 
       const [latitude, setLatitude] = useState(null);
       const [longitude, setLogitude] = useState(null);
@@ -293,6 +293,7 @@ const Main = () => {
 
   const waitPage = async() => {
     if (isLoggedIn) {
+      console.log("호출")
     try{
       const response = await axios.post('http://119.200.31.63:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
       const storeData = await axios.post('http://119.200.31.63:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})

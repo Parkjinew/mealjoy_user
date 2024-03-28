@@ -121,7 +121,7 @@ const Main = () => {
     try{
       const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeList', {id : id})
 
-      navigation.navigate('Store', {data: response.data, id : id, align:"align"})
+      navigation.navigate('Store', {data: response.data, id : id, align:"align", selectedAddress:selectedAddress})
 
     } catch (error){
       console.error(error);

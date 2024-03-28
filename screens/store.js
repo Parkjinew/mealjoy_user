@@ -139,6 +139,8 @@ const Store = ({route}) => {
   const [sortedCafes, setSortedCafes] = useState(cafes);
   const [modalVisible, setModalVisible] = useState(false);
   const scrollViewRef = useRef();
+  const selectedAddress = route.params.selectedAddress;
+  console.log(selectedAddress)
 
   console.log(cafes)
 

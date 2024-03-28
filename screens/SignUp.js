@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View,
@@ -16,106 +16,99 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
-const SignUp = ({ onGoBack, onKakaoLogin }) => {
+const SignUp = () => {
     // 상태 변수들을 선언합니다.
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isDuplicate, setIsDuplicate] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [isDuplicate, setIsDuplicate] = useState(false);
+    const [passwordMatch, setPasswordMatch] = useState(true);
 
-  // 중복확인 함수
-  const checkDuplicate = () => {
-    console.log('중복 확인 중...');
-     // 중복확인 로직을 추가하세요.
-    setIsDuplicate(true);
-  };
+    // 중복 확인 함수 (Dummy implementation)
+    const checkDuplicate = () => {
+        console.log('중복 확인 중...');
+        // 여기에 실제 중복 확인 API 요청 로직을 구현하세요.
+        setIsDuplicate(false); // 예시: 중복 없음
+    };
 
-  // 회원가입 처리 함수
-  const handleSignUp = () => {
-    if (!isDuplicate && password === confirmPassword) {
-      console.log('회원가입:', username);
-      // 회원가입 로직을 추가하세요.
-    }
-  };
-//  // Assuming this function is meant to handle Kakao login.
-//  const onKakaoLogin = () => {
-//     console.log('Kakao login');
-//   };
-const handleKakaoLogin = () => {
-  onKakaoLogin(); // Call the function passed as a prop
-};
+    // 비밀번호 일치 확인
+    useEffect(() => {
+      if (password && confirmPassword) {
+          setPasswordMatch(password === confirmPassword);
+      }
+  }, [password, confirmPassword]); 
 
-  const handleGoBack = () => {
-    Alert.alert(
-      'Go Back',
-      'Are you sure you want to go back?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel'
-        },
-        {
-          text: 'OK',
-          onPress: () => onGoBack(), // Navigate back if OK is pressed
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+    // 모든 입력 필드 검증
+    const verifyInputs = () => {
+        if (!username || !password || !confirmPassword || !name || !phoneNumber) {
+            Alert.alert('오류', '모든 필드를 입력해주세요.');
+            return false;
+        }
+        if (isDuplicate) {
+            Alert.alert('오류', '아이디 중복을 확인해주세요.');
+            return false;
+        }
+        if (!passwordMatch) {
+            Alert.alert('오류', '비밀번호가 일치하지 않습니다.');
+            return false;
+        }
+        return true;
+    };
+
+    // 회원가입 처리 함수 (Dummy implementation)
+    const handleSignUp = () => {
+        if (verifyInputs()) {
+            console.log('회원가입:', username);
+            // 여기에 실제 회원가입 API 요청 로직을 구현하세요.
+            Alert.alert('성공', '회원가입이 완료되었습니다.', [
+                { text: 'OK', onPress: onGoBack },
+            ]);
+        }
+    };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-            <Ionicons name="arrow-back" size={24} color="black" />
-            </TouchableOpacity>
-            <Text style={styles.headerText}></Text>
-          </View>
-          <View style={styles.parentContainer}>
-          <Image source={require('../assets/logo.png')} style={styles.logo} />
-        </View>
-        
- 
-    <ScrollView style={styles.container}>
-      <View style={styles.formContainer}>
-        {/* 기존의 입력 필드들... */}
-        <Text style={styles.label}>아이디*</Text>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.input}
-            onChangeText={setUsername}
-            value={username}
-            placeholder="Liverpool1004"
-            autoCapitalize="none"
-          />
-          <TouchableOpacity style={styles.checkButton} onPress={checkDuplicate}>
-            <Text style={styles.checkButtonText}>중복확인</Text>
-          </TouchableOpacity>
-        </View>
-        {isDuplicate && <Text style={styles.errorText}>이미 사용중인 아이디입니다.</Text>}
-        
-        {/* Password input */}
-        <Text style={styles.label}>비밀번호*</Text>
-        <TextInput
-          style={[styles.input, styles.inputFull]}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="********"
-          secureTextEntry={true}
-        />
+       <SafeAreaView style={styles.container}>
+            <ScrollView style={styles.container}>
+                    <View style={styles.formContainer}>
+                        <Text style={styles.label}>아이디*</Text>
+                        <View style={styles.inputRow}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={text => { setUsername(text); setIsDuplicate(false); }}
+                                value={username}
+                                placeholder="아이디를 입력하세요"
+                                autoCapitalize="none"
+                            />
+                            <TouchableOpacity style={styles.checkButton} onPress={checkDuplicate}>
+                                <Text style={styles.checkButtonText}>중복확인</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {isDuplicate && <Text style={styles.errorText}>이미 사용중인 아이디입니다.</Text>}
 
-        {/* Confirm password input */}
-        <Text style={styles.label}>비밀번호 확인*</Text>
-        <TextInput
-          style={[styles.input, styles.inputFull]}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="********"
-          secureTextEntry={true}
-        />
+                        <Text style={styles.label}>비밀번호*</Text>
+                        <TextInput
+                        style={styles.input}
+                        onChangeText={setPassword}
+                        value={password}
+                        placeholder="********"
+                        secureTextEntry={true}
+                    />
+
+                        <Text style={styles.label}>비밀번호 확인*</Text>
+                        <TextInput
+                        style={styles.input}
+                        onChangeText={setConfirmPassword}
+                        value={confirmPassword}
+                        placeholder="********"
+                        secureTextEntry={true}
+                    />
+                        {passwordMatch ? 
+                        (password.length > 0 && confirmPassword.length > 0) && <Text style={styles.successText}>비밀번호가 일치합니다.</Text> :
+                        <Text style={styles.errorText}>비밀번호가 일치하지 않습니다.</Text>
+                    }
+
 
         {/* 이름 입력 */}
         <Text style={styles.label}>이름*</Text>
@@ -140,7 +133,7 @@ const handleKakaoLogin = () => {
         <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
           <Text style={styles.signUpButtonText}>회원가입</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonKakao} onPress={handleKakaoLogin}>
+      <TouchableOpacity style={styles.buttonKakao} >
       <Image
         source={require('../assets/Kakaostart.png')} // Make sure the path is correct
         style={styles.kakaoLoginImage}
@@ -150,12 +143,20 @@ const handleKakaoLogin = () => {
         </View>
         </ScrollView>
       </SafeAreaView>
-    </TouchableWithoutFeedback>
+
    
   );
 };
 
 const styles = StyleSheet.create({
+  errorText: {
+    color: 'red',
+    // 추가적인 스타일링...
+},
+successText: {
+    color: 'green',
+    // 추가적인 스타일링...
+},
      // ... 기존 스타일 ...
   container: {
     flex: 1,
@@ -167,6 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    marginBottom:-30
     //backgroundColor: '#f2f2f2',
   },
   headerText: {
@@ -185,6 +187,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     zIndex: 10,
+    paddingTop:40
   },
 
   logo: {
@@ -205,6 +208,7 @@ const styles = StyleSheet.create({
   label: {
     color: '#333',
     marginBottom: 8,
+    marginTop: 10
   },
   inputRow: {
     flexDirection: 'row',
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    marginBottom: 8,
+
   },
   signUpButton: {
     backgroundColor: 'red',
@@ -241,9 +245,8 @@ const styles = StyleSheet.create({
   signUpButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    inputFull: {
-        marginBottom: 8, // Add margin below the full-width inputs
-      },
+ 
+
   },
   buttonKakao: {
     backgroundColor: '#FEE500',
@@ -269,9 +272,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 
-  inputFull: {
-    marginBottom: 8, // 전체 너비 입력 필드 아래 여백을 추가합니다.
-  },
+
   
 });
 

@@ -12,12 +12,13 @@ import {
     Keyboard,
     Alert, 
 } from 'react-native';
-
+import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Feather } from '@expo/vector-icons';
-
+import { useNavigation } from '@react-navigation/native';
 const SignUp = () => {
     // 상태 변수들을 선언합니다.
+    const navigation = useNavigation();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -25,14 +26,99 @@ const SignUp = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isDuplicate, setIsDuplicate] = useState(false);
     const [passwordMatch, setPasswordMatch] = useState(true);
-
+    const [hasCheckedDuplicate, setHasCheckedDuplicate] = useState(false);
     // 중복 확인 함수 (Dummy implementation)
-    const checkDuplicate = () => {
-        console.log('중복 확인 중...');
-        // 여기에 실제 중복 확인 API 요청 로직을 구현하세요.
-        setIsDuplicate(false); // 예시: 중복 없음
-    };
 
+    const checkDuplicate = async () => {
+      try {
+          if(username !=""){
+  
+         
+              const response = await axios.post('http://119.200.31.63:8090/botbuddies/idcheck', {
+                  id: username
+              });
+              
+  
+              console.log(response.data)
+              // 응답 데이터에 따라 조건 분기
+              if(response.data == 0) {
+                  // 사용 가능한 아이디인 경우
+                  Alert.alert("사용 가능한 아이디입니다.");
+                  setIsDuplicate(false);
+        setHasCheckedDuplicate(true); // 중복 확인을 성공적으로 마쳤음을 표시
+        console.log("isDuplicate 상태 변경:", isDuplicate);
+              } else if(response.data != 0)  {
+                  // 이미 사용 중인 아이디인 경우
+                  Alert.alert("이미 사용중인 아이디입니다.");
+                  setIsDuplicate(true);
+        setHasCheckedDuplicate(false); // 중복 확인에서 실패했음을 표시 (이 경우 회원가입 버튼을 비활성화)
+              }
+          }else {
+              Alert.alert("아이디를 입력해주세요");
+          }
+      } catch (error) {
+        console.error('중복 확인 중 에러 발생:', error);
+        // 에러 처리 로직을 추가하세요.
+      }
+  
+    };
+  const handlePasswordChange = (password) => {
+    setPassword(password);
+    setPasswordMatch(password === confirmPassword);
+  };
+
+  const handleConfirmPasswordChange = (confirmPassword) => {
+    setConfirmPassword(confirmPassword);
+    setPasswordMatch(password === confirmPassword);
+  };
+
+
+
+    const handleSignUp = async () => {
+      console.log("함수")
+      // 회원가입 로직이 성공적으로 완료되었을 때만 조건 검사를 하고 싶다면,
+      // isDuplicate와 password === confirmPassword 조건 검사를 axios.post 호출 이후에 배치하세요.
+      console.log(hasCheckedDuplicate, passwordMatch);
+      if (verifyInputs()) {
+        try {
+          const response = await axios.post('http://119.200.31.63:8090/botbuddies/SignUp', {
+            id: username,
+            pw: password,
+            name: name,
+            phone: phoneNumber,
+          });
+  
+          console.log('회원가입:', username);
+          Alert.alert(
+              "회원가입 성공",
+              "회원가입 성공"
+              [{
+                  text: "확인",
+                  onPress: () => console.log("성공"),
+                  style:"cancel"
+  
+              }],
+              {cancelable: false}
+          );
+          navigation.navigate('HomeLogin');
+          
+          // 회원가입 로직을 추가하세요.
+        } catch (error) {
+          console.error('회원가입 에러:', error);
+          // 에러 처리 로직을 추가하세요.
+        }
+      } else {
+        // 유효성 검사 실패 시, 적절한 처리를 하세요.
+        if (!hasCheckedDuplicate) {
+          Alert.alert('오류', '아이디 중복 확인이 필요합니다.');
+        } else if (!passwordMatch) {
+          Alert.alert('오류', '비밀번호가 일치하지 않습니다.');
+        } else {
+          Alert.alert('오류', '모든 필드를 입력해주세요.');
+        }
+      }
+    };
+  
     // 비밀번호 일치 확인
     useEffect(() => {
       if (password && confirmPassword) {
@@ -58,34 +144,21 @@ const SignUp = () => {
     };
 
     // 회원가입 처리 함수 (Dummy implementation)
-    const handleSignUp = () => {
-        if (verifyInputs()) {
-            console.log('회원가입:', username);
-            // 여기에 실제 회원가입 API 요청 로직을 구현하세요.
-            Alert.alert('성공', '회원가입이 완료되었습니다.', [
-                { text: 'OK', onPress: onGoBack },
-            ]);
-        }
-    };
+
 
   return (
        <SafeAreaView style={styles.container}>
             <ScrollView style={styles.container}>
-            <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backbutton}>
+            <View style={styles.logoContainer}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={24} color="black" />
+    
       </TouchableOpacity>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}> 
-      <Image
-    source={require('../assets/logo.png')}
-    resizeMode="contain"
-    style={styles.logo}
-  />
-  </View>
-
-      <Feather name="bell" style={styles.bellIcon} size={24} color="white" />
-
-    </View>
+      
+      
+        {/* Logo를 중앙에 배치합니다. */}
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
+      </View>
                     <View style={styles.formContainer}>
                         <Text style={styles.label}>아이디*</Text>
                         <View style={styles.inputRow}>
@@ -99,13 +172,14 @@ const SignUp = () => {
                             <TouchableOpacity style={styles.checkButton} onPress={checkDuplicate}>
                                 <Text style={styles.checkButtonText}>중복확인</Text>
                             </TouchableOpacity>
+                            
                         </View>
                         {isDuplicate && <Text style={styles.errorText}>이미 사용중인 아이디입니다.</Text>}
 
                         <Text style={styles.label}>비밀번호*</Text>
                         <TextInput
                         style={styles.input}
-                        onChangeText={setPassword}
+                        onChangeText={handlePasswordChange}
                         value={password}
                         placeholder="********"
                         secureTextEntry={true}
@@ -114,7 +188,7 @@ const SignUp = () => {
                         <Text style={styles.label}>비밀번호 확인*</Text>
                         <TextInput
                         style={styles.input}
-                        onChangeText={setConfirmPassword}
+                        onChangeText={handleConfirmPasswordChange}
                         value={confirmPassword}
                         placeholder="********"
                         secureTextEntry={true}
@@ -145,7 +219,7 @@ const SignUp = () => {
         />
 
           {/* 회원가입 버튼 */}
-        <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
+        <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignUp()}>
           <Text style={styles.signUpButtonText}>회원가입</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonKakao} >
@@ -164,6 +238,11 @@ const SignUp = () => {
 };
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom:-30
+     // Adjust the space between the logo and the input fields as needed
+  },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -208,7 +287,8 @@ successText: {
     position: 'absolute',
     left: 20,
     zIndex: 10,
-    paddingTop:40
+    paddingTop:30,
+
   },
 
   logo: {

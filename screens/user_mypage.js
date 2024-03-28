@@ -335,7 +335,7 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   logoutContainer: {
     alignItems: 'center', // 버튼을 컨테이너의 가운데로 정렬
-    marginTop: 180, // 위쪽 마진 추가
+    marginTop: 100, // 위쪽 마진 추가
     marginBottom: 20, // 아래쪽 마진 추가, 필요에 따라 조정
   },
   logoutButton: {

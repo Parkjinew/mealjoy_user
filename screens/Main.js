@@ -16,6 +16,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import * as Location from 'expo-location';
+import { Locations } from "@env";
 
 const images = [
   { id: '0', uri: require('../assets/all.png'), label: '전체' },
@@ -125,41 +127,92 @@ const Main = () => {
       console.error(error);
     }
   }
-  const showChangeAddressPopup = () => {
-    Alert.alert(
-      "주소 변경",
-      "주소를 변경하시겠습니까?",
-      [
-        {
-          text: "현재 위치로 설정",
-          onPress: () => {
-            console.log("현재 위치로 주소 설정");
-            // 현재 위치를 사용하여 주소를 설정하는 로직을 여기에 추가하세요.
-          },
-        },
-        {
-          text: "직접 주소 설정하기",
-          onPress: () => {
-            console.log("직접 주소 설정 화면으로 이동");
-            // 직접 주소 설정 화면으로 이동하는 로직을 여기에 추가하세요.
-            navigation.navigate('AddressChange', {
-              onSelect: handleSelectAddress,
-            });
-          },
-        },
-        {
-          text: "취소",
-          onPress: () => console.log("주소 변경 취소"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+
+
+      const [latitude, setLatitude] = useState(null);
+      const [longitude, setLogitude] = useState(null);
   
-  const handleSelectAddress = async (addressData) => {
-    const address = addressData.default_address;
+      const geoLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('위치 정보 접근 권한이 거부되었습니다.');
+          return;
+        }
     
+        let location = await Location.getCurrentPositionAsync({});
+        console.log(location);
+        // 여기서 필요한 위치 정보 처리를 할 수 있습니다.
+        
+        // 예: setSelectedAddress(`위도: ${location.coords.latitude}, 경도: ${location.coords.longitude}`);
+        const { latitude, longitude } = location.coords;
+
+    reverseGeocode(latitude, longitude);
+      };
+      const reverseGeocode = async (latitude, longitude) => {
+        try {
+          let response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${Locations}&language=ko`
+          );
+          let responseJson = await response.json();
+          if (responseJson.results.length > 0) {
+            const address = responseJson.results[0].formatted_address;
+            console.log(address);
+            await saveAddress(address); // 선택된 주소를 저장
+            setSelectedAddress(address); // 화면에 표시될 주소 상태 업데이트
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  // const showChangeAddressPopup = () => {
+  //   Alert.alert(
+  //     "주소 변경",
+  //     "주소를 변경하시겠습니까?",
+  //     [
+  //       {
+  //         text: "현재 위치로 설정",
+  //         onPress: () => {
+  //           console.log("직접 주소 설정 화면으로 이동");
+  //           // 직접 주소 설정 화면으로 이동하는 로직을 여기에 추가하세요.
+  //           geoLocation()
+  //         },
+  //       },
+  //       {
+  //         text: "직접 주소 설정하기",
+  //         onPress: () => {
+  //           console.log("직접 주소 설정 화면으로 이동");
+  //           // 직접 주소 설정 화면으로 이동하는 로직을 여기에 추가하세요.
+  //           navigation.navigate('AddressChange', {
+  //             onSelect: handleSelectAddress,
+  //           });
+  //         },
+  //       },
+  //       {
+  //         text: "취소",
+  //         onPress: () => console.log("주소 변경 취소"),
+  //         style: "cancel",
+  //       },
+  //     ],
+  //     { cancelable: false }
+  //     );
+    //  };
+    
+    const showChangeAddressPopup = () => {
+      Alert.alert(
+        "주소 변경",
+        "주소를 변경하시겠습니까?",
+        [
+          { text: "현재 위치로 설정", onPress: geoLocation },
+          { text: "직접 주소 설정하기", onPress: () => handleSelectAddress }, // 실제 주소 변경 로직 구현
+          { text: "취소", onPress: () => console.log("주소 변경 취소"), style: "cancel" },
+        ],
+        { cancelable: false }
+      );
+    };
+
+    const handleSelectAddress = async (addressData) => {
+      const address = addressData.default_address;
+      
     await saveAddress(address); // 선택된 주소를 저장
     setSelectedAddress(address);
     navigation.navigate('SearchResult', { selectedAddress: addressData.default_address });

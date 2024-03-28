@@ -203,7 +203,9 @@ const Main = () => {
         "주소를 변경하시겠습니까?",
         [
           { text: "현재 위치로 설정", onPress: geoLocation },
-          { text: "직접 주소 설정하기", onPress: () => handleSelectAddress }, // 실제 주소 변경 로직 구현
+          { text: "직접 주소 설정하기", onPress: () => {
+            navigation.navigate('AddressChange'); // 이 부분을 수정했습니다.
+          } }, // 실제 주소 변경 로직 구현
           { text: "취소", onPress: () => console.log("주소 변경 취소"), style: "cancel" },
         ],
         { cancelable: false }
@@ -213,9 +215,9 @@ const Main = () => {
     const handleSelectAddress = async (addressData) => {
       const address = addressData.default_address;
       
-    await saveAddress(address); // 선택된 주소를 저장
-    setSelectedAddress(address);
-    navigation.navigate('SearchResult', { selectedAddress: addressData.default_address });
+      await saveAddress(address); // 선택된 주소를 저장
+      setSelectedAddress(address);
+      navigation.navigate('SearchResult', { selectedAddress: addressData.default_address });
   };
 
   const saveAddress = async (address) => {

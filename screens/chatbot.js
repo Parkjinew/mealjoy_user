@@ -241,6 +241,7 @@ const ChatBot = () => {
   }
 
   const waitPage = async() => {
+    if (userInfo) {
     try{
       const response = await axios.post('http://119.200.31.63:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
       const storeData = await axios.post('http://119.200.31.63:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
@@ -248,6 +249,9 @@ const ChatBot = () => {
     } catch(error){
       console.error(error);
     }
+  }else{
+    navigation.navigate("HomeLogin")
+  }
   }
 
   return (

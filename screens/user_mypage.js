@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     marginLeft: 10,
     fontSize: 16,
-    color: "#ff3b30", // 이 부분은 이미지의 텍스트 색상에 맞게 조정하세요.
+    color: "black", // 이 부분은 이미지의 텍스트 색상에 맞게 조정하세요.
   },
   infoManagementContainer: {
     flexDirection: "row",

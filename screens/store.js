@@ -81,7 +81,7 @@ const SortMenu = ({ visible, onClose, onSelect }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          {["등록순 정렬", "거리순", "평점순", "리뷰순"].map((option) => (
+          {["기본 정렬", "거리순", "평점순", "리뷰순"].map((option) => (
             <TouchableOpacity
               key={option}
               style={styles.modalButton}
@@ -139,8 +139,9 @@ const Store = ({route}) => {
   const [sortedCafes, setSortedCafes] = useState(cafes);
   const [modalVisible, setModalVisible] = useState(false);
   const scrollViewRef = useRef();
+  const selectedAddress = route.params.selectedAddress;
+  console.log(selectedAddress)
 
-  console.log(cafes)
 
 
   const storeList = async (id) => {
@@ -158,7 +159,7 @@ const Store = ({route}) => {
   const storeAlign = async(align) => {
     console.log(align);
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeAlign', {align : align, category : category})
+      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeAlign', {align : align, category : category, selectedAddress:selectedAddress})
       console.log(response.data);
       setSortedCafes(response.data);
       scrollViewRef.current?.scrollTo({y:0, animated:true});
@@ -199,7 +200,7 @@ const Store = ({route}) => {
   // Header 컴포넌트
 const Header = ({ totalCafes, onSortPress, sortOption }) => {
     const optionToText = {
-      align: "등록순 정렬",
+      align: "기본 정렬",
       distance: "거리순",
       rating: "평점순",
       review: "리뷰순",
@@ -241,7 +242,7 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
 
   const handleSelectSortOption = (option) => {
     const textToOption = {
-      "등록순 정렬": "align",
+      "기본 정렬": "align",
       "거리순": "distance",
       "평점순": "rating",
       "리뷰순": "review",

@@ -48,7 +48,7 @@ const Header = () => {
 };
 
 
-const ReviewCard = ({ review }) => {
+const ReviewCard = ({ review, userInfo }) => {
     // 별점을 렌더링하는 함수
     const renderStars = () => {
         return Array.from({ length: review.review.score }, (_, i) => (
@@ -87,7 +87,7 @@ const ReviewCard = ({ review }) => {
   
     return (
         <View style={styles.reviewCard}>
-        <Text style={styles.customerName}>{review.review.user_id}</Text>
+        <Text style={styles.customerName}>{userInfo[0].user_nick}</Text>
         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
           {renderStars()}
         </View>
@@ -141,8 +141,9 @@ const ReviewList = ({route}) => {
   const [isStartDatePicker, setIsStartDatePicker] = useState(true);
   const [filter, setFilter] = useState("all"); // 'all' 또는 'replied'
   const [displayLimit, setDisplayLimit] = useState(10); // 초기에 보여질 리뷰 수
-
+  
   const reviewData = {route}.route.params.reviewList;
+  const userInfo =  {route}.route.params.user;
   const [reviewList, setreviewList] = useState(reviewData);
   const store_seq = {route}.route.params.store_seq
   const reviewsData = [  
@@ -152,6 +153,8 @@ const ReviewList = ({route}) => {
     { rating: 2, count: 0 },
     { rating: 1, count: 0 },
   ];
+
+  console.log(userInfo[0].user_nick)
 
   const updateReviewCounts = (reviewsData, reviewList) => {
     // reviewsData의 구조를 그대로 복사하여 새로운 배열을 만듭니다.
@@ -268,7 +271,7 @@ const ReviewList = ({route}) => {
         </TouchableOpacity>
       </View>
       {displayedReviews.slice(0, displayLimit).map((review) => (
-          <ReviewCard key={review.review.review_seq} review={review} />
+          <ReviewCard key={review.review.review_seq} review={review} userInfo={userInfo} />
           ))}
         {reviewList.length > displayLimit && (
             <TouchableOpacity onPress={handleShowMore} style={styles.showMoreButton}>

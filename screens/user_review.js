@@ -87,7 +87,7 @@ const ReviewCard = ({ review, userInfo }) => {
   
     return (
         <View style={styles.reviewCard}>
-        <Text style={styles.customerName}>{userInfo[0].user_nick}</Text>
+        <Text style={styles.customerName}>{review.user_nick}</Text>
         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
           {renderStars()}
         </View>
@@ -143,7 +143,6 @@ const ReviewList = ({route}) => {
   const [displayLimit, setDisplayLimit] = useState(10); // 초기에 보여질 리뷰 수
   
   const reviewData = {route}.route.params.reviewList;
-  const userInfo =  {route}.route.params.user;
   const [reviewList, setreviewList] = useState(reviewData);
   const store_seq = {route}.route.params.store_seq
   const reviewsData = [  
@@ -154,7 +153,8 @@ const ReviewList = ({route}) => {
     { rating: 1, count: 0 },
   ];
 
-  console.log(userInfo[0].user_nick)
+
+
 
   const updateReviewCounts = (reviewsData, reviewList) => {
     // reviewsData의 구조를 그대로 복사하여 새로운 배열을 만듭니다.
@@ -271,7 +271,7 @@ const ReviewList = ({route}) => {
         </TouchableOpacity>
       </View>
       {displayedReviews.slice(0, displayLimit).map((review) => (
-          <ReviewCard key={review.review.review_seq} review={review} userInfo={userInfo} />
+          <ReviewCard key={review.review.review_seq} review={review} />
           ))}
         {reviewList.length > displayLimit && (
             <TouchableOpacity onPress={handleShowMore} style={styles.showMoreButton}>

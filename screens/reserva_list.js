@@ -97,7 +97,7 @@ const ReservaList = ({route}) => {
         reservations.map((reservation, index) => {
            const reservationDateTime = parseDateTime(reservation.reserve_date, reservation.reserve_time);
            const isPast = reservationDateTime < now;
-           const statusText = isPast ? "이용완료" : (reservation.state === 0 ? "예약대기" : "예약완료");
+           const statusText = isPast ? "이용완료" : (reservation.state === "0" ? "예약대기" : "예약완료");
            const opacityStyle = isPast ? {opacity: 0.5} : {}; // 과거 예약일 경우 투명도 조절
            const storeinfo = async () => {
             try {

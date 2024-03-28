@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { Feather } from '@expo/vector-icons';
 
 const SignUp = () => {
     // 상태 변수들을 선언합니다.
@@ -71,6 +71,21 @@ const SignUp = () => {
   return (
        <SafeAreaView style={styles.container}>
             <ScrollView style={styles.container}>
+            <View style={styles.headerContainer}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backbutton}>
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}> 
+      <Image
+    source={require('../assets/logo.png')}
+    resizeMode="contain"
+    style={styles.logo}
+  />
+  </View>
+
+      <Feather name="bell" style={styles.bellIcon} size={24} color="white" />
+
+    </View>
                     <View style={styles.formContainer}>
                         <Text style={styles.label}>아이디*</Text>
                         <View style={styles.inputRow}>
@@ -149,6 +164,12 @@ const SignUp = () => {
 };
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+  },
   errorText: {
     color: 'red',
     // 추가적인 스타일링...

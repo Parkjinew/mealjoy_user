@@ -142,7 +142,6 @@ const Store = ({route}) => {
   const selectedAddress = route.params.selectedAddress;
   console.log(selectedAddress)
 
-  console.log(cafes)
 
 
   const storeList = async (id) => {

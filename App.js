@@ -95,8 +95,11 @@ export default function App() {
         <Stack.Screen name="InquiryCheck" component={InquiryCheck} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
+    
   );
+  
   // 안녕~
 }
+
 
 

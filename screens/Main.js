@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView, Alert,
-  Platform,TouchableWithoutFeedback,Keyboard } from 'react-native';
+  Platform,TouchableWithoutFeedback,Keyboard,ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -45,18 +45,23 @@ const images = [
 
   // ... 더 많은 이미지를 추가할 수 있습니다.
 ];
+
 const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
+
+
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        bold: require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
-        medium: require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
-        light: require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
       });
+
+    
     }
 
     loadFonts();
@@ -64,6 +69,9 @@ const Main = () => {
 
 
 
+
+
+  
   useEffect(() => {
     const fetchUserInfo = async () => {
       const storedUserInfo = await AsyncStorage.getItem('userInfo');
@@ -144,8 +152,6 @@ const Main = () => {
   }
                                                                                                                           
 
-      const [latitude, setLatitude] = useState(null);
-      const [longitude, setLogitude] = useState(null);
   
       const geoLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -280,7 +286,7 @@ const Main = () => {
         {imagesRow.map((img) => (
           <TouchableOpacity key={img.id} style={styles.imageTouchable} onPress={() => storeList(img.id)}>
             <Image source={img.uri} style={styles.image} />
-            <Text style={[styles.imageLabel, { fontFamily: 'medium', fontSize: 13 }]}>{img.label}</Text>
+            <Text style={[styles.imageLabel,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>{img.label}</Text>
           </TouchableOpacity>
         ))}
       </View>

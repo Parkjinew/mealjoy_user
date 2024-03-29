@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Alert } from 'react-native';
+import { View,Platform, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Alert } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -21,9 +21,9 @@ const Header = ({ totalCafes, onSortPress }) => {
   const navigation = useNavigation();
   // 이 함수에서 sortOption과 setSortOption을 제거하였습니다.
   return (
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
+      <View style={styles.headerContainer} >
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backrow}>
+        <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
 
         <Text style={styles.headerText}>나의 예약 내역 리스트</Text>
@@ -86,7 +86,16 @@ const ReservaList = ({route}) => {
       { cancelable: false },
     );
   };
-
+  const getButtonStyle = (statusText) => {
+    switch (statusText) {
+      case "예약완료":
+        return styles.buttonGreen; // 예약완료일 때의 스타일
+      case "이용완료":
+        return styles.buttonGray; // 이용완료일 때의 스타일
+      default:
+        return styles.button; // 기본 스타일
+    }
+  };
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
@@ -114,7 +123,7 @@ const ReservaList = ({route}) => {
             <View style={styles.detailBox}>
               <View style={styles.detailRow}>
                 <Text style={styles.detailTitle}>{reservation.store_name}</Text>
-                <View style={styles.button}>
+                <View style={getButtonStyle(statusText)}>
                   <Text style={styles.buttonText}>{statusText}</Text>
                 </View>
               </View>
@@ -152,6 +161,23 @@ const ReservaList = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  buttonGreen: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    backgroundColor: 'green', // 예약완료일 때의 배경색
+    // 나머지 버튼 스타일...
+  },
+  buttonGray: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+    backgroundColor: 'gray', // 이용완료일 때의 배경색
+    // 나머지 버튼 스타일...
+  },
+  backrow:{
+    zIndex:1,
+  },
   noReservationsContainer: {
     flex: 1,
     alignItems: 'center',
@@ -196,13 +222,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: 'center', // 중앙에 정렬하기 위해 이 속성을 'center'로 설정합니다.
+    justifyContent: 'space-between', // 중앙에 정렬하기 위해 이 속성을 'center'로 설정합니다.
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderBottomWidth: 1, // 밑줄 추가
     borderColor:'#ffff',
     paddingBottom:20,
-    paddingTop:20
+    paddingTop:20,
+    marginTop:Platform.OS === "android"? 40 :0
   },
   scrollView: {
     flex: 1,

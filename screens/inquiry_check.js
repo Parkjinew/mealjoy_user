@@ -10,7 +10,8 @@ import {
   Modal,
   Button,
   TextInput,
-    Alert
+    Alert,
+    Platform
 } from "react-native";
 import {
   Ionicons,
@@ -155,7 +156,8 @@ const styles = StyleSheet.create({
     marginTop:10,
     paddingBottom:20,
     borderBottomWidth:1,
-    borderColor:"#eeeeee"
+    borderColor:"#eeeeee",
+    marginTop:Platform.OS === "android"? 40 :0
   },
   headerText: {
     fontSize: 18,

@@ -7,7 +7,7 @@ import { LocaleConfig, Calendar } from 'react-native-calendars';
 import moment from 'moment';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import { Ionicons } from '@expo/vector-icons';
 LocaleConfig.locales['ko'] = {
   monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
   monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -220,6 +220,10 @@ const onDayPress = (day) => {
     <View style={styles.container}>
       <ScrollView ref={scrollViewRef}
       >
+         <TouchableOpacity style={styles.backButton} 
+          onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back-outline" size={24} color="black" />
+          </TouchableOpacity>
         <Image
           style={styles.image}
           source={{uri:store.imageFilename}} // Replace with your image path
@@ -280,6 +284,7 @@ const onDayPress = (day) => {
   </View>
 </View>
 
+
 <View style={styles.inputContainer}>
   <Text style={styles.label}>예약자 명</Text>
   <TextInput
@@ -303,6 +308,20 @@ const onDayPress = (day) => {
 };
 
 const styles = StyleSheet.create({
+  backButton: {
+    position: 'absolute', // This positions the button absolutely within imageContainer
+    top: 55, // Distance from the top of the imageContainer
+    left: 20, // Distance from the left of the imageContainer
+    backgroundColor: 'white', // White circular background
+    borderRadius: 20, // Makes it round
+    padding: 6, // Padding inside the circle to make it larger or smaller
+    elevation: 3, // Adds a slight shadow on Android
+    shadowColor: '#000', // Shadow color for iOS
+    shadowOffset: { width: 0, height: 1 }, // Shadow offset for iOS
+    shadowOpacity: 0.2, // Shadow opacity for iOS
+    shadowRadius: 1, // Shadow blur radius for iOS
+    zIndex: 10,
+  },
   safe:{
     paddingTop: -65
   },

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,Image,Alert } from 'react-native';
+import { View,Platform, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,Image,Alert } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { AntDesign } from '@expo/vector-icons';
 // 상단 헤더 컴포넌트
 const Header = () => {
     const navigation = useNavigation();
@@ -69,7 +70,7 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
         <View style={styles.starContainer}>
           {/* 별점을 기반으로 별표시하기 */}
           {Array.from({ length: review.score }, (_, index) => (
-            <FontAwesome key={index} name="star" size={24} color="orange" />
+            <AntDesign key={index} name="star" size={13} color="#ffd700" />
           ))}
         </View>
         <View style={styles.dateAndActions}>
@@ -83,7 +84,14 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
         </View>
         {review.answer && review.answer.trim().length > 0 && (
           <View style={styles.answerContainer}>
+
+<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+             <Image
+          source={require("../assets/owner2.png")}
+          style={styles.ownerImage}
+        />
             <Text style={styles.answerTitle}>사장님</Text>
+            </View>
             <Text style={styles.answerContent}>{review.answer}</Text>
           </View>
         )}
@@ -133,12 +141,18 @@ const ReviewModify = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
+  ownerImage: {
+    width: 40, // 사진의 너비
+    height: 40, // 사진의 높이
+    borderRadius: 20, // 원형 사진을 만들기 위해 너비와 높이의 반으로 설정
+ // 사장님 닉네임과의 간격
+  },
   answerContainer: {
     marginTop: 10,
 
     paddingVertical: 10, // 상하 패딩 조정
     paddingHorizontal: 15, // 좌우 패딩 조정
-    backgroundColor: "#eeeeee", // 배경색 변경
+    backgroundColor: "#f2f2f2", // 배경색 변경
     borderRadius: 10, // 모서리 둥근 정도 조정
     alignSelf: 'flex-start', // 컨테이너를 시작 부분에 정렬
     width: "100%", // 최대 너비 설정
@@ -146,7 +160,6 @@ const styles = StyleSheet.create({
 },
 answerTitle: {
     fontWeight: "bold",
-    marginBottom: 5,
     color: 'black', // 제목 색상 변경
 },
 answerContent: {
@@ -175,7 +188,8 @@ answerContent: {
         borderBottomWidth: 1,
         borderBottomColor: '#eeeeee',
         paddingBottom:24,
-        paddingTop:-30
+        paddingTop:-30,
+        marginTop:Platform.OS === "android"? 40 :0
         
       },
       headerTitleContainer: {

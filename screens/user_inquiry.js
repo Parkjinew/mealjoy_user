@@ -10,7 +10,8 @@ import {
   Modal,
   Button,
   TextInput,
-    Alert
+    Alert,
+    Platform
 } from "react-native";
 import {
   Ionicons,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent:"space-between",
     padding: 10,
     marginBottom: 30,
-    marginTop:10
+    marginTop:Platform.OS === "android"? 40 :5
   },
   headerText: {
     fontSize: 18,
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "red", // 버튼 배경색
-    padding: 15,
+    padding: Platform.OS === "android"? 10 :15,
     borderRadius: 5,
     margin: 10,
     justifyContent: "center",

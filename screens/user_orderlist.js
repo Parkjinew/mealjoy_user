@@ -100,7 +100,7 @@ const OrderList = ({route}) => {
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>주문목록</Text>
-          <View style={{ paddingHorizontal: 16 }}></View>
+          <View style={styles.rightComponent}></View>
         </View>
         <View>
             <Text style={styles.total}>총 {restaurants.length}개</Text></View> 
@@ -127,27 +127,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', // 이 배경색은 상단 노치와 하단 제스처 영역의 배경색입니다.
   },
     backrow:{
-      paddingLeft:15
+      paddingLeft:15,
+      position: 'absolute',
+      left: 0, // 왼쪽 정렬,
+      zIndex:1
     },
   container: {
     flex: 1,
     
   },
   header: {
-    flexDirection: 'row',// 중앙 정렬을 위해 space-between 사용
-    justifyContent:'space-between',
+    flexDirection: 'row',
     paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#eeeeee',
-    paddingBottom:20,
+    paddingBottom:50,
+    marginTop:Platform.OS === 'android' ? 40 : 0,
     
   },
   headerTitle: {
     fontWeight: 'bold',
     fontSize: 20,
     textAlign: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
     flex:1,
-    paddingRight:15
   },
   review:{
     borderBottomWidth: 1,

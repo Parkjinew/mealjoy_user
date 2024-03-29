@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView,Alert, ScrollView, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView,Alert, ScrollView, TextInput, Platform } from 'react-native';
 import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
@@ -53,6 +53,7 @@ const Password = () => {
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>비밀번호 변경</Text>
+        <View style={{width:24}}/>
       </View>
 
       <ScrollView >
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     nicksetting:{
         backgroundColor:'#efefef',
         alignSelf:'center',
-        width:350,
+        width:"90%",
         height:45,
         borderRadius:5
     },
@@ -128,16 +129,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
+    marginTop:Platform?.OS === 'android'? 40 : 0,
   },
   headerTitle: {
     flex: 1,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    marginLeft:-20
+
   },
   tabBar: {
     flexDirection: 'row',
@@ -159,13 +161,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#efefef',
-  },
+
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',

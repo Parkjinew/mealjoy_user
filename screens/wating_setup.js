@@ -46,7 +46,7 @@ const WatingSetup = ({route}) => {
     <ScrollView style={styles.container}>
       <View style={styles.head}>
         <View>
-          <TouchableOpacity style={styles.backbutton}>
+          <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color="black" /></TouchableOpacity></View>
         <View>
        <Text style={styles.waitingCountText}>현재 {waitingCount}명 대기중</Text>

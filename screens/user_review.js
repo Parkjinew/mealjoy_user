@@ -24,7 +24,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
-
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -34,11 +34,12 @@ import axios from 'axios';
 
 // Header 컴포넌트
 const Header = () => {
+  const navigation = useNavigation();
   return (
     <View>
       <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => console.log("뒤로 가기")}>
-        <Ionicons name="arrow-back" size={24} color="#ff3b30" />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
       <Text style={styles.headerText}>리뷰</Text>
     </View>
@@ -52,7 +53,7 @@ const ReviewCard = ({ review, userInfo }) => {
     // 별점을 렌더링하는 함수
     const renderStars = () => {
         return Array.from({ length: review.review.score }, (_, i) => (
-          <AntDesign key={i} name="star" size={24} color="#ffd700" />
+          <AntDesign key={i} name="star" size={13} color="#ffd700" />
         ));
       };
       
@@ -87,8 +88,16 @@ const ReviewCard = ({ review, userInfo }) => {
   
     return (
         <View style={styles.reviewCard}>
+                   
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+
+    <Image
+      source={require('../assets/user.png')}
+      style={styles.userImage}
+    />
         <Text style={styles.customerName}>{review.user_nick}</Text>
-        <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+        </View>
+        <View style={{ flexDirection: 'row', marginBottom:10 }}>
           {renderStars()}
         </View>
         {renderImages()}
@@ -96,10 +105,17 @@ const ReviewCard = ({ review, userInfo }) => {
         <Text style={styles.reviewText}>{review.review.details}</Text>
         {review.review.answer && ( // owner 정보가 있을 때만 렌더링
           <View style={styles.ownerContainer}>
+             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+             <Image
+          source={require("../assets/owner2.png")}
+          style={styles.ownerImage}
+        />
             <Text style={styles.ownername}>사장님</Text>
+            </View>
             <Text style={styles.ownerText}>{review.review.answer}</Text>
           </View>
         )}
+
       </View>
     );
   };
@@ -267,7 +283,7 @@ const ReviewList = ({route}) => {
         <Text style={styles.subText}>최근 리뷰 {reviewList.length}개</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.sortButtonContainer}>
           <Text style={styles.sortButtonText}>{sortOption}</Text>
-          <MaterialIcons name="keyboard-arrow-down" size={24} color="#ff3b30" />
+          <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
         </TouchableOpacity>
       </View>
       {displayedReviews.slice(0, displayLimit).map((review) => (
@@ -296,16 +312,23 @@ const ReviewList = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  userImage: {
+    width: 40, // 사진의 너비
+    height: 40, // 사진의 높이
+    borderRadius: 20, // 원형 사진을 만들기 위해 너비와 높이의 반으로 설정
+    marginRight: 5, // 닉네임과의 간격
+  },
+  
+  ownerImage: {
+    width: 40, // 사진의 너비
+    height: 40, // 사진의 높이
+    borderRadius: 20, // 원형 사진을 만들기 위해 너비와 높이의 반으로 설정
+
+  },
     safeArea: {
       flex: 1,
       backgroundColor: "#fff", // SafeAreaView 색상을 배경색과 일치시키기
-    },
-    headerContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 10,
-      
-    },
+     },
     headerText: {
       fontSize: 20,
       fontWeight: "bold",
@@ -344,16 +367,11 @@ const styles = StyleSheet.create({
     },
     card: {
       backgroundColor: "#fff",
-      borderRadius: 6,
+      borderRadius: 10,
       padding: 16,
-      borderColor: "#ff3b30",
+      borderColor: "rgba(255, 0, 0, 0.3)",
       borderWidth: 1,
       margin: 10,
-      shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 3,
     },
     cardTitle: {
       fontSize: 18,
@@ -386,23 +404,36 @@ const styles = StyleSheet.create({
     },
     reviewCard: {
       margin: 10,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: "#ff3b30",
+      padding: 20,
       borderRadius: 6,
+      // iOS용 그림자 스타일
+      shadowColor: "#eeeeee", // 그림자 색상
+      backgroundColor: 'white', // 그림자가 보이려면 배경색이 있어야 합니다.
+    
+      // iOS용 그림자 스타일
+      shadowColor: '#000', // 그림자 색
+      shadowOffset: { width: 0, height: 2 }, // 그림자 방향 (이 경우 아래로)
+      shadowOpacity: 0.25, // 그림자 투명도
+      shadowRadius: 3.84, // 그림자 블러 반경
+      
+      // Android용 그림자 스타일
+      elevation: 5, // Android에서는 elevation으로 그림자를 조절
+    
 
     },
     customerName: {
       fontWeight: "bold",
-      fontSize: 18,
+      fontSize: 15,
     },
     reviewTitleText:{
       fontWeight: "bold",
       fontSize: 18,
+      marginTop:5,
+      marginBottom:5
     },
     reviewText:{
         fontSize: 16,
-
+      marginBottom:5
     },
     reviewImage: {
       width: 100, // 이미지 크기에 맞게 조절해주세요.
@@ -449,7 +480,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-end", // 하단 정렬
         alignItems: "center",
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
       },
       modalView: {
         width: '100%', // 화면 너비와 일치
@@ -493,8 +524,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 10,
-        marginTop: 10,
+        marginTop: Platform.OS === 'android' ? 40 : 10,
+        padding:8
       },
       sortButtonContainer: {
         flexDirection: 'row', // 아이콘과 텍스트를 가로로 나란히 배열합니다.
@@ -504,7 +535,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor:"#ff3b30",
+        borderColor: "rgba(255, 0, 0, 0.7)",
       },
       sortButtonText: {
         color: "black",
@@ -546,7 +577,6 @@ const styles = StyleSheet.create({
     },
     ownername:{
         fontWeight:'bold',
-        marginBottom:20,
     }
       
   });

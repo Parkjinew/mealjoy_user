@@ -9,7 +9,8 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     Text,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
   inputContainer:{
     flex:1,
     alignItems:'center',
+    marginTop: Platform.OS === 'android' ? 70 : 0,
   },
   logo: {
     width: 300,
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16, // 좌우 여백을 주기 위해 horizontal padding 값을 조정합니다. // 상단 바 여백
     backgroundColor: 'white',
-    marginTop:-70
+    marginTop: Platform.OS === 'android' ? -20 : -70
   },
   header: {
     flexDirection: 'row',
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
     //fontWeight: 'bold',
     marginBottom: 5, // 라벨과 입력 필드 사이의 간격
     // 필요한 다른 스타일을 추가합니다.
-    marginRight:290
+    marginRight:Platform.OS === 'android' ? 280 : 290
   },
   inputLabel2: {
     fontSize: 15, // 라벨의 글자 크기
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     //fontWeight: 'bold',
     marginBottom: 5, // 라벨과 입력 필드 사이의 간격
     // 필요한 다른 스타일을 추가합니다.
-    marginRight:280
+    marginRight:Platform.OS === 'android' ? 265 : 280
   },
   input: {
     // ... other input styles ...
@@ -226,11 +228,12 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     marginBottom:-20,
-    left: 0,
+    left: Platform.OS === 'android' ? -15 : 0,
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     padding: 20,
+    
     //backgroundColor: '#f9f9f9',//배경 지워도 되고 안지워도 되고 
   },
  

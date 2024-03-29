@@ -58,6 +58,7 @@ const Nick = () => {
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>닉네임 변경</Text>
+        <View style={{width:24}}/>
       </View>
 
       <ScrollView >
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     nicksetting:{
         backgroundColor:'#efefef',
         alignSelf:'center',
-        width:350,
+        width:Platform?.OS === 'android'? "90%" : "90%",
         height:45,
         borderRadius:5
     },
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    marginTop:Platform?.OS === 'android'? 100 : 0,
+    marginTop:Platform?.OS === 'android'? 40 : 0,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
   },
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    marginLeft:-29
+
   },
   tabBar: {
     flexDirection: 'row',
@@ -147,13 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#efefef',
-  },
+
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',

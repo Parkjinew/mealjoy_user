@@ -225,7 +225,7 @@ const ChatBot = () => {
   };
 
   useEffect(() => {
-    const deleteTimer = setTimeout(autoDeleteMessages, 10*4000); // 10분
+    const deleteTimer = setTimeout(autoDeleteMessages, 600000); // 10분
     return () => clearTimeout(deleteTimer);
   }, []);
 

@@ -391,7 +391,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     paddingTop:20,
-    paddingBottom:30
+    paddingBottom:30,
+    marginTop:Platform.OS === 'android' ? 40 : 0,
   },
   headerText: {
     fontSize: 18,

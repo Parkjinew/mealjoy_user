@@ -100,7 +100,11 @@ const Setting = () => {
 
 const styles = StyleSheet.create({
   backbutton:{
-    zIndex:666
+    position: 'absolute', // 뒤로 가기 버튼을 절대 위치시킴
+    left: 16, 
+    zIndex:666,
+    top: '50%',
+    marginTop:5
   },
     edge:{
         borderColor:'#efefef',
@@ -128,14 +132,14 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     padding: 16,
-
+    justifyContent: 'center',
+    marginTop:Platform.OS === "android"? 40 :0
   },
   headerTitle: {
     flex: 1,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    marginLeft:-20
   },
   tabBar: {
     flexDirection: 'row',

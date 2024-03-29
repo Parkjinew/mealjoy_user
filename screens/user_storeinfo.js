@@ -230,7 +230,7 @@ const StoreInfo = ({route}) => {
       <ScrollView>
       <TouchableOpacity style={styles.backButton} 
           onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back-outline" size={24} color="#ff3b30" />
+            <Ionicons name="arrow-back-outline" size={24} color="black" />
           </TouchableOpacity>
         <Image
           style={styles.image}

@@ -11,6 +11,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     Alert, 
+    Platform
 } from 'react-native';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -240,7 +241,8 @@ const SignUp = () => {
 const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
-    marginBottom:-30
+    marginBottom:-30,
+    marginTop: Platform.OS === 'android' ? 30 : 0,
      // Adjust the space between the logo and the input fields as needed
   },
   headerContainer: {

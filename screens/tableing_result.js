@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert, Platform } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -16,18 +16,16 @@ const HorizontalDivider = () => {
 const Header = ({ navigation }) => {
   // 이 함수에서 sortOption과 setSortOption을 제거하였습니다.
   return (
-    <View>
+
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("Main")}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <View style={styles.headerText2}>
         <Text style={styles.headerText}>나의 원격 줄서기 내역 </Text>
-        </View>
-        <View></View>
+
+          <View style={{width:24}}/>
       </View>
-      <View style={styles.divider} />
-    </View>
+
   );
 };
 
@@ -101,7 +99,6 @@ const TableingResult = ({route}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
         {/* Your scrollable content */}
       <Header
         navigation={navigation}
@@ -152,8 +149,6 @@ const TableingResult = ({route}) => {
       
       {/* Footer navigation bar */}
       {/* Include icons or images for the navigation bar as needed */}
-
-      </ScrollView>
        
       
     </View>
@@ -288,7 +283,7 @@ const styles = StyleSheet.create({
     justifyContent:'space-between',
     padding: 10,
     marginBottom: 5,
-    marginTop: 0,
+    marginTop: Platform?.OS === 'android'? 40 : 0,
   },
   headerText: {
     fontSize: 18,

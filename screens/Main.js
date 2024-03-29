@@ -319,13 +319,13 @@ const Main = () => {
       {/* 헤더 영역 */}
       <View style={styles.header}>
       <View style={styles.searchAndIconContainer}>
-        <View>
-        </View>
+        <View style={{width:24}}/>
       <Image
     source={require('../assets/logo.png')}
     resizeMode="contain"
     style={styles.logo}
   />
+
 <TouchableOpacity style={styles.bellIcon} onPress={() => navigation.navigate('Recomplete')}>
       <Feather name="bell" size={24} color="black" />
     </TouchableOpacity>
@@ -400,7 +400,6 @@ const Main = () => {
 const styles = StyleSheet.create({
   bellIcon: {
     marginTop:5,
-    marginLeft:Platform.OS === 'android' ? -15 : -8,
 // 벨 아이콘과 검색창 사이의 간격 조정
     // marginTop으로 벨 아이콘의 위치를 미세 조정할 수 있음
     // 벨 아이콘을 살짝 위로 올림
@@ -409,6 +408,7 @@ const styles = StyleSheet.create({
   searchAndIconContainer: {
     flexDirection: 'row', // 로고와 벨 아이콘을 가로로 배치
     justifyContent: 'space-between',
+    paddingHorizontal:20,
   },
   searchIcon: {
     padding: 10,
@@ -442,7 +442,6 @@ const styles = StyleSheet.create({
     height: 150, // 로고의 높이. 필요에 따라 조절하세요.
     marginBottom: -40, // 로고와 검색 입력란 사이의 마진을 조절합니다.
     marginTop : -60,
-    marginLeft: Platform.OS === 'android' ? 5 : 10,
   },
   safeArea: {
     flex: 1,

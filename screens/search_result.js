@@ -239,6 +239,7 @@ const SearchResult = ({ route }) => {
                                 resizeMode="contain"
                                 style={styles.logo}
                             />
+                            
                             <TouchableOpacity style={styles.bellIcon}>
                                 <Feather name="bell" size={24} color="black" />
                             </TouchableOpacity>

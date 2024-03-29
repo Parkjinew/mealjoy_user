@@ -259,6 +259,10 @@ export default function UserOrder({route}){
     return (
     <View style={styles.container}>
       <ScrollView>
+      <TouchableOpacity style={styles.backButton} 
+          onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back-outline" size={24} color="black" />
+          </TouchableOpacity>
         <Image
           style={styles.image}
           source={{uri: store.imageFilename}} // Replace with your image path
@@ -316,6 +320,20 @@ export default function UserOrder({route}){
 
 
 const styles = StyleSheet.create({
+  backButton: {
+    position: 'absolute', // This positions the button absolutely within imageContainer
+    top: 55, // Distance from the top of the imageContainer
+    left: 20, // Distance from the left of the imageContainer
+    backgroundColor: 'white', // White circular background
+    borderRadius: 20, // Makes it round
+    padding: 6, // Padding inside the circle to make it larger or smaller
+    elevation: 3, // Adds a slight shadow on Android
+    shadowColor: '#000', // Shadow color for iOS
+    shadowOffset: { width: 0, height: 1 }, // Shadow offset for iOS
+    shadowOpacity: 0.2, // Shadow opacity for iOS
+    shadowRadius: 1, // Shadow blur radius for iOS
+    zIndex: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',

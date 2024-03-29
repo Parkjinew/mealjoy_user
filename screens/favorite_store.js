@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#cccccc',
         paddingBottom:20,
-        
+        marginTop:Platform?.OS === "android"? 40 :0,
       },
       title: {
         fontSize: 24,

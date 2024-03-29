@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,Alert, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image } from 'react-native';
+import { View,Alert, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Platform } from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -55,7 +55,7 @@ const Number = () => {
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>휴대폰 번호 변경</Text>
-        
+        <View style={{width:24}}/>
       </View>
 
       <ScrollView >
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     numbersetting:{
         backgroundColor:'#efefef',
         alignSelf:'center',
-        width:350,
+        width: "90%",
         height:45,
         borderRadius:5
     },
@@ -117,13 +117,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
+    marginTop:Platform?.OS === 'android'? 40 : 0,
   },
   headerTitle: {
     flex: 1,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
-    marginLeft:-23
   },
   tabBar: {
     flexDirection: 'row',
@@ -145,13 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#efefef',
-  },
+
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',

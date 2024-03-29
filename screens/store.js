@@ -354,6 +354,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  
   headerText: {
     fontSize: 18,
     fontWeight: "bold",

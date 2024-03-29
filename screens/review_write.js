@@ -157,7 +157,9 @@ const ReviewWrite = ({ route }) => {
               resizeMode="contain"
               style={styles.logo}
             />
+            <View style={{width:24}}/>
           </View>
+          
           <ScrollView contentContainerStyle={styles.container}>
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : "height"} style={styles.reviewSection}
           keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
@@ -319,14 +321,14 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     paddingTop: Platform.OS === 'android' ? 50 : 10,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
-   
     backgroundColor: 'white',
     zIndex:10,
+    paddingHorizontal:30,
+    paddingBottom:5
    
-
   },
   logo: {
     width: 300,
@@ -335,7 +337,7 @@ const styles = StyleSheet.create({
     marginTop: -60,
   },
   backButton: {
-    marginLeft: 15,
+
     marginTop: 7
   },
   tabBar: {

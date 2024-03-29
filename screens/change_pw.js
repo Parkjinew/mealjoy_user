@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Alert, Platform } from 'react-native';
-import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Alert, Platform, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // 
-import { FontAwesome5 } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import md5 from 'react-native-md5';
+import * as Font from 'expo-font';
+
 const ChangePassword = () => {
-  // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userInfo, setUserInfo] = useState(null);
-
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -54,7 +52,26 @@ const ChangePassword = () => {
     }
   };
 
- 
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+
 return (
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 */}
@@ -62,18 +79,18 @@ return (
       <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()}>
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>비밀번호 변경</Text>
+        <Text style={[styles.headerTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>비밀번호 변경</Text>
         <View style={{width:24}}/>
       </View>
 
       <ScrollView >
      
         <View style={styles.infoItem}>
-          <Text style={styles.infoText}>새로운 비밀번호를 입력해주세요</Text>    
+          <Text style={[styles.infoText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>새로운 비밀번호를 입력해주세요</Text>    
         </View>
         <View style={styles.nicksetting}>
         <TextInput
-            style={styles.input}
+            style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}
             placeholder="새 비밀번호"
             secureTextEntry={true}
             value={newPassword}
@@ -82,7 +99,7 @@ return (
         </View>
         <View style={styles.nicksetting}>
            <TextInput
-            style={styles.input}
+            style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}
             placeholder="비밀번호 확인"
             secureTextEntry={true}
             value={confirmPassword}
@@ -98,7 +115,7 @@ return (
           style={[styles.tabItem, isButtonDisabled && styles.disabledButton]}
           disabled={isButtonDisabled} onPress={pwsetting} // 비활성화 여부
         >
-        <Text style={styles.setting}>변경 완료</Text>
+        <Text style={[styles.setting,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>변경 완료</Text>
         </TouchableOpacity>
       </View>
       

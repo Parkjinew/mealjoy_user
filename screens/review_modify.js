@@ -208,8 +208,8 @@ answerContent: {
         marginTop:10
     },
     image: {
-        width: 100,
-        height: 100,
+        width:Platform?.OS === "android"? 95 :100,
+        height:Platform?.OS === "android"? 95 :100,
         borderRadius: 8,
         marginRight: 6,
     },
@@ -254,6 +254,7 @@ answerContent: {
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
+
   },
   cardContent: {
     marginBottom: 8,

@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView,Alert, ScrollView, TextInput, Platform } from 'react-native';
-import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView,Alert, ScrollView, TextInput, Platform, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // 
-import { FontAwesome5 } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import md5 from 'react-native-md5';
+import * as Font from 'expo-font';
 const Password = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [inputPassword, setInputPassword] = useState('');
-
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
@@ -44,6 +41,24 @@ const Password = () => {
       Alert.alert('비밀번호가 일치하지 않습니다.');
     }
   };
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,14 +67,14 @@ const Password = () => {
       <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()}>
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>비밀번호 변경</Text>
+        <Text style={[styles.headerTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>비밀번호 변경</Text>
         <View style={{width:24}}/>
       </View>
 
       <ScrollView >
      
         <View style={styles.infoItem}>
-          <Text style={styles.infoText}>안전한 변경을 위해 현재 비밀번호를 확인할게요</Text>  
+          <Text style={[styles.infoText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>안전한 변경을 위해 현재 비밀번호를 확인할게요</Text>  
         </View>
        
 
@@ -77,7 +92,7 @@ const Password = () => {
 
       <View style={styles.tabBar}>
         <TouchableOpacity style={styles.tabItem} onPress={handlePasswordChange}>
-        <Text style={styles.setting}>다음</Text>
+        <Text style={[styles.setting,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>다음</Text>
         </TouchableOpacity>
       </View>
       

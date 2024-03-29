@@ -3,7 +3,6 @@ import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView,
   KeyboardAvoidingView, Alert,
   Platform,TouchableWithoutFeedback,Keyboard,ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
-import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -11,14 +10,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import { Locations } from "@env";
 import * as Font from 'expo-font';
+
+
 const images = [
   { id: '0', uri: require('../assets/all.png'), label: '전체' },
   { id: '1', uri: require('../assets/bibi.png'), label: '한식' },
@@ -43,7 +42,7 @@ const images = [
   {id:'18'},
   {id:'19'}
 
-  // ... 더 많은 이미지를 추가할 수 있습니다.
+
 ];
 
 const dismissKeyboard = () => Keyboard.dismiss();
@@ -51,9 +50,6 @@ const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-
-
-
 
   
   useEffect(() => {
@@ -169,38 +165,7 @@ const Main = () => {
           console.error(error);
         }
       };
-  // const showChangeAddressPopup = () => {
-  //   Alert.alert(
-  //     "주소 변경",
-  //     "주소를 변경하시겠습니까?",
-  //     [
-  //       {
-  //         text: "현재 위치로 설정",
-  //         onPress: () => {
-  //           console.log("직접 주소 설정 화면으로 이동");
-  //           // 직접 주소 설정 화면으로 이동하는 로직을 여기에 추가하세요.
-  //           geoLocation()
-  //         },
-  //       },
-  //       {
-  //         text: "직접 주소 설정하기",
-  //         onPress: () => {
-  //           console.log("직접 주소 설정 화면으로 이동");
-  //           // 직접 주소 설정 화면으로 이동하는 로직을 여기에 추가하세요.
-  //           navigation.navigate('AddressChange', {
-  //             onSelect: handleSelectAddress,
-  //           });
-  //         },
-  //       },
-  //       {
-  //         text: "취소",
-  //         onPress: () => console.log("주소 변경 취소"),
-  //         style: "cancel",
-  //       },
-  //     ],
-  //     { cancelable: false }
-  //     );
-    //  };
+ 
     
     const showChangeAddressPopup = () => {
       Alert.alert(
@@ -342,7 +307,6 @@ const Main = () => {
     >
       <ScrollView style={styles.content}>
     <View style={styles.container}>
-      {/* 헤더 영역 */}
       <View style={styles.header}>
       <View style={styles.searchAndIconContainer}>
         <View style={{width:24}}/>
@@ -359,11 +323,12 @@ const Main = () => {
    
     <View style={styles.searchSection}>
       <TextInput
-        style={styles.searchInput}
-        placeholder="지역,음식,메뉴검색"
+        style={[styles.searchInput,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}
+        placeholder="매장검색"
         placeholderTextColor="#888"
         value={searchQuery}
         onChangeText={text => setSearchQuery(text)}
+        
       />
       <TouchableOpacity onPress={handleSearch}>
       <EvilIcons name="search" size={24} color="black" style={styles.searchIcon}/>
@@ -375,7 +340,7 @@ const Main = () => {
   style={styles.dropdown}
   onPress={showChangeAddressPopup }
 >
-          <Text style={styles.dropdownText}>{selectedAddress} ▼</Text>
+          <Text style={[styles.dropdownText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 15 }]}>{selectedAddress} ▼</Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -387,18 +352,15 @@ const Main = () => {
       {renderImagesRow(images.slice(12, 16))}
       {renderImagesRow(images.slice(16, 19))}
    </View>
-      {/* 메인 컨텐츠 영역 */}
-     
-        {/* 대형 프로모션 카드 */}
+
         <TouchableOpacity style={styles.promotionCard}>
-          <Text style={styles.promotionText}>챗봇 밀조이 셰프!!!</Text>
-          <Text style={styles.promotionSubtext}>하단 탭 가운데 아이콘을 눌러보세요!!</Text>
+          <Text style={[styles.promotionText, { fontFamily: 'KBO-Dia-Gothic_bold', fontSize: 18 }]}>챗봇 밀조이 셰프!!!</Text>
+          <Text style={[styles.promotionSubtext, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>하단 탭 가운데 아이콘을 눌러보세요!!</Text>
         </TouchableOpacity>    
  </View>
  </ScrollView>
  </KeyboardAvoidingView>
  </TouchableWithoutFeedback>
-      {/* 하단 탭 바 */}
       {!keyboardVisible && (
       <View style={styles.tabBar}>
         <TouchableOpacity style={styles.tabItem}>
@@ -426,13 +388,10 @@ const Main = () => {
 const styles = StyleSheet.create({
   bellIcon: {
     marginTop:5,
-// 벨 아이콘과 검색창 사이의 간격 조정
-    // marginTop으로 벨 아이콘의 위치를 미세 조정할 수 있음
-    // 벨 아이콘을 살짝 위로 올림
   },
 
   searchAndIconContainer: {
-    flexDirection: 'row', // 로고와 벨 아이콘을 가로로 배치
+    flexDirection: 'row', 
     justifyContent: 'space-between',
     paddingHorizontal:20,
   },
@@ -451,59 +410,58 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   dropdownContainer: {
-    alignSelf: 'flex-start', // 이 컨테이너 내의 요소를 왼쪽으로 정렬
-    width: '100%', // 컨테이너의 너비를 header의 전체 너비로 설정
+    alignSelf: 'flex-start',
+    width: '100%', 
     paddingBottom:20,
     paddingTop:5
   },
   divider: {
-    height: 1, // 선의 두께
-    backgroundColor: '#e0e0e0', // 선의 색상
-    width: '100%', // 선의 너비를 부모 컨테이너에 맞춥니다.
-    marginTop: 1, // 선 위의 여백
-    marginBottom: 1, // 선 아래의 여백
+    height: 1, 
+    backgroundColor: '#e0e0e0', 
+    width: '100%', 
+    marginTop: 1, 
+    marginBottom: 1, 
   },
   logo: {
-    width: 300, // 로고의 너비. 필요에 따라 조절하세요.
-    height: 150, // 로고의 높이. 필요에 따라 조절하세요.
-    marginBottom: -40, // 로고와 검색 입력란 사이의 마진을 조절합니다.
+    width: 300,
+    height: 150, 
+    marginBottom: -40, 
     marginTop : -60,
   },
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff', // 이 배경색은 상단 노치와 하단 제스처 영역의 배경색입니다.
+    backgroundColor: '#fff', 
   },
   keyboardAvoid: {
     flex: 1,
   },
-  // ... 다른 스타일들 ...
+
   tabBar: {
     flexDirection: 'row',
     borderTopColor: '#ccc',
     borderTopWidth: 1,
-    backgroundColor: '#fff', // 탭 바의 배경색을 설정합니다.
+    backgroundColor: '#fff', 
   },
   imagesRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '100%', // 가로로 꽉 차게 설정
-    marginBottom: 20, // 여백 설정
+    width: '100%', 
+    marginBottom: 20, 
   },
   imageTouchable: {
-    alignItems: 'center', // 이미지와 라벨을 중앙 정렬
+    alignItems: 'center', 
   width: 75,
   },
   image: {
-    width: 75, // 이미지의 크기 설정
-    height: 75, // 이미지의 크기 설정
-    borderRadius: 10, // 이미지의 모서리 둥글게
+    width: 75,
+    height: 75, 
+    borderRadius: 10, 
   },
   imageLabel: {
     textAlign:'center',
-    marginTop: 5, // 이미지와 글자 사이의 간격을 조정합니다.
-    fontSize: 14, // 글자 크기를 조정합니다.
-    color: '#000', // 글자 색상을 조정합니다.
-    // 여기에 글자에 대한 추가 스타일을 적용할 수 있습니다.
+    marginTop: 5, 
+    fontSize: 14, 
+    color: '#000',
   },
   container: {
     flex: 1,
@@ -514,8 +472,8 @@ const styles = StyleSheet.create({
     paddingTop:Platform.OS === 'android' ? 50 : 10,
     padding: 16,
     paddingBottom:-10,
-    backgroundColor: '#fff', // '#f53b50'이었지만, 배경을 흰색으로 변경했습니다.
-    alignItems: 'center', // 추가: 요소들을 수평 중앙에 정렬합니다.
+    backgroundColor: '#fff', 
+    alignItems: 'center', 
     
   },
   title: {
@@ -529,7 +487,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     padding: 10,
-    backgroundColor: 'transparent', // 배경을 투명하게 설정
+    backgroundColor: 'transparent', 
     color: '#424242',
   },
   dropdown: {
@@ -543,7 +501,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    // 컨텐츠 영역 스타일링
+  
   },
   promotionCard: {
     margin: 16,
@@ -551,18 +509,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#ffebed',
     alignItems: 'center',
-    // 그림자 효과 등 추가
+
   },
   promotionText: {
     fontSize: 18,
     fontWeight: 'bold',
-    // 텍스트 색상 변경 등
+
   },
   promotionSubtext: {
     fontSize: 16,
     color: '#555',
     marginTop: 8,
-    // 텍스트 색상 변경 등
+   
   },
   tabBar: {
     height: 60,
@@ -584,7 +542,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  // 탭 아이템 스타일 추가
 });
 
 export default Main;

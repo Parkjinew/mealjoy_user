@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -10,12 +10,14 @@ import {
     Keyboard,
     Text,
     Alert,
-    Platform
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Font from 'expo-font';
 
 const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
   const navigation = useNavigation();
@@ -25,6 +27,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
       password: '',
   });
 
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   // 로그인 입력 핸들러
   const handleLoginChange = (name, value) => {
@@ -58,7 +61,24 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
         Alert.alert('로그인 요청 실패', '네트워크 상태를 확인해주세요.');
     }
 };
+useEffect(() => {
+  async function loadFonts() {
+    await Font.loadAsync({
+      'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+      'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+      'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+    });
 
+    setFontsLoaded(true);
+  
+  }
+
+  loadFonts();
+}, []);
+
+if (!fontsLoaded) {
+  return <ActivityIndicator size="large" color="#0000ff" />;
+}
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView style={styles.container}>
@@ -73,16 +93,16 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
         <Image source={require('../assets/logo.png')} style={styles.logo} />
       </View>
       <View style={styles.inputContainer}>
-  <Text style={styles.inputLabel}>아이디*</Text>
+  <Text style={[styles.inputLabel,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>아이디*</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}
           placeholder="아이디를 입력하세요"
           onChangeText={(value) => handleLoginChange('id', value)}
           value={loginInfo.id}
         />
-          <Text style={styles.inputLabel2}>비밀번호*</Text>
+          <Text style={[styles.inputLabel2,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>비밀번호*</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}
           placeholder="비밀번호를 입력하세요 "
           secureTextEntry={true}
           onChangeText={(value) => handleLoginChange('password', value)}
@@ -90,10 +110,10 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
         />
         <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
-    <Text style={styles.buttonText}>로그인</Text>
+    <Text style={[styles.buttonText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>로그인</Text>
   </TouchableOpacity>
   <TouchableOpacity style={[styles.button, styles.buttonSignUp]} onPress={() => navigation.navigate('SignUp')}>
-    <Text style={styles.buttonText}>회원가입</Text>
+    <Text style={[styles.buttonText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>회원가입</Text>
   </TouchableOpacity>
         </View>
 

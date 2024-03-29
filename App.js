@@ -14,7 +14,6 @@ import Nick from './screens/nick_setting';
 import Number from './screens/number_setting';
 import Password from './screens/pw_setting';
 import ChangePassword from './screens/change_pw';
-import StoreDetail from './screens/location';
 import Store from './screens/store';
 import HomeLogin from './screens/homelogin';
 import KakaoLogin from './screens/kakaoLogin';
@@ -76,7 +75,7 @@ export default function App() {
         <Stack.Screen name="Number" component={Number} options={{ headerShown: false }}/>
         <Stack.Screen name="Password" component={Password} options={{ headerShown: false }}/>
         <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }}/>
-        <Stack.Screen name="StoreDetail" component={StoreDetail} options={{ headerShown: false }}/>
+    
         <Stack.Screen name="Store" component={Store} options={{ headerShown: false }}/>
         <Stack.Screen name="HomeLogin" component={HomeLogin} options={{ headerShown: false }}/>
         <Stack.Screen name="KakaoLogin" component={KakaoLogin} options={{ headerShown: false }}/>

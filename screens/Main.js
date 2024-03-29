@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import { Locations } from "@env";
-
+import * as Font from 'expo-font';
 const images = [
   { id: '0', uri: require('../assets/all.png'), label: '전체' },
   { id: '1', uri: require('../assets/bibi.png'), label: '한식' },
@@ -48,8 +48,22 @@ const images = [
 const dismissKeyboard = () => Keyboard.dismiss();
 const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        bold: require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        medium: require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        light: require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+    }
+
+    loadFonts();
+  }, []);
+
+
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       const storedUserInfo = await AsyncStorage.getItem('userInfo');
@@ -64,6 +78,8 @@ const Main = () => {
 
     fetchUserInfo();
   }, []);
+
+
   const handleHeartIconPress = async () => {
     if (isLoggedIn) {
       // 사용자가 로그인 상태일 때 수행할 작업
@@ -264,7 +280,7 @@ const Main = () => {
         {imagesRow.map((img) => (
           <TouchableOpacity key={img.id} style={styles.imageTouchable} onPress={() => storeList(img.id)}>
             <Image source={img.uri} style={styles.image} />
-            <Text style={styles.imageLabel}>{img.label}</Text>
+            <Text style={[styles.imageLabel, { fontFamily: 'medium', fontSize: 13 }]}>{img.label}</Text>
           </TouchableOpacity>
         ))}
       </View>

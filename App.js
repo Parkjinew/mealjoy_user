@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Main from "./screens/Main";
@@ -34,7 +34,7 @@ import UserInquiry from './screens/user_inquiry';
 import InquiryCheck from './screens/inquiry_check';
 const Stack = createStackNavigator();
 
-
+LogBox.ignoreAllLogs(true);
 export default function App() {
   const [initialRouteName, setInitialRouteName] = useState(null); // 초기값을 null로 설정
 

@@ -56,9 +56,9 @@ const Main = () => {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
-        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
-        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        bold: require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        medium: require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        light: require('../assets/fonts/KBO Dia Gothic_light.ttf')
       });
 
     

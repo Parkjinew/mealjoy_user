@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, FlatList, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, FlatList, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, Entypo, FontAwesome6 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_KEY } from "@env";
+import * as Font from 'expo-font';
 
 const ChatBot = () => {
   const navigation = useNavigation();
@@ -12,6 +13,7 @@ const ChatBot = () => {
   const [inputText, setInputText] = useState('');
   const flatListRef = useRef(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -253,6 +255,26 @@ const ChatBot = () => {
     navigation.navigate("HomeLogin")
   }
   }
+
+  
+ useEffect(() => {
+  async function loadFonts() {
+    await Font.loadAsync({
+      'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+      'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+      'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+    });
+
+    setFontsLoaded(true);
+  
+  }
+
+  loadFonts();
+}, []);
+
+if (!fontsLoaded) {
+  return <ActivityIndicator size="large" color="#0000ff" />;
+}
 
   return (
     <SafeAreaView style={styles.safeArea}>

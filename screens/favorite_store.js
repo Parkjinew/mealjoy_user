@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Image, Text, StyleSheet, TextInput, TouchableOpacity,
-  ScrollView, SafeAreaView, KeyboardAvoidingView, Platform,
- FlatList
+  View, Image, Text, StyleSheet,  TouchableOpacity,
+  ScrollView, SafeAreaView, KeyboardAvoidingView, Platform,ActivityIndicator
 } from 'react-native';
 
-import { FontAwesome5, Entypo, FontAwesome6, FontAwesome } from '@expo/vector-icons';
+import { Entypo, FontAwesome6, FontAwesome } from '@expo/vector-icons';
 import {  Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import * as Font from 'expo-font';
 
 
 
@@ -19,9 +18,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 const FavoriteStore = ({route}) => {
   const navigation = useNavigation();
   const { FavoriteStore } = route.params;
-  console.log(FavoriteStore);
   const [restaurants, setRestaurants] = useState(FavoriteStore);
   const [userInfo, setUserInfo] = useState(null);
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -101,14 +101,14 @@ const FavoriteStore = ({route}) => {
         <Image source={{uri : item.store_IMG}} style={styles.restaurantImage} />
       <View style={styles.restaurantDetailContainer}>
         <View style={styles.restaurantNameAndIcon}>
-            <Text style={styles.restaurantName}>{item.store_name}</Text>
+            <Text style={[styles.restaurantName,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{item.store_name}</Text>
         </View>
-          <Text style={styles.restaurantcategory}>{categoryLabel}</Text>
+          <Text style={[styles.restaurantcategory,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>{categoryLabel}</Text>
           <View style={styles.ratingContainer}>
             <FontAwesome name="star" size={16} color="#FFD700" />
-            <Text style={styles.restaurantRating}>{item.averageRating}</Text>
+            <Text style={[styles.restaurantRating,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 12 }]}>{item.averageRating}</Text>
           </View>
-          <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
+          <Text style={[styles.restaurantReviews,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 12 }]}>{item.reviewCount}개의 리뷰</Text>
   
       </View>
     </View>
@@ -131,6 +131,24 @@ const FavoriteStore = ({route}) => {
   }
 
   
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -140,12 +158,12 @@ const FavoriteStore = ({route}) => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backrow}>
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>관심매장 목록</Text>
+          <Text style={[styles.headerTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>관심매장 목록</Text>
           <View style={{ paddingHorizontal: 16 }}></View>
           
         </View>
         <View>
-            <Text style={styles.total}>총 {restaurants.length}개</Text></View> 
+            <Text style={[styles.total,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 15 }]}>총 {restaurants.length}개</Text></View> 
 
           {renderRestaurants()}
         </ScrollView>
@@ -244,6 +262,7 @@ const styles = StyleSheet.create({
         ratingContainer: {
           flexDirection: 'row',
           alignItems: 'center',
+          paddingVertical:3
         },
         restaurantRating: {
           marginLeft: 5,
@@ -252,6 +271,7 @@ const styles = StyleSheet.create({
         restaurantReviews: {
           fontSize: 12,
           color: '#666',
+          marginTop:3
         },
     
     

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Platform, Image } from 'react-native';
-import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Platform, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // 
-import { FontAwesome5 } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -49,6 +47,27 @@ const Setting = () => {
     }
   };
 
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+
+        setFontsLoaded(true);
+      
+      }
+
+      loadFonts();
+    }, []);
+
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,8 +75,8 @@ const Setting = () => {
       <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()}>
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>내 정보 수정</Text>
-    
+        <Text style={[styles.headerTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>내 정보 수정</Text>
+        
       </View>
 
       <ScrollView >
@@ -67,24 +86,24 @@ const Setting = () => {
         
         <View style={styles.edge}>
         <View style={styles.infoItem}>
-          <Text style={styles.infoText}>아이디</Text>
-          <Text style={styles.valueText}>{userInfo?.[0]?.user_id}</Text>
+          <Text style={[styles.infoText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>아이디</Text>
+          <Text style={[styles.valueText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>{userInfo?.[0]?.user_id}</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="white" />
         </View>
         <TouchableOpacity style={styles.infoItem} onPress={() => navigation.navigate('Nick')}>
-          <Text style={styles.infoText}>닉네임</Text>
-          <Text style={styles.valueText}>{userInfo?.[0]?.user_nick}</Text>
+          <Text style={[styles.infoText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>닉네임</Text>
+          <Text style={[styles.valueText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>{userInfo?.[0]?.user_nick}</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
 
         </TouchableOpacity>
         <TouchableOpacity style={styles.infoItem} onPress={() => navigation.navigate('Number')}>
-          <Text style={styles.infoText}>휴대폰</Text>
-          <Text style={styles.valueText}>{userInfo?.[0]?.user_phone}</Text>
+          <Text style={[styles.infoText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>휴대폰</Text>
+          <Text style={[styles.valueText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>{userInfo?.[0]?.user_phone}</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.infoItem} onPress={() => navigation.navigate('Password')}>
-          <Text style={styles.infoText}>비밀번호</Text>
+          <Text style={[styles.infoText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>비밀번호</Text>
           <Ionicons name="chevron-forward-outline" size={24} color="black" />
         </TouchableOpacity>
         </View>

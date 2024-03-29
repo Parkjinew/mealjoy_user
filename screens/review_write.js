@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, SafeAreaView, TouchableOpacity,Alert, Keyboard, TextInput, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, ScrollView, ActivityIndicator } from 'react-native';
-import { Entypo, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { FontAwesome,  Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -192,7 +192,7 @@ const ReviewWrite = ({ route }) => {
           keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
            
             <View style={styles.rateContainer}>
-              <Text style={[styles.rateTitle, { fontFamily: 'KBO-Dia-Gothic_bold', fontSize: 25 }]}>{storeName}</Text>
+              <Text style={[styles.rateTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 25 }]}>{storeName}</Text>
               <View style={styles.stars}>
                 {[...Array(5)].map((_, index) => {
                   return (
@@ -224,20 +224,20 @@ const ReviewWrite = ({ route }) => {
 ))}
  </ScrollView>
             <TextInput
-              style={styles.input2}
+              style={[styles.input2, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
               placeholder="리뷰 제목을 입력해주세요!"
               value={reviewTitle}
               onChangeText={setReviewTitle}
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
               placeholder="리뷰를 남겨주세요!"
               multiline
               value={reviewText}
               onChangeText={setReviewText}
             />
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmitReview}>
-              <Text style={styles.submitButtonText}>리뷰 제출</Text>
+              <Text style={[styles.submitButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>리뷰 제출</Text>
             </TouchableOpacity>
              
           </KeyboardAvoidingView>

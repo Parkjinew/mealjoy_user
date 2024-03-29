@@ -4,24 +4,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   SafeAreaView,
   ScrollView,
-  Modal,
-  Button,
   TextInput,
     Alert,
-    Platform
+    Platform,
+    ActivityIndicator
 } from "react-native";
 import {
   Ionicons,
-  Entypo,
-  FontAwesome5,
-  FontAwesome6,
 } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as Font from 'expo-font';
 // Header 컴포넌트
 const Header = ({ navigation }) => {
 
@@ -31,7 +27,7 @@ const Header = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>문의 하기</Text>
+        <Text style={[styles.headerText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>문의 하기</Text>
         <Ionicons name="arrow-back" size={24} color="white" />
       </View>
     </View>
@@ -92,16 +88,38 @@ const InquiryForm = () => {
     setContent("");
 };
 
+const [fontsLoaded, setFontsLoaded] = useState(false);
+
+useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+
   return (
     <View style={styles.inquiryContainer}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
         value={title}
         onChangeText={setTitle}
         placeholder="제목"
       />
       <TextInput
-        style={[styles.input, styles.multiline]}
+        style={[styles.input, styles.multiline, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
         value={content}
         onChangeText={setContent}
         placeholder="문의 내용"
@@ -109,7 +127,7 @@ const InquiryForm = () => {
         numberOfLines={4}
       />
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>등록</Text>
+        <Text style={[styles.buttonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>등록</Text>
       </TouchableOpacity>
     </View>
   );

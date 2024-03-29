@@ -8,17 +8,16 @@ import {
     ScrollView,
     Image,
     SafeAreaView,
-    TouchableWithoutFeedback,
-    Keyboard,
     Alert, 
-    Platform
+    Platform,
+    ActivityIndicator
 } from 'react-native';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import * as Font from 'expo-font';
+
 const SignUp = () => {
-    // 상태 변수들을 선언합니다.
     const navigation = useNavigation();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -28,7 +27,6 @@ const SignUp = () => {
     const [isDuplicate, setIsDuplicate] = useState(false);
     const [passwordMatch, setPasswordMatch] = useState(true);
     const [hasCheckedDuplicate, setHasCheckedDuplicate] = useState(false);
-    // 중복 확인 함수 (Dummy implementation)
 
     const checkDuplicate = async () => {
       try {
@@ -41,7 +39,6 @@ const SignUp = () => {
               
   
               console.log(response.data)
-              // 응답 데이터에 따라 조건 분기
               if(response.data == 0) {
                   // 사용 가능한 아이디인 경우
                   Alert.alert("사용 가능한 아이디입니다.");
@@ -59,7 +56,6 @@ const SignUp = () => {
           }
       } catch (error) {
         console.error('중복 확인 중 에러 발생:', error);
-        // 에러 처리 로직을 추가하세요.
       }
   
     };
@@ -103,13 +99,10 @@ const SignUp = () => {
           );
           navigation.navigate('HomeLogin');
           
-          // 회원가입 로직을 추가하세요.
         } catch (error) {
           console.error('회원가입 에러:', error);
-          // 에러 처리 로직을 추가하세요.
         }
       } else {
-        // 유효성 검사 실패 시, 적절한 처리를 하세요.
         if (!hasCheckedDuplicate) {
           Alert.alert('오류', '아이디 중복 확인이 필요합니다.');
         } else if (!passwordMatch) {
@@ -144,7 +137,26 @@ const SignUp = () => {
         return true;
     };
 
-    // 회원가입 처리 함수 (Dummy implementation)
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+        async function loadFonts() {
+          await Font.loadAsync({
+            'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+            'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+            'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+          });
+
+          setFontsLoaded(true);
+        
+        }
+
+        loadFonts();
+      }, []);
+
+      if (!fontsLoaded) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+      }
 
 
   return (
@@ -157,38 +169,37 @@ const SignUp = () => {
       </TouchableOpacity>
       
       
-        {/* Logo를 중앙에 배치합니다. */}
         <Image source={require('../assets/logo.png')} style={styles.logo} />
       </View>
-                    <View style={styles.formContainer}>
-                        <Text style={styles.label}>아이디*</Text>
+                    <View style={styles.formContainer}> 
+                        <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>아이디*</Text>
                         <View style={styles.inputRow}>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
                                 onChangeText={text => { setUsername(text); setIsDuplicate(false); }}
                                 value={username}
                                 placeholder="아이디를 입력하세요"
                                 autoCapitalize="none"
                             />
-                            <TouchableOpacity style={styles.checkButton} onPress={checkDuplicate}>
+                            <TouchableOpacity style={[styles.checkButton, { fontFamily: 'KBO-Dia-Gothic_bold', fontSize: 13 }]} onPress={checkDuplicate}>
                                 <Text style={styles.checkButtonText}>중복확인</Text>
                             </TouchableOpacity>
                             
-                        </View>
-                        {isDuplicate && <Text style={styles.errorText}>이미 사용중인 아이디입니다.</Text>}
+                        </View>   
+                        {isDuplicate && <Text style={[styles.errorText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>이미 사용중인 아이디입니다.</Text>}
 
-                        <Text style={styles.label}>비밀번호*</Text>
+                        <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>비밀번호*</Text>
                         <TextInput
-                        style={styles.input}
+                        style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
                         onChangeText={handlePasswordChange}
                         value={password}
                         placeholder="********"
                         secureTextEntry={true}
                     />
 
-                        <Text style={styles.label}>비밀번호 확인*</Text>
+                        <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>비밀번호 확인*</Text>
                         <TextInput
-                        style={styles.input}
+                        style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
                         onChangeText={handleConfirmPasswordChange}
                         value={confirmPassword}
                         placeholder="********"
@@ -196,36 +207,36 @@ const SignUp = () => {
                     />
                         {passwordMatch ? 
                         (password.length > 0 && confirmPassword.length > 0) && <Text style={styles.successText}>비밀번호가 일치합니다.</Text> :
-                        <Text style={styles.errorText}>비밀번호가 일치하지 않습니다.</Text>
+                        <Text style={[styles.errorText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>비밀번호가 일치하지 않습니다.</Text>
                     }
 
 
         {/* 이름 입력 */}
-        <Text style={styles.label}>이름*</Text>
+        <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>이름*</Text>
         <TextInput
-          style={[styles.input, styles.inputFull]}
+          style={[styles.input, styles.inputFull, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
           onChangeText={setName}
           value={name}
           placeholder="홍길동"
         />
 
         {/* 전화번호 입력 */}
-        <Text style={styles.label}>전화번호*</Text>
+        <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>전화번호*</Text>
         <TextInput
-          style={[styles.input, styles.inputFull]}
+          style={[styles.input, styles.inputFull, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
           onChangeText={setPhoneNumber}
           value={phoneNumber}
           placeholder="010-1234-5678"
           keyboardType="phone-pad" // 숫자 키패드를 기본으로 표시합니다.
         />
 
-          {/* 회원가입 버튼 */}
+          {/* 회원가입 버튼 */} 
         <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignUp()}>
-          <Text style={styles.signUpButtonText}>회원가입</Text>
+          <Text style={[styles.signUpButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>회원가입</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.buttonKakao} >
       <Image
-        source={require('../assets/Kakaostart.png')} // Make sure the path is correct
+        source={require('../assets/Kakaostart.png')} 
         style={styles.kakaoLoginImage}
       />
     </TouchableOpacity>
@@ -243,7 +254,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom:-30,
     marginTop: Platform.OS === 'android' ? 30 : 0,
-     // Adjust the space between the logo and the input fields as needed
   },
   headerContainer: {
     flexDirection: "row",
@@ -253,13 +263,10 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    // 추가적인 스타일링...
 },
 successText: {
     color: 'green',
-    // 추가적인 스타일링...
 },
-     // ... 기존 스타일 ...
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -271,7 +278,6 @@ successText: {
     alignItems: 'center',
     padding: 10,
     marginBottom:-30
-    //backgroundColor: '#f2f2f2',
   },
   headerText: {
     // 새로 추가된 회원가입 텍스트 스타일

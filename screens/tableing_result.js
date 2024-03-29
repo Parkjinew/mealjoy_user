@@ -1,12 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert, Platform } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import React, {useState, useEffect} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, SafeAreaView, Alert, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import * as Font from 'expo-font';
 
 const HorizontalDivider = () => {
   return <View style={styles.horizontalDivider} />;
@@ -21,7 +18,7 @@ const Header = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Main")}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>나의 원격 줄서기 내역 </Text>
+        <Text style={[styles.headerText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>나의 원격 줄서기 내역 </Text>
 
           <View style={{width:24}}/>
       </View>
@@ -96,6 +93,27 @@ const TableingResult = ({route}) => {
     }
   }
 
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+
+        setFontsLoaded(true);
+      
+      }
+
+      loadFonts();
+    }, []);
+
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
@@ -105,36 +123,35 @@ const TableingResult = ({route}) => {
       />
       <HorizontalDivider />
 
-      {store ? (
+      {store ? ( 
         <View style={styles.detailBox}>
         <View style={styles.detailRow}>
-          <Text style={styles.detailTitle}>{store}</Text>
+          <Text style={[styles.detailTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{store}</Text>
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>이용예정</Text>
-          </TouchableOpacity>
+            <Text style={[styles.buttonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>이용예정</Text>
+          </TouchableOpacity>  
+        </View> 
+        <View style={styles.detailRow}>
+          <Text style={[styles.detailLabel, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>예약 일시</Text>
+          <Text style={[styles.detailValue, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{wait.create_at}</Text>
         </View>
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>예약 일시</Text>
-          <Text style={styles.detailValue}>{wait.create_at}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>대기번호</Text>
-          <Text style={styles.detailValue}>{wait.wait_num}번</Text>
+          <Text style={[styles.detailLabel, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>대기번호</Text>
+          <Text style={[styles.detailValue, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{wait.wait_num}번</Text>
         </View>
          <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>인원</Text>
-          <Text style={styles.detailValue}>{wait.people_num}명</Text>
+          <Text style={[styles.detailLabel, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>인원</Text>
+          <Text style={[styles.detailValue, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{wait.people_num}명</Text>
         </View> 
         <View style={styles.wait}>
-          <Text style={styles.detailwait}>남은 대기팀 : {wait.count-1}팀</Text>
-         
-        </View>
+          <Text style={[styles.detailwait, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 30 }]}>남은 대기팀 : {wait.count-1}팀</Text>                                                                                                                                                      
+        </View> 
         <View style={styles.actionRow}>
           <TouchableOpacity style={styles.actionButton} onPress={() => storeinfo(wait.store_seq)}>
-            <Text style={styles.actionButtonText}>매장상세보기</Text>
+            <Text style={[styles.actionButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>매장상세보기</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton} onPress={() => waitDel()}>
-            <Text style={styles.actionButtonText}>대기등록취소</Text>
+            <Text style={[styles.actionButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>대기등록취소</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -142,13 +159,10 @@ const TableingResult = ({route}) => {
       ) : (
         
         <View style={styles.noWaitContainer}>
-            <Text style={styles.noWaitText}>등록 중인 대기가 없습니다.</Text>
+            <Text style={[styles.noWaitText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>등록 중인 대기가 없습니다.</Text>
         </View>
 
       )}
-      
-      {/* Footer navigation bar */}
-      {/* Include icons or images for the navigation bar as needed */}
        
       
     </View>
@@ -224,11 +238,10 @@ const styles = StyleSheet.create({
   },
 
   wait: {
- 
-    flex: 1, // Add this to make sure the container takes full available space
-    justifyContent: 'center', // This will vertically center the content
-    alignItems: 'center', // This will horizontally center the content
-    paddingVertical: 16, // Optional: Add some vertical padding
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
   },
   detailRow: {
     flexDirection: 'row',

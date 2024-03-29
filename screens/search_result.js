@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image,Alert, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // 
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
+import { View, Image,Alert, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform, Keyboard, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import { Locations } from "@env";
+import * as Font from 'expo-font';
 
 const SearchResult = ({ route }) => {
     const navigation = useNavigation();
@@ -152,6 +149,28 @@ const SearchResult = ({ route }) => {
     
       loadAddress();
     }, []);
+
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+        async function loadFonts() {
+          await Font.loadAsync({
+            'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+            'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+            'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+          });
+
+          setFontsLoaded(true);
+        
+        }
+
+        loadFonts();
+      }, []);
+
+      if (!fontsLoaded) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+      }
+
     const categoryLabels = {
       '1': '한식',
       '2': '카페/디저트',
@@ -186,9 +205,9 @@ const SearchResult = ({ route }) => {
     const renderRestaurants = () => {
 
       if (restaurants.length === 0) {
-        return (
+        return (  
             <View style={styles.noResultsContainer}>
-                <Text style={styles.noResultsText}>검색 결과가 없습니다.</Text>
+                <Text style={[styles.noResultsText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>검색 결과가 없습니다.</Text>
             </View>
         );
     }
@@ -204,15 +223,15 @@ const SearchResult = ({ route }) => {
                         <Image source={{uri : item.imageFilename}} style={styles.restaurantImage} />
                     <View style={styles.restaurantDetailContainer}>
                         <View style={styles.restaurantNameAndIcon}>
-                            <Text style={styles.restaurantName}>{item.store_name}</Text>
-                          
+                            <Text style={[styles.restaurantName, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>{item.store_name}</Text>
+                            
                         </View>
-                        <Text style={styles.restaurantCategory}>{categoryLabel}</Text>
+                        <Text style={[styles.restaurantCategory, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{categoryLabel}</Text>
                         <View style={styles.restaurantRatingContainer}>
               <FontAwesome name="star" size={16} color="#ffd700" />
-                <Text style={styles.restaurantRating}> {item.averageRating}</Text>
+                <Text style={[styles.restaurantRating, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}> {item.averageRating}</Text>
                       </View>
-                        <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
+                        <Text style={[styles.restaurantReviews, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 12 }]}>{item.reviewCount}개의 리뷰</Text>
                     </View>
                 </View>
                     </TouchableOpacity>
@@ -246,8 +265,8 @@ const SearchResult = ({ route }) => {
                         </View>
                         <View style={styles.searchSection}>
                             <TextInput
-                                style={styles.searchInput}
-                                placeholder="지역,음식,메뉴검색"
+                                style={[styles.searchInput, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
+                                placeholder="매장검색"
                                 placeholderTextColor="#888"
                                 value={searchQuery}
                                 onChangeText={setSearchQuery}
@@ -260,8 +279,8 @@ const SearchResult = ({ route }) => {
                             <TouchableOpacity
                                 style={styles.dropdown}
                                 onPress={showChangeAddressPopup}
-                            >
-                                <Text style={styles.dropdownText}>{selectedAddress} ▼</Text>
+                            > 
+                                <Text style={[styles.dropdownText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>{selectedAddress} ▼</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -356,8 +375,6 @@ const SearchResult = ({ route }) => {
         bellIcon: {
           marginTop:5,
       // 벨 아이콘과 검색창 사이의 간격 조정
-          // marginTop으로 벨 아이콘의 위치를 미세 조정할 수 있음
-          // 벨 아이콘을 살짝 위로 올림
         },
       
         searchAndIconContainer: {

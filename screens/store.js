@@ -9,17 +9,16 @@ import {
   ScrollView,
   Modal,
   Platform,
+  ActivityIndicator
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
 import {
   Ionicons,
-  Entypo,
   FontAwesome,
-  FontAwesome6,
 } from "@expo/vector-icons";
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 
 
 const images = [
@@ -86,12 +85,12 @@ const SortMenu = ({ visible, onClose, onSelect }) => {
               key={option}
               style={styles.modalButton}
               onPress={() => onSelect(option)}
-            >
-              <Text style={styles.modalButtonText}>{option}</Text>
+            > 
+              <Text style={[styles.modalButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{option}</Text>
             </TouchableOpacity>
-          ))}
+          ))} 
           <TouchableOpacity onPress={onClose} style={styles.closeButtonContainer}>
-            <Text style={styles.closeButtonText}>닫기</Text>
+            <Text style={[styles.closeButtonText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 18 }]}>닫기</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -182,14 +181,13 @@ const Store = ({route}) => {
     }
     
   }
-
   const renderImagesRow = (imagesRow) => {
     return (
       <View style={styles.imagesRow}>
         {imagesRow.map((img) => (
           <TouchableOpacity key={img.id} style={styles.imageTouchable} onPress={() => storeList(img.id)}>
             <Image source={img.uri} style={styles.image} />
-            <Text style={styles.imageLabel}>{img.label}</Text>
+            <Text   style={[styles.imageLabel, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{img.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -205,6 +203,28 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
       rating: "평점순",
       review: "리뷰순",
     };
+
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+        async function loadFonts() {
+          await Font.loadAsync({
+            'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+            'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+            'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+          });
+
+          setFontsLoaded(true);
+        
+        }
+
+        loadFonts();
+      }, []);
+
+      if (!fontsLoaded) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+      }
+
   
     return (
       <View>
@@ -219,11 +239,11 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
           </View>
         </ScrollView>
   
-        <Divider />
-        <View style={styles.subHeaderContainer}>
-          <Text style={styles.storeCount}>{totalCafes}개의 매장</Text>
+        <Divider /> 
+        <View style={styles.subHeaderContainer}> 
+          <Text style={[styles.storeCount, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>{totalCafes}개의 매장</Text>
           <TouchableOpacity onPress={onSortPress} style={styles.sortButton}>
-            <Text style={styles.atten}>{optionToText[sortOption]}</Text>
+            <Text style={[styles.atten, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{optionToText[sortOption]}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -281,16 +301,16 @@ const Header = ({ totalCafes, onSortPress, sortOption }) => {
               <Image source={{uri : cafe.imageFilename}} style={cafe.open_state==='0'? styles.restaurantImage2 :styles.restaurantImage} />
           
           <View style={styles.restaurantDetailContainer}>
-              <View style={styles.restaurantNameAndIcon}>
-                  <Text style={cafe.open_state==='0'? styles.restaurantName2 : styles.restaurantName}>{cafe.store_name}</Text>
+              <View style={styles.restaurantNameAndIcon}> 
+                  <Text style={cafe.open_state==='0'? [styles.restaurantName2, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }] : [styles.restaurantName, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{cafe.store_name}</Text>
                 
-              </View>
-              <Text style={styles.restaurantCategory}>{categoryLabels[cafe.category_seq]}</Text>
+              </View> 
+              <Text style={[styles.restaurantCategory, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{categoryLabels[cafe.category_seq]}</Text>
               <View style={styles.restaurantRatingContainer}>
           <FontAwesome name="star" size={16} color="#ffd700" />
-          <Text style={styles.restaurantRating}> {cafe.averageRating}</Text>
-            </View>
-              <Text style={styles.restaurantReviews}>{cafe.reviewCount}개의 리뷰</Text>
+          <Text style={[styles.restaurantRating, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}> {cafe.averageRating}</Text>
+            </View>  
+              <Text style={[styles.restaurantReviews, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 12 }]}>{cafe.reviewCount}개의 리뷰</Text>
           </View>
           </View>
           </TouchableOpacity>

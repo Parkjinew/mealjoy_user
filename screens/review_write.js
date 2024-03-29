@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, SafeAreaView, TouchableOpacity,Alert, Keyboard, TextInput, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, SafeAreaView, TouchableOpacity,Alert, Keyboard, TextInput, KeyboardAvoidingView, Platform, Text, TouchableWithoutFeedback, ScrollView, ActivityIndicator } from 'react-native';
 import { Entypo, FontAwesome, FontAwesome5, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,7 +7,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
+import * as Font from 'expo-font';
 
 
 
@@ -32,6 +32,11 @@ const ReviewWrite = ({ route }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
   const [reviewTitle, setReviewTitle] = useState('');
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  
+
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -46,6 +51,25 @@ const ReviewWrite = ({ route }) => {
 
     fetchUserInfo();
   }, []);
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
   
   const handleRemoveImage = (index) => {
     setSelectedImages((currentImages) => currentImages.filter((_, i) => i !== index));
@@ -143,6 +167,9 @@ const ReviewWrite = ({ route }) => {
     }
 
   };
+
+  
+
   return (
     
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -165,7 +192,7 @@ const ReviewWrite = ({ route }) => {
           keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}>
            
             <View style={styles.rateContainer}>
-              <Text style={styles.rateTitle}>{storeName}</Text>
+              <Text style={[styles.rateTitle, { fontFamily: 'KBO-Dia-Gothic_bold', fontSize: 25 }]}>{storeName}</Text>
               <View style={styles.stars}>
                 {[...Array(5)].map((_, index) => {
                   return (

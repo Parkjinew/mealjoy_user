@@ -76,17 +76,17 @@ const [fontsLoaded, setFontsLoaded] = useState(false);
             inquiry.map((inquiry, index) => (
                 <View key={index} style={styles.inquiryItem}>
                     {/* 문의 제목 */}
-                    <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>문의 제목</Text>
-                    <Text style={[styles.inquiryContent,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16 }]}>{inquiry.title}</Text>
+                    {/* <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>문의 제목</Text> */}
+                    <Text style={[styles.inquiryContent,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>Q : {inquiry.title}</Text>
 
                     {/* 문의 내용 */}
-                    <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>문의 내용</Text>
+                    {/* <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>문의 내용</Text> */}
                     <Text style={[styles.inquiryContent,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16 }]}>{inquiry.details}</Text>
 
                     {/* 관리자 답변이 있을 경우에만 표시 */}
                     {inquiry.answer && (
                         <View style={styles.answerContainer}>
-                            <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>관리자 답변</Text>
+                            <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>A : 관리자</Text>
                             <Text style={[styles.inquiryContent2,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16}]}>{inquiry.answer}</Text>
                         </View>
                     )}

@@ -136,6 +136,17 @@ const OrderList = ({route}) => {
   
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 45, // 또는 적절한 값으로 조정
+    
+  },
+  emptyText: {
+    fontSize: 17,
+    color: '#666',
+  },
   total:{
     fontSize:15,
     fontWeight: 'bold',

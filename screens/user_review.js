@@ -51,6 +51,15 @@ const Header = () => {
 
 
 const ReviewCard = ({ review, userInfo }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+
+  const handleImagePress = (img) => {
+    setSelectedImage(img);
+    setModalVisible(true);
+  };
+
+  const imagesArray = review.reviewImg || [];
     // 별점을 렌더링하는 함수
     const renderStars = () => {
         return Array.from({ length: review.review.score }, (_, i) => (
@@ -104,7 +113,31 @@ const ReviewCard = ({ review, userInfo }) => {
         
         <Text style={[styles.reviewTitleText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{review.review.title}</Text>
         <Text style={[styles.reviewText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{review.review.details}</Text>
-        {renderImages()}
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {imagesArray.map((img, index) => (
+          <TouchableOpacity key={index} onPress={() => handleImagePress(img.img_filename)}>
+            <Image source={{ uri: img.img_filename }} style={styles.reviewImage} />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalContainer}
+          activeOpacity={1}
+          onPressOut={() => setModalVisible(false)}
+        >
+          <Image source={{ uri: selectedImage }} style={styles.expandedImage} />
+        </TouchableOpacity>
+      </Modal>
+
+
         {review.review.answer && ( // owner 정보가 있을 때만 렌더링
           <View style={styles.ownerContainer}>
              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -337,6 +370,25 @@ const ReviewList = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  reviewImage: {
+    width: 100,
+    height: 100,
+    marginRight: 10,
+    borderRadius: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  expandedImage: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
+  },
+
+
   userImage: {
     width: 40, // 사진의 너비
     height: 40, // 사진의 높이
@@ -369,12 +421,6 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
-    },
-    modalContainer: {
-      flex: 1,
-      justifyContent: "flex-end",
-      alignItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.5)", // 모달 배경을 반투명하게 설정
     },
     modalContent: {
       backgroundColor: "#fff",

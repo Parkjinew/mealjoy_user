@@ -7,6 +7,7 @@ import axios from 'axios';
 import { API_KEY } from "@env";
 import * as Font from 'expo-font';
 
+
 const ChatBot = () => {
   const navigation = useNavigation();
   const [messages, setMessages] = useState([]);
@@ -318,7 +319,7 @@ if (!fontsLoaded) {
                   {item.img && <Image source={{uri : item.img}} style={styles.imgStyle}  />}
                 </View> */}
                 <View>
-                 <Text style={styles.messageText}>{item.text}</Text>
+                 <Text style={[styles.messageText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{item.text}</Text>
                 </View>
                 </View>}
 
@@ -329,14 +330,14 @@ if (!fontsLoaded) {
               
               <View style={styles.restaurantDetailContainer}>
                   <View style={styles.restaurantNameAndIcon}>
-                      <Text style={styles.restaurantName}>{item.text}</Text>
-                    
+                      <Text style={[styles.restaurantName, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>{item.text}</Text>
+                      
                   </View>
                   <View style={styles.restaurantRatingContainer}>
               <FontAwesome name="star" size={16} color="#ffd700" />
               <Text style={styles.restaurantRating}> {item.average}</Text>
                 </View>
-                  <Text style={styles.restaurantReviews}>{item.reviewCount}개의 리뷰</Text>
+                  <Text style={[styles.restaurantReviews, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 12 }]}>{item.reviewCount}개의 리뷰</Text>
               </View>
               </View>  }
 
@@ -349,7 +350,7 @@ if (!fontsLoaded) {
         {/* Message Input */}
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
             placeholder="메세지를 입력하세요.."
             value={inputText}
             onChangeText={setInputText}

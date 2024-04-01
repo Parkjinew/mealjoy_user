@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button, Linking, Alert   } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Button, Linking, Alert, ActivityIndicator   } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Dialog from 'react-native-dialog';
+import * as Font from 'expo-font';
 
 
 
@@ -192,7 +193,7 @@ const StoreInfo = ({route}) => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
-  const handlePress = (store_seq, open_state) => {
+  const handlePress = (store_seq, open_state, tabling_state) => {
     if(open_state == '0'){
 
       Alert.alert(
@@ -208,17 +209,43 @@ const StoreInfo = ({route}) => {
         { cancelable: false }
       );
 
+    }else if(tabling_state == '0'){
+
+      Alert.alert(
+        "원격 줄서기를 지원하지 않는 매장입니다."
+      );
+  
     }else{
-      if (store.category_seq === 2 || store.tableCount > 0) {
-        order(store_seq);
-      } else {
-        waiting(store_seq);
+        if (store.category_seq === 2 || store.tableCount > 0) {
+          order(store_seq);
+        } else {
+          waiting(store_seq);
+        }
       }
-    }
-    
-  };
+      
+    };
 
   
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+
+        setFontsLoaded(true);
+      
+      }
+
+      loadFonts();
+    }, []);
+
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
 
 
   
@@ -240,7 +267,7 @@ const StoreInfo = ({route}) => {
         <View style={styles.body}>
 
         <View style={styles.starContainer}>
-        <Text style={styles.title}>{store.store_name}</Text>
+        <Text style={[styles.title, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 30 }]}>{store.store_name}</Text>
         <TouchableOpacity onPress={toggleFavorite}>
         <Ionicons
           name={favorite ? "heart" : "heart-outline"}
@@ -254,25 +281,25 @@ const StoreInfo = ({route}) => {
           <AntDesign name="star" size={30} color="#FFD700" />
           <Text style={styles.starRating}>{store.averageRating}</Text>
           <TouchableOpacity onPress={() => review()}>
-          <Text style={styles.reviewCount}>{store.reviewCount}개 리뷰 ▷</Text>
+          <Text style={[styles.reviewCount, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{store.reviewCount}개 리뷰 ▷</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.telContainer}>
           <TouchableOpacity style={styles.iconContainer} onPress={() => openMap(store.store_name)}>
             <AntDesign name="enviroment" size={20} color="black" />
-            <Text style={styles.iconText}>매장위치</Text>
+            <Text style={[styles.iconText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>매장위치</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconContainer} onPress={() => Linking.openURL(`tel:${store.store_phone}`)}>
             <Foundation name="telephone" size={20} color="black" />
-            <Text style={styles.iconText}>전화번호</Text>
+            <Text style={[styles.iconText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>전화번호</Text>
           </TouchableOpacity>
-          {store.category_seq!=2 &&<TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
+          {store.reserva_state!=0 &&<TouchableOpacity style={styles.iconContainer} onPress={() => reservation()}>
             <FontAwesome name="calendar-check-o" size={18} color="black" />
-            <Text style={styles.iconText}>예약하기</Text>
+            <Text style={[styles.iconText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>예약하기</Text>
           </TouchableOpacity>}
         </View>
-        <Text style={styles.subtitle}>{store.store_desc}</Text>
+        <Text style={[styles.subtitle, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 18 }]}>{store.store_desc}</Text>
         
 
         {menu.map((food) => {
@@ -286,8 +313,8 @@ const StoreInfo = ({route}) => {
                   source={getImageSource(food.menu_img)}
                 />
               <View style={styles.foodInfo}>
-                <Text style={styles.foodTitle}>{food.menu_name}</Text>
-                <Text style={styles.fooddiscription}>{food.menu_desc}</Text>
+                <Text style={[styles.foodTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{food.menu_name}</Text>
+                <Text style={[styles.fooddiscription, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>{food.menu_desc}</Text>
               </View>
               </View>
           )
@@ -298,8 +325,8 @@ const StoreInfo = ({route}) => {
 
       {/* {store.open_state === '1' && ( */}
       <SafeAreaView>
-        <TouchableOpacity style={store.open_state === '0' ? styles.endTimeButton : styles.orderButton} onPress={() => handlePress(store.store_seq, store.open_state)}>
-          <Text style={styles.orderButtonText}>
+        <TouchableOpacity style={store.open_state === '0' || store.tabling_state ==='0' ? styles.endTimeButton : styles.orderButton} onPress={() => handlePress(store.store_seq, store.open_state, store.tabling_state)}>
+          <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>
             {store.open_state === '0' ? "오픈 전" : (store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기')}
             {/* {store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기'} */}
           </Text>

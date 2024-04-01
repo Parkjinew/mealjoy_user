@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert  } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert, ActivityIndicator  } from 'react-native';
 import { FontAwesome, AntDesign, Foundation, Entypo, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,6 +8,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Font from 'expo-font';
+
 LocaleConfig.locales['ko'] = {
   monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
   monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -216,6 +218,27 @@ const onDayPress = (day) => {
         }
       };
 
+      const [fontsLoaded, setFontsLoaded] = useState(false);
+
+      useEffect(() => {
+          async function loadFonts() {
+            await Font.loadAsync({
+              'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+              'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+              'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+            });
+      
+            setFontsLoaded(true);
+          
+          }
+      
+          loadFonts();
+        }, []);
+      
+        if (!fontsLoaded) {
+          return <ActivityIndicator size="large" color="#0000ff" />;
+        }
+
   return (
     <View style={styles.container}>
       <ScrollView ref={scrollViewRef}
@@ -230,7 +253,7 @@ const onDayPress = (day) => {
         />
         <View style={styles.body}>
           <View style={styles.starContainer}>
-            <Text style={styles.title}>{store.store_name}</Text>
+            <Text style={[styles.title, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 32 }]}>{store.store_name}</Text>
           </View>
         </View>
         <Calendar
@@ -251,13 +274,14 @@ const onDayPress = (day) => {
       key={index}
       style={[
         styles.timeSlotButton,
-        selectedTimeSlot === time && styles.selectedTimeSlotButton
+        selectedTimeSlot === time && styles.selectedTimeSlotButton,
       ]}
       onPress={() => {selectTimeSlot(time)}}
     >
       <Text style={[
         styles.timeSlotText,
-        selectedTimeSlot === time && styles.selectedTimeSlotText
+        selectedTimeSlot === time && styles.selectedTimeSlotText,
+        { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }
       ]}>
         {time}
       </Text>
@@ -268,7 +292,7 @@ const onDayPress = (day) => {
 {selectedTimeSlot && (
   <View style={styles.container}>
     <View style={styles.inputContainer}>
-  <Text style={styles.label}>인원수</Text>
+  <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>인원수</Text>
   <View style={styles.stepperContainer}>
   <TouchableOpacity
   onPress={() => setGuestCount(prevCount => Math.max(0, (parseInt(prevCount) || 0) - 1).toString())}
@@ -286,9 +310,9 @@ const onDayPress = (day) => {
 
 
 <View style={styles.inputContainer}>
-  <Text style={styles.label}>예약자 명</Text>
+  <Text style={[styles.label, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>예약자 명</Text>
   <TextInput
-    style={styles.input}
+    style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
     value={reserverName}
     onChangeText={setReserverName}
     placeholder="예약자명 입력하세요"
@@ -300,7 +324,7 @@ const onDayPress = (day) => {
       </ScrollView>
       <SafeAreaView style={styles.safe}>
       <TouchableOpacity style={styles.orderButton} onPress={handleReservation}>
-        <Text style={styles.orderButtonText}>예약하기</Text>
+        <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>예약하기</Text>
       </TouchableOpacity>
       </SafeAreaView>
     </View>

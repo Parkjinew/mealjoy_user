@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Alert, Button, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -13,6 +13,7 @@ import { Foundation } from '@expo/vector-icons';
 import IMP from 'iamport-react-native'; 
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import * as Font from 'expo-font';
 
 
 
@@ -22,7 +23,7 @@ const TableButton = ({ id, selected, onPress }) => (
       style={[styles.tableButton, selected && styles.selectedTableButton]}
       onPress={onPress}
     >
-      <Text style={[styles.tableButtonText, selected && styles.selectedTableButtonText]}>
+      <Text style={[styles.tableButtonText, selected && styles.selectedTableButtonText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16 }]}>
         {`${id}인석`}
       </Text>
     </TouchableOpacity>
@@ -43,18 +44,18 @@ const TableButton = ({ id, selected, onPress }) => (
         style={[styles.foodItem, quantity > 0 ? styles.selectedFoodItem : null]}
         onPress={() => onSelect(food.id)}
         activeOpacity={0.6}
-      >
+      >  
         <Image style={styles.foodImage} source={{uri : food.menu_img}} />
         <View style={styles.foodInfo}>
-          <Text style={styles.foodTitle}>{food.menu_name}</Text>
-          <Text style={styles.fooddiscription}>{food.menu_desc}</Text>
-          <Text style={styles.foodprice}>{food.price}원</Text>
-        </View>
+          <Text style={[styles.foodTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{food.menu_name}</Text>
+          <Text style={[styles.fooddiscription, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{food.menu_desc}</Text>
+          <Text style={[styles.foodprice, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>{food.price}원</Text>
+        </View> 
         <View style={styles.stepperContainer}>
           <TouchableOpacity onPress={() => onDecrement(food.menu_seq)} style={styles.stepperButton}>
             <Text style={styles.stepperButtonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantityText}>{quantity}</Text>
+          </TouchableOpacity> 
+          <Text style={[styles.quantityText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>{quantity}</Text>
           <TouchableOpacity onPress={() => onIncrement(food.menu_seq)} style={styles.stepperButton}>
             <Text style={styles.stepperButtonText}>+</Text>
           </TouchableOpacity>
@@ -236,6 +237,7 @@ export default function UserOrder({route}){
               style={[
                 styles.tableButtonText,
                 selected && styles.selectedTableButtonText,
+                { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }
               ]}
             >
               {`${number}인석`}
@@ -253,7 +255,26 @@ export default function UserOrder({route}){
           ))}
 
         
+          const [fontsLoaded, setFontsLoaded] = useState(false);
 
+      useEffect(() => {
+          async function loadFonts() {
+            await Font.loadAsync({
+              'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+              'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+              'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+            });
+
+            setFontsLoaded(true);
+          
+          }
+
+          loadFonts();
+        }, []);
+
+        if (!fontsLoaded) {
+          return <ActivityIndicator size="large" color="#0000ff" />;
+        }
           
 
     return (
@@ -271,7 +292,7 @@ export default function UserOrder({route}){
         <View style={styles.body}>
 
         <View style={styles.starContainer}>
-        <Text style={styles.title}>{store.store_name}</Text>
+        <Text style={[styles.title, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 32 }]}>{store.store_name}</Text>
         </View>       
         
 
@@ -307,7 +328,7 @@ export default function UserOrder({route}){
       </ScrollView>
           <SafeAreaView>
        <TouchableOpacity style={styles.orderButton} onPress={() => Payment()}>
-        <Text style={styles.orderButtonText} >
+        <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]} >
           {`${totalPrice.toLocaleString()}원 주문하기`}
         </Text>
       </TouchableOpacity> 

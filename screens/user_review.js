@@ -11,6 +11,7 @@ import {
   Button,
   Platform,
   TextInput,
+  ActivityIndicator
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
@@ -25,7 +26,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import * as Font from 'expo-font';
 
 
 
@@ -41,7 +42,7 @@ const Header = () => {
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
-      <Text style={styles.headerText}>리뷰</Text>
+      <Text style={[styles.headerText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>리뷰</Text>
     </View>
       <View style={styles.divider} />
     </View>
@@ -95,14 +96,15 @@ const ReviewCard = ({ review, userInfo }) => {
       source={require('../assets/user.png')}
       style={styles.userImage}
     />
-        <Text style={styles.customerName}>{review.user_nick}</Text>
+        <Text style={[styles.customerName, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 15 }]}>{review.user_nick}</Text>
         </View>
-        <View style={{ flexDirection: 'row', marginBottom:10 }}>
+        <View style={{ flexDirection: 'row', marginBottom:4 }}>
           {renderStars()}
         </View>
+        
+        <Text style={[styles.reviewTitleText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{review.review.title}</Text>
+        <Text style={[styles.reviewText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{review.review.details}</Text>
         {renderImages()}
-        <Text style={styles.reviewTitleText}>{review.review.title}</Text>
-        <Text style={styles.reviewText}>{review.review.details}</Text>
         {review.review.answer && ( // owner 정보가 있을 때만 렌더링
           <View style={styles.ownerContainer}>
              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -110,9 +112,9 @@ const ReviewCard = ({ review, userInfo }) => {
           source={require("../assets/owner2.png")}
           style={styles.ownerImage}
         />
-            <Text style={styles.ownername}>사장님</Text>
+            <Text style={[styles.ownername, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>사장님</Text>
             </View>
-            <Text style={styles.ownerText}>{review.review.answer}</Text>
+            <Text style={[styles.ownerText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16 }]}>{review.review.answer}</Text>
           </View>
         )}
 
@@ -128,7 +130,7 @@ const RatingSummary = ({ reviews }) => {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.cardTitle}>리뷰 평점</Text>
+      <Text style={[styles.cardTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>리뷰 평점</Text>
       {reviews.map((review, index) => (
         <View key={index} style={styles.ratingRow}>
           <Text style={styles.ratingLabel}>{`${review.rating}점`}</Text>
@@ -240,6 +242,7 @@ const ReviewList = ({route}) => {
           onClose(); // 모달 닫기
         }
       };
+      
 
     return (
       <Modal
@@ -261,17 +264,39 @@ const ReviewList = ({route}) => {
                 style={styles.modalButton}
                 onPress={() => onSelect(option.toLowerCase())}
               >
-                <Text style={styles.modalButtonText}>{option}</Text>
+                <Text style={[styles.modalButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>{option}</Text>
               </TouchableOpacity>
             ))}
             <TouchableOpacity onPress={onClose} style={styles.closeButtonContainer}>
-            <Text style={styles.closeButtonText}>닫기</Text>
+            <Text style={[styles.modalButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>닫기</Text>
           </TouchableOpacity>
           </View>
           </TouchableOpacity>
       </Modal>
     );
   };
+
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+
+        setFontsLoaded(true);
+      
+      }
+
+      loadFonts();
+    }, []);
+
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -280,9 +305,9 @@ const ReviewList = ({route}) => {
       <RatingSummary reviews={updatedReviewsData} />
       <View style={styles.divider} />
       <View style={styles.headerContainer}>
-        <Text style={styles.subText}>최근 리뷰 {reviewList.length}개</Text>
+        <Text style={[styles.subText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>최근 리뷰 {reviewList.length}개</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.sortButtonContainer}>
-          <Text style={styles.sortButtonText}>{sortOption}</Text>
+          <Text style={[styles.sortButtonText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{sortOption}</Text>
           <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
         </TouchableOpacity>
       </View>

@@ -10,6 +10,7 @@ import {
   Linking,
   Platform,
   AppState,
+  ActivityIndicator
 } from "react-native";
 import {
   Ionicons,
@@ -27,6 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import { Feather } from '@expo/vector-icons';
+import * as Font from 'expo-font';
 
 
 
@@ -37,7 +39,7 @@ const HeaderContainer = () => {
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
-      <Text style={styles.headerText}>마이페이지</Text>
+      <Text style={[styles.headerText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>마이페이지</Text>
       <TouchableOpacity >
         <Ionicons name="notifications" size={24} color="white" />
       </TouchableOpacity>
@@ -209,6 +211,28 @@ const SettingsScreen = () => {
     setChatbotEnabled(newState);
     await AsyncStorage.setItem('chatbotEnabled', JSON.stringify(newState));
   };
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+
+        setFontsLoaded(true);
+      
+      }
+
+      loadFonts();
+    }, []);
+
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
+    
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -219,7 +243,7 @@ const SettingsScreen = () => {
           <View style={styles.menuItem} >
             <Ionicons name="person-outline" size={24} color="#ff3b30" />
             <Text
-              style={styles.menuItemText}
+              style={[styles.menuItemText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}
             >
               내 정보
             </Text>
@@ -230,7 +254,7 @@ const SettingsScreen = () => {
           <View style={styles.menuItem}>
           <MaterialIcons name="restaurant-menu" size={24} color="#ff3b30" />
             <Text
-              style={styles.menuItemText}
+              style={[styles.menuItemText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}
             >
               주문목록
             </Text>
@@ -241,7 +265,7 @@ const SettingsScreen = () => {
           <View style={styles.menuItem} >
           <FontAwesome6 name="list" size={24} color="#ff3b30" />
             <Text
-              style={styles.menuItemText}
+              style={[styles.menuItemText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}
          
             >
               예약 목록
@@ -254,7 +278,7 @@ const SettingsScreen = () => {
           <View style={styles.menuItem}>
             <Entypo name="chat" size={24} color="#ff3b30" />
             <Text
-              style={styles.menuItemText}
+              style={[styles.menuItemText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}
          
             >
               문의하기
@@ -265,7 +289,7 @@ const SettingsScreen = () => {
           <View style={styles.menuItem}>
           <Feather name="check-circle" size={24} color="#ff3b30" />
             <Text
-              style={styles.menuItemText}
+              style={[styles.menuItemText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}
          
             >
               문의확인
@@ -277,7 +301,7 @@ const SettingsScreen = () => {
           <View style={styles.menuItem} >
             <MaterialIcons name="rate-review" size={24} color="#ff3b30" />
             <Text
-              style={styles.menuItemText}
+              style={[styles.menuItemText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}
            
             >
               리뷰 관리
@@ -288,9 +312,9 @@ const SettingsScreen = () => {
 
           <View style={styles.divider} />
 
-          {/* 위치 정보 허용 스위치 */}
+          {/* 위치 정보 허용 스위치 */}  
           <View style={styles.infoManagementContainer}>
-            <Text style={styles.infoManagementText}>위치 정보 허용</Text>
+            <Text style={[styles.infoManagementText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>위치 정보 허용</Text>
             <Switch
               trackColor={{ false: "#767577", true: "#767577" }}
               thumbColor={isLocationEnabled ? "white" : "white"}
@@ -303,7 +327,7 @@ const SettingsScreen = () => {
           {/* 챗봇 활성화 스위치 */}
 
           <View style={styles.infoManagementContainer}>
-            <Text style={styles.infoManagementText}>
+            <Text style={[styles.infoManagementText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>
               메인페이지 챗봇 비활성화
             </Text>
             <Switch
@@ -317,8 +341,8 @@ const SettingsScreen = () => {
           <View style={styles.logoutContainer}>
        <TouchableOpacity
      style={styles.logoutButton}
-     onPress={handleLogout}> 
-    <Text style={styles.logoutButtonText}>로그아웃</Text>
+     onPress={handleLogout}>   
+    <Text style={[styles.logoutButtonText, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>로그아웃</Text>
        </TouchableOpacity>
         </View>
         </View>

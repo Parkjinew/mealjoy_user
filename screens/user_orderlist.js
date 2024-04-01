@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useCallback  } from "react";
 import { View, Image, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView,
-  Platform,TouchableWithoutFeedback,Keyboard } from 'react-native';
+  Platform,TouchableWithoutFeedback,Keyboard, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
-
+import * as Font from 'expo-font';
 
 
 
@@ -54,11 +54,11 @@ const OrderList = ({route}) => {
          <TouchableOpacity onPress={() => storeinfo(item.store_seq)}>
       <View  style={styles.menuItem}>
         <Image source={{uri : item.image_filenames}} style={styles.menuImage} />
-        <View style={styles.menuDetails}>
-          <Text style={styles.menuTitle}>{item.store_name}</Text>
-          <Text style={styles.menuSubtitle}>{item.menu_names}</Text>
-          <Text style={styles.menuPrice}>총 {item.total_amount.toLocaleString()}원</Text>
-          <Text style={styles.menuSubtitle2}>주문일 : {item.order_at}</Text>
+        <View style={styles.menuDetails}>  
+          <Text style={[styles.menuTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>{item.store_name}</Text>
+          <Text style={[styles.menuSubtitle, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>{item.menu_names}</Text>
+          <Text style={[styles.menuPrice, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 15 }]}>총 {item.total_amount.toLocaleString()}원</Text>
+          <Text style={[styles.menuSubtitle2, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 14 }]}>주문일 : {item.order_at}</Text>
         </View>
       </View>
       </TouchableOpacity>
@@ -67,14 +67,14 @@ const OrderList = ({route}) => {
      
         <TouchableOpacity style={styles.review2} onPress={() => {
     navigation.navigate('ReviewWrite', {orderNum: item.order_num, storeName: item.store_name});
-  }}>
-            <Text style={styles.orderButtonText}>리뷰 남기기</Text>
+  }}>   
+            <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>리뷰 남기기</Text>
           </TouchableOpacity>
         
       </View>):(
             <View style={styles.review}>  
             <View style={styles.review3}>
-                <Text style={styles.orderButtonText}>리뷰 작성 완료</Text>
+                <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>리뷰 작성 완료</Text>
               </View>
             
           </View>
@@ -88,6 +88,27 @@ const OrderList = ({route}) => {
     return restaurantItems;
     };
 
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+        async function loadFonts() {
+          await Font.loadAsync({
+            'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+            'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+            'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+          });
+
+          setFontsLoaded(true);
+        
+        }
+
+        loadFonts();
+      }, []);
+
+      if (!fontsLoaded) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
+      }
+
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -98,12 +119,12 @@ const OrderList = ({route}) => {
           <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backrow}>
             <Ionicons name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>주문목록</Text>
+          </TouchableOpacity>  
+          <Text style={[styles.headerTitle, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>주문목록</Text>
           <View style={styles.rightComponent}></View>
         </View>
-        <View>
-            <Text style={styles.total}>총 {restaurants.length}개</Text></View> 
+        <View>  
+            <Text style={[styles.total, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 15 }]}>총 {restaurants.length}개</Text></View> 
         {renderRestaurants()}
         </ScrollView>
         {/* Tab Bar */}

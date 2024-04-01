@@ -47,7 +47,13 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
 
 
 
-
+      const isWithin3Days = (reviewDate) => {
+        const reviewDateObj = new Date(reviewDate);
+        const currentDateObj = new Date();
+        const threeDaysInMs = 3 * 24 * 60 * 60 * 1000; // 3일을 밀리초로 환산
+      
+        return currentDateObj - reviewDateObj <= threeDaysInMs;
+      };
 
 
 
@@ -95,13 +101,15 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
           ))}
         </View>
         <View style={styles.dateAndActions}>
-        <Text style={styles.date}>{`리뷰 날짜: ${review.review_date}`}</Text>
-          <TouchableOpacity onPress={onEdit} style={styles.editButton}>
+        <Text style={styles.date}>{`리뷰 날짜: ${review.review_date}`}</Text>    
+          {/* <TouchableOpacity onPress={onEdit} style={styles.editButton}>
             <Text style={styles.buttonText}>수정</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          {isWithin3Days(review.review_date) ? (
           <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
             <Text style={styles.buttonText}>삭제</Text>
           </TouchableOpacity>
+          ) : null}
         </View>
         {review.answer && review.answer.trim().length > 0 && (
           <View style={styles.answerContainer}>

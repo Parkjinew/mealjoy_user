@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View,Platform, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,Image,Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View,Platform, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView,Image,Alert,ActivityIndicator } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import * as Font from 'expo-font';
 import { AntDesign } from '@expo/vector-icons';
 // 상단 헤더 컴포넌트
 const Header = () => {
@@ -13,7 +14,7 @@ const Header = () => {
       <Ionicons name="arrow-back" size={24} color="black" />
     </TouchableOpacity>
     <View style={styles.headerTitleContainer}>
-    <Text style={styles.headerTitle}>리뷰 관리</Text>
+    <Text style={[styles.headerTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>리뷰 관리</Text>
     </View>
     <View  />
   </View>
@@ -22,7 +23,7 @@ const Header = () => {
 // 각 리뷰 아이템을 표시하는 컴포넌트
 const ReviewItem = ({ review, onEdit, onDelete }) => {
     const navigation = useNavigation();
-
+    const [fontsLoaded, setFontsLoaded] = useState(false);
     const handleDelete = async () => {
         console.log(review.review_seq)
         try {
@@ -53,9 +54,29 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
     const imageUris = review.image_filenames 
                       ? review.image_filenames.split(",").filter(uri => uri && uri.trim() !== "").slice(0, 3) 
                       : [];
+
+                      useEffect(() => {
+                        async function loadFonts() {
+                          await Font.loadAsync({
+                            'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+                            'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+                            'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+                          });
+                    
+                          setFontsLoaded(true);
+                        
+                        }
+                    
+                        loadFonts();
+                      }, []);
+                    
+                      if (!fontsLoaded) {
+                        return <ActivityIndicator size="large" color="#0000ff" />;
+                      }
+
     return (
       <View style={styles.card}>
-        <Text style={styles.storeName}>{review.store_name}</Text>
+        <Text style={[styles.storeName,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{review.store_name}</Text>
         <View style={styles.imageContainer}>
                 {imageUris.length > 0 ? (
                     imageUris.map((uri, index) => (
@@ -65,8 +86,8 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
                     <Text style={styles.empty}></Text>
                 )}
             </View>
-        <Text style={styles.title}>{review.title} </Text>
-          <Text style={styles.cardContent}>{review.details}</Text>
+        <Text style={[styles.title,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>{review.title} </Text>
+          <Text style={[styles.cardContent,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}>{review.details}</Text>
         <View style={styles.starContainer}>
           {/* 별점을 기반으로 별표시하기 */}
           {Array.from({ length: review.score }, (_, index) => (
@@ -90,9 +111,9 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
           source={require("../assets/owner2.png")}
           style={styles.ownerImage}
         />
-            <Text style={styles.answerTitle}>사장님</Text>
+            <Text style={[styles.answerTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>사장님</Text>
             </View>
-            <Text style={styles.answerContent}>{review.answer}</Text>
+            <Text style={[styles.answerContent,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>{review.answer}</Text>
           </View>
         )}
       </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,Platform, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Alert } from 'react-native';
+import { View,Platform, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,Alert,ActivityIndicator } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -7,6 +7,9 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import * as Font from 'expo-font';
+
+
 const HorizontalDivider = () => {
   return <View style={styles.horizontalDivider} />;
 };
@@ -26,7 +29,7 @@ const Header = ({ totalCafes, onSortPress }) => {
         <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>나의 예약 내역 리스트</Text>
+        <Text style={[styles.headerText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>나의 예약 내역 리스트</Text>
         <View style={{ width: 24 }}></View>
       </View>
 
@@ -46,6 +49,9 @@ const ReservaList = ({route}) => {
   const navigation = useNavigation();
   const { ReservaList } = route.params;
   const [reservations, setReservations] = useState(ReservaList);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+
   const formatTime = (timeString) => {
     const parts = timeString.split(':'); // "18:00:00"을 ":"로 분리하여 ["18", "00", "00"] 얻음
     return `${parts[0]}:${parts[1]}`; // 시와 분만 사용하여 "18:00" 반환
@@ -96,6 +102,25 @@ const ReservaList = ({route}) => {
         return styles.button; // 기본 스타일
     }
   };
+
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
   return (
     <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
@@ -122,7 +147,7 @@ const ReservaList = ({route}) => {
           <Card key={index} style={{...styles.card, ...opacityStyle}}>
             <View style={styles.detailBox}>
               <View style={styles.detailRow}>
-                <Text style={styles.detailTitle}>{reservation.store_name}</Text>
+                <Text style={[styles.detailTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>{reservation.store_name}</Text>
                 <View style={getButtonStyle(statusText)}>
                   <Text style={styles.buttonText}>{statusText}</Text>
                 </View>
@@ -137,11 +162,11 @@ const ReservaList = ({route}) => {
               </View>
               <View style={styles.actionRow}>
                 <TouchableOpacity style={styles.actionButton} onPress={storeinfo}>
-                  <Text style={styles.actionButtonText}>매장상세보기</Text>
+                  <Text style={[styles.actionButtonText,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>매장상세보기</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}
               onPress={() => showCancelConfirmation(reservation.reserve_seq)}>
-                  <Text style={styles.actionButtonText}>예약취소</Text>
+                  <Text style={[styles.actionButtonText,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>예약취소</Text>
                 </TouchableOpacity>
               </View>
             </View>

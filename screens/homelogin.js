@@ -95,14 +95,14 @@ if (!fontsLoaded) {
       <View style={styles.inputContainer}>
   <Text style={[styles.inputLabel,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>아이디*</Text>
         <TextInput
-          style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}
+          style={styles.input}
           placeholder="아이디를 입력하세요"
           onChangeText={(value) => handleLoginChange('id', value)}
           value={loginInfo.id}
         />
           <Text style={[styles.inputLabel2,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}>비밀번호*</Text>
         <TextInput
-          style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 14 }]}
+          style={styles.input}
           placeholder="비밀번호를 입력하세요 "
           secureTextEntry={true}
           onChangeText={(value) => handleLoginChange('password', value)}

@@ -91,6 +91,17 @@ const FavoriteStore = ({route}) => {
   }
 
   const renderRestaurants = () => {
+
+
+    if (!restaurants || restaurants.length === 0) {
+      // 관심 매장이 없을 경우 표시할 내용
+      return (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>관심 매장이 없습니다.</Text>
+        </View>
+      );
+    }
+
     const restaurantItems = [];
     for (let i = 0; i < restaurants.length; i++) {
       const item = restaurants[i];
@@ -194,6 +205,14 @@ const FavoriteStore = ({route}) => {
   
 };
 const styles = StyleSheet.create({
+  emptyContainer: {
+    alignItems: 'center', // 가운데 정렬
+    marginTop: 20, // 상단 여백
+  },
+  emptyText: {
+    fontSize: 16, // 텍스트 크기
+    color: '#666', // 텍스트 색상
+  },
     total:{
         fontSize:15,
         fontWeight: 'bold',

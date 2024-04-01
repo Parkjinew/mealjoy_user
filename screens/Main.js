@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Image, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView,SafeAreaView,
   KeyboardAvoidingView, Alert,
   Platform,TouchableWithoutFeedback,Keyboard,ActivityIndicator } from 'react-native';
@@ -16,6 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import { Locations } from "@env";
 import * as Font from 'expo-font';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const images = [
@@ -52,20 +53,7 @@ const Main = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const storedUserInfo = await AsyncStorage.getItem('userInfo');
-      if (storedUserInfo) {
-        setIsLoggedIn(true);
-        setUserInfo(JSON.parse(storedUserInfo));
-      } else {
-        setIsLoggedIn(false);
-        setUserInfo(null);
-      }
-    };
 
-    fetchUserInfo();
-  }, []);
 
 
   const handleHeartIconPress = async () => {
@@ -276,25 +264,31 @@ const Main = () => {
     navigation.navigate("HomeLogin");
   }
   }
+  useFocusEffect(
+    useCallback(() => {
+      const loadResourcesAndData = async () => {
+        // 폰트 로딩
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf'),
+        });
+        setFontsLoaded(true);
 
-  useEffect(() => {
-    async function loadFonts() {
-      await Font.loadAsync({
-        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
-        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
-        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
-      });
+        // 사용자 정보 로딩
+        const storedUserInfo = await AsyncStorage.getItem('userInfo');
+        if (storedUserInfo) {
+          setUserInfo(JSON.parse(storedUserInfo));
+        } else {
+          setUserInfo(null);
+        }
+        
+        // 여기에 다른 데이터 새로고침 로직 추가
+      };
 
-      setFontsLoaded(true);
-    
-    }
-
-    loadFonts();
-  }, []);
-
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
+      loadResourcesAndData();
+    }, [])
+  );
 
 
   return (

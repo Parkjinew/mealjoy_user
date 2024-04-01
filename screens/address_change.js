@@ -9,7 +9,7 @@ const AddressChange = () => {
   const handleSelectAddress = async (data) => {
     await AsyncStorage.setItem('selectedAddress', data.address);
     // 다른 화면으로 이동 또는 상태 업데이트하기 전에 필요한 작업 수행
-    navigation.goBack(); // 또는 navigation.navigate('목적지')
+    navigation.goBack(); 
   };
 
   useEffect(() => {

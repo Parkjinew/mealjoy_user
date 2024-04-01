@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,Alert, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image, Platform } from 'react-native';
+import { View,Alert, Text,ActivityIndicator, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Image, Platform } from 'react-native';
 import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 
@@ -7,13 +7,14 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as Font from 'expo-font';
 const Nick = () => {
   // 설정 항목의 state와 로직이 필요하면 여기에 추가하세요.
   const navigation = useNavigation();
   const [nickname, setNickname] = useState('');
   const [inputText, setInputText] = useState('');
   const [userInfo, setUserInfo] = useState(null);
-
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -50,6 +51,25 @@ const Nick = () => {
     }
   };
 
+  useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
+
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 */}
@@ -57,18 +77,18 @@ const Nick = () => {
       <TouchableOpacity style={styles.backbutton} onPress={() => navigation.goBack()} >
       <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>닉네임 변경</Text>
+        <Text style={[styles.headerTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>닉네임 변경</Text>
         <View style={{width:24}}/>
       </View>
 
       <ScrollView >
      
         <View style={styles.infoItem}>
-          <Text style={styles.infoText}>새로운 닉네임을 입력해주세요</Text>    
+          <Text style={[styles.infoText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 16 }]}>새로운 닉네임을 입력해주세요</Text>    
         </View>
         <View style={styles.nicksetting}>
         <TextInput
-            style={styles.input}
+            style={[styles.input,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 15 }]}
             placeholder={userInfo?.[0]?.user_nick}
             value={inputText}
             onChangeText={setInputText}
@@ -79,7 +99,7 @@ const Nick = () => {
 
       <View style={styles.tabBar}>
         <TouchableOpacity style={styles.tabItem} onPress={nicksetting}>
-        <Text style={styles.setting}>변경 하기</Text>
+        <Text style={[styles.setting,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>변경 하기</Text>
         </TouchableOpacity>
       </View>
       

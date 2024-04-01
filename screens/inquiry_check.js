@@ -11,7 +11,8 @@ import {
   Button,
   TextInput,
     Alert,
-    Platform
+    Platform,
+    ActivityIndicator
 } from "react-native";
 import {
   Ionicons,
@@ -22,7 +23,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import * as Font from 'expo-font';
 // Header 컴포넌트
 const Header = () => {
     const navigation = useNavigation();
@@ -32,7 +33,7 @@ const Header = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>문의 확인</Text>
+        <Text style={[styles.headerText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>문의 확인</Text>
         <Ionicons name="arrow-back" size={24} color="white" />
       </View>
     </View>
@@ -44,8 +45,29 @@ const InquiryCheck = ({route}) => {
     const { inquiryCheck } = route.params;
     const [inquiry, setinquiry] = useState(inquiryCheck);
   
+const [fontsLoaded, setFontsLoaded] = useState(false);
 
     const hasInquiries = inquiry && inquiry.length > 0;
+
+
+    useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+  
+        setFontsLoaded(true);
+      
+      }
+  
+      loadFonts();
+    }, []);
+  
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
   return (
     <SafeAreaView style={styles.safeArea}>
          <Header />
@@ -54,18 +76,18 @@ const InquiryCheck = ({route}) => {
             inquiry.map((inquiry, index) => (
                 <View key={index} style={styles.inquiryItem}>
                     {/* 문의 제목 */}
-                    <Text style={styles.inquiryTitle}>문의 제목</Text>
-                    <Text style={styles.inquiryContent}>{inquiry.title}</Text>
+                    <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>문의 제목</Text>
+                    <Text style={[styles.inquiryContent,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16 }]}>{inquiry.title}</Text>
 
                     {/* 문의 내용 */}
-                    <Text style={styles.inquiryTitle}>문의 내용</Text>
-                    <Text style={styles.inquiryContent}>{inquiry.details}</Text>
+                    <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>문의 내용</Text>
+                    <Text style={[styles.inquiryContent,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16 }]}>{inquiry.details}</Text>
 
                     {/* 관리자 답변이 있을 경우에만 표시 */}
                     {inquiry.answer && (
                         <View style={styles.answerContainer}>
-                            <Text style={styles.inquiryTitle}>관리자 답변</Text>
-                            <Text style={styles.inquiryContent2}>{inquiry.answer}</Text>
+                            <Text style={[styles.inquiryTitle,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>관리자 답변</Text>
+                            <Text style={[styles.inquiryContent2,{ fontFamily: 'KBO-Dia-Gothic_light', fontSize: 16}]}>{inquiry.answer}</Text>
                         </View>
                     )}
                 </View>

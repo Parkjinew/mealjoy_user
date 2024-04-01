@@ -1,8 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import React,{useState, useEffect} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import * as Font from 'expo-font';
+
 
 const Recomplete = ({route}) => {
   const data = {route}.route.params;
@@ -14,7 +16,7 @@ const Recomplete = ({route}) => {
   const reserve_time = data.reserve_time;
   const reserve_num = data.reserve_num;
   const navigation = useNavigation();
-
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   const showCancelConfirmation = () => {
     Alert.alert(
@@ -71,6 +73,25 @@ const Recomplete = ({route}) => {
     }
     };
   
+
+    useEffect(() => {
+      async function loadFonts() {
+        await Font.loadAsync({
+          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+        });
+  
+        setFontsLoaded(true);
+      
+      }
+  
+      loadFonts();
+    }, []);
+  
+    if (!fontsLoaded) {
+      return <ActivityIndicator size="large" color="#0000ff" />;
+    }
   return (
     <ScrollView style={styles.container}>
       
@@ -78,7 +99,7 @@ const Recomplete = ({route}) => {
       <TouchableOpacity  onPress={()=>navigation.navigate("Main")}>
       <AntDesign name="arrowleft" size={24} color="black" />
       </TouchableOpacity>
-        <Text style={styles.headerText}>예약 완료</Text>
+        <Text style={[styles.headerText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 20 }]}>예약 완료</Text>
         <AntDesign name="arrowleft" size={24} color="white" />
         </View>
 
@@ -110,7 +131,7 @@ const Recomplete = ({route}) => {
         </Text>
       
         <TouchableOpacity style={styles.cancelButton} onPress={showCancelConfirmation}>
-        <Text style={styles.cancelButtonText}>예약 취소하기</Text>
+        <Text style={[styles.cancelButtonText,{ fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>예약 취소하기</Text>
       </TouchableOpacity>
       </View>
     </ScrollView>

@@ -31,7 +31,9 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
 
   // 로그인 입력 핸들러
   const handleLoginChange = (name, value) => {
-    setLoginInfo({ ...loginInfo, [name]: value });
+    let cleanedValue = value;
+    cleanedValue = cleanedValue.replace(/[^\w\s!@]/gi, '');
+    setLoginInfo({ ...loginInfo, [name]: cleanedValue });
   };
 
   // 로그인 버튼 핸들러

@@ -29,6 +29,7 @@ const SignUp = () => {
     const [passwordMatch, setPasswordMatch] = useState(true);
     const [hasCheckedDuplicate, setHasCheckedDuplicate] = useState(false);
 
+
     const checkDuplicate = async () => {
       try {
           if(username !=""){
@@ -61,11 +62,13 @@ const SignUp = () => {
   
     };
   const handlePasswordChange = (password) => {
-    setPassword(password);
-    setPasswordMatch(password === confirmPassword);
+    const cleanedPassword = password.replace(/[^a-zA-Z0-9!@]/g, '');
+    setPassword(cleanedPassword);
+    setPasswordMatch(cleanedPassword === confirmPassword);
   };
 
   const handleConfirmPasswordChange = (confirmPassword) => {
+    const cleanedPassword = password.replace(/[^a-zA-Z0-9!@]/g, '');
     setConfirmPassword(confirmPassword);
     setPasswordMatch(password === confirmPassword);
   };
@@ -85,7 +88,16 @@ const SignUp = () => {
             name: name,
             phone: phoneNumber,
           });
-  
+          if (password.length < 8) {
+            Alert.alert("비밀번호 오류", "비밀번호는 8자리 이상이어야 합니다.",
+            [
+              { text: "OK", onPress: () => resetForm() }
+            ]
+            );
+            return ; // 함수를 여기서 종료하여 회원가입 절차를 중단합니다.
+        }
+
+
           console.log('회원가입:', username);
           Alert.alert(
               "회원가입 성공",
@@ -113,7 +125,16 @@ const SignUp = () => {
         }
       }
     };
-  
+  const resetForm = () => {
+  // 모든 상태를 초기화하거나 특정 상태만 초기화
+  setUsername('');
+  setPassword('');
+  setConfirmPassword('');
+  setName('');
+  setPhoneNumber('');
+
+  // 나머지 필요한 상태도 초기화
+};
     // 비밀번호 일치 확인
     useEffect(() => {
       if (password && confirmPassword) {
@@ -182,7 +203,9 @@ const SignUp = () => {
                         <View style={styles.inputRow}>
                             <TextInput
                                 style={[styles.input, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}
-                                onChangeText={text => { setUsername(text); setIsDuplicate(false); }}
+                                onChangeText={text => {
+                                  const cleanedText = text.replace(/[^a-zA-Z0-9]/g, '');
+                                   setUsername(cleanedText); setIsDuplicate(false); }}
                                 value={username}
                                 placeholder="아이디를 입력하세요"
                                 autoCapitalize="none"

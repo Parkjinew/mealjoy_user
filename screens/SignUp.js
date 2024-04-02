@@ -115,7 +115,7 @@ const SignUp = () => {
         } catch (error) {
           console.error('회원가입 에러:', error);
         }
-      } else {
+      } else {  
         if (!hasCheckedDuplicate) {
           Alert.alert('오류', '아이디 중복 확인이 필요합니다.');
         } else if (!passwordMatch) {

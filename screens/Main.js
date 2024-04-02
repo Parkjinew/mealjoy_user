@@ -16,7 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import { Locations } from "@env";
 import * as Font from 'expo-font';
-import { useFocusEffect } from '@react-navigation/native';
+
 
 
 const images = [
@@ -52,7 +52,28 @@ const Main = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // 페이지가 포커스를 받을 때 실행할 로직
+      const fetchUserInfo = async () => {
+        try {
+          const storedUserInfo = await AsyncStorage.getItem('userInfo');
+          if (storedUserInfo) {
+            setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
+          } else {
+            setUserInfo(null); // 로그아웃 상태 처리
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
   
+      fetchUserInfo();
+    });
+  
+    return unsubscribe; // 클린업 함수에서 리스너를 제거
+  }, [navigation]);
+
 
 
 
@@ -264,31 +285,26 @@ const Main = () => {
     navigation.navigate("HomeLogin");
   }
   }
-  useFocusEffect(
-    useCallback(() => {
-      const loadResourcesAndData = async () => {
-        // 폰트 로딩
-        await Font.loadAsync({
-          'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
-          'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
-          'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf'),
-        });
-        setFontsLoaded(true);
 
-        // 사용자 정보 로딩
-        const storedUserInfo = await AsyncStorage.getItem('userInfo');
-        if (storedUserInfo) {
-          setUserInfo(JSON.parse(storedUserInfo));
-        } else {
-          setUserInfo(null);
-        }
-        
-        // 여기에 다른 데이터 새로고침 로직 추가
-      };
+   useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'KBO-Dia-Gothic_bold': require('../assets/fonts/KBO Dia Gothic_bold.ttf'),
+        'KBO-Dia-Gothic_medium': require('../assets/fonts/KBO Dia Gothic_medium.ttf'),
+        'KBO-Dia-Gothic_light': require('../assets/fonts/KBO Dia Gothic_light.ttf')
+      });
 
-      loadResourcesAndData();
-    }, [])
-  );
+      setFontsLoaded(true);
+    
+    }
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
 
 
   return (

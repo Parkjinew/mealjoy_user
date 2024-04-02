@@ -267,7 +267,7 @@ const StoreInfo = ({route}) => {
         <View style={styles.body}>
 
         <View style={styles.starContainer}>
-        <Text style={[styles.title, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 30 }]}>{store.store_name}</Text>
+        <Text style={[styles.title, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 25 }]}>{store.store_name}</Text>
         <TouchableOpacity onPress={toggleFavorite}>
         <Ionicons
           name={favorite ? "heart" : "heart-outline"}

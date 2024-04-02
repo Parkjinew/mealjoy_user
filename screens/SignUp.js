@@ -16,6 +16,7 @@ import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
+import { KeyboardAvoidingView } from 'react-native';
 
 const SignUp = () => {
     const navigation = useNavigation();
@@ -161,6 +162,11 @@ const SignUp = () => {
 
   return (
        <SafeAreaView style={styles.container}>
+         <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"} // iOS는 padding, Android는 height 사용
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20} // 필요한 경우 Android에서 offset 조정
+    >
             <ScrollView style={styles.container}>
             <View style={styles.logoContainer}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -243,6 +249,7 @@ const SignUp = () => {
 
         </View>
         </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
 
    

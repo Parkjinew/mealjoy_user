@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert, ActivityIndicator  } from 'react-native';
+import { View,KeyboardAvoidingView,Platform, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert, ActivityIndicator  } from 'react-native';
 import { FontAwesome, AntDesign, Foundation, Entypo, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -241,6 +241,11 @@ const onDayPress = (day) => {
 
   return (
     <View style={styles.container}>
+       <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"} // iOS는 "padding", Android는 "height"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0} // iOS에서 키보드와 입력 필드 사이의 간격을 조정
+    >
       <ScrollView ref={scrollViewRef}
       >
          <TouchableOpacity style={styles.backButton} 
@@ -322,6 +327,7 @@ const onDayPress = (day) => {
   </View>
 )}
       </ScrollView>
+      </KeyboardAvoidingView>
       <SafeAreaView style={styles.safe}>
       <TouchableOpacity style={styles.orderButton} onPress={handleReservation}>
         <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>예약하기</Text>

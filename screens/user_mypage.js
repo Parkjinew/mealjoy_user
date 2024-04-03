@@ -84,7 +84,7 @@ const SettingsScreen = () => {
     console.log(userInfo)
     if (userInfo) { 
       try {
-        const response = await axios.post('http://119.200.31.63:8090/botbuddies/orderlist', { id: userInfo[0].user_id });
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/orderlist', { id: userInfo[0].user_id });
         navigation.navigate('OrderList', { OrderList: response.data });
       } catch (error) {
         console.error("Error fetching OrderList:", error);
@@ -98,7 +98,7 @@ const SettingsScreen = () => {
     console.log(userInfo)
     if (userInfo) { 
       try {
-        const response = await axios.post('http://119.200.31.63:8090/botbuddies/reservaList', { id: userInfo[0].user_id });
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/reservaList', { id: userInfo[0].user_id });
         navigation.navigate('ReservaList', { ReservaList: response.data });
       } catch (error) {
         console.error("Error fetching ReservaList:", error);
@@ -112,7 +112,7 @@ const SettingsScreen = () => {
   const handleReviewManagement = async () => {
     // 서버로부터 데이터를 받아오는 로직 구현
     try {
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/reviewModify', {  id: userInfo[0].user_id });
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/reviewModify', {  id: userInfo[0].user_id });
       navigation.navigate('ReviewModify', { reviewModify: response.data });
     } catch (error) {
       console.error("Error fetching Review Management data:", error);
@@ -123,7 +123,7 @@ const SettingsScreen = () => {
   const inquiryCheck = async () => {
     // 서버로부터 데이터를 받아오는 로직 구현
     try {
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/inquiryCheck', {  id: userInfo[0].user_id });
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/inquiryCheck', {  id: userInfo[0].user_id });
       navigation.navigate('InquiryCheck', { inquiryCheck: response.data });
     } catch (error) {
       console.error("Error fetching Review Management data:", error);

@@ -82,7 +82,7 @@ const Main = () => {
       // 사용자가 로그인 상태일 때 수행할 작업
       try {
         // 예를 들어, 사용자 ID를 서버로 보내 관심 매장 목록을 요청하는 경우
-        const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', {id : userInfo[0].user_id});
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/favorite', {id : userInfo[0].user_id});
         // 서버로부터 받은 데이터를 처리
        navigation.navigate('FavoriteStore', {FavoriteStore : response.data});
       } catch (error) {
@@ -131,7 +131,7 @@ const Main = () => {
 
   const storeList = async (id) => {
     try{
-      const response = await axios.post('http://localhost:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeList', {id : id})
 
       navigation.navigate('Store', {data: response.data, id : id, align:"align", selectedAddress:selectedAddress})
 
@@ -254,7 +254,7 @@ const Main = () => {
   const Stack = createStackNavigator();
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/search_result', JSON.stringify({
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/search_result', JSON.stringify({
         searchQuery: searchQuery
       }), {
         headers: {
@@ -275,8 +275,8 @@ const Main = () => {
     if (isLoggedIn) {
       console.log("호출")
     try{
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
-      const storeData = await axios.post('http://119.200.31.63:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);

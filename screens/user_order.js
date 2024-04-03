@@ -160,10 +160,10 @@ export default function UserOrder({route}){
     const orderT = async(orderDetails) => {
       console.log("주문가능");
       if(store.category_seq==2){
-        const response = await axios.post('http://211.227.224.159:8090/botbuddies/paycafe', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails})
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/paycafe', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails})
         
       }else{
-        const response = await axios.post('http://211.227.224.159:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails, selectedTable:selectedTable})
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/payment', {store_seq : store.store_seq, user_id:user_id, orders:orderDetails, selectedTable:selectedTable})
       }
       
       navigation.navigate("Payment",{totalPrice:totalPrice});

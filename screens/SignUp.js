@@ -35,7 +35,7 @@ const SignUp = () => {
           if(username !=""){
   
          
-              const response = await axios.post('http://119.200.31.63:8090/botbuddies/idcheck', {
+              const response = await axios.post('http://18.188.101.208:8090/botbuddies/idcheck', {
                   id: username
               });
               
@@ -82,7 +82,7 @@ const SignUp = () => {
       console.log(hasCheckedDuplicate, passwordMatch);
       if (verifyInputs()) {
         try {
-          const response = await axios.post('http://119.200.31.63:8090/botbuddies/SignUp', {
+          const response = await axios.post('http://18.188.101.208:8090/botbuddies/SignUp', {
             id: username,
             pw: password,
             name: name,

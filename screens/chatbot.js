@@ -34,7 +34,7 @@ const ChatBot = () => {
     console.log(userInfo)
     if (userInfo) { // userInfo 상태를 통해 로그인 상태 확인
       try {
-        const response = await axios.post('http://119.200.31.63:8090/botbuddies/favorite', { id: userInfo[0].user_id });
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/favorite', { id: userInfo[0].user_id });
         navigation.navigate('FavoriteStore', { FavoriteStore: response.data });
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -104,7 +104,7 @@ const ChatBot = () => {
   
     try {
       // 서버에 메시지 전송 및 챗봇 응답 받기
-      const response = await axios.post('http://211.227.224.159:8000/predict', {
+      const response = await axios.post('http://18.188.101.208:8000/predict', {
         text: inputText,
       });
   
@@ -143,7 +143,7 @@ const ChatBot = () => {
           
 
         } else if(response.data.text=="매장검색"){
-          const searchStoreResponse = await axios.post("http://211.227.224.159:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
+          const searchStoreResponse = await axios.post("http://18.188.101.208:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
           
           console.log("데이터 " ,searchStoreResponse.data)
 
@@ -234,7 +234,7 @@ const ChatBot = () => {
 
   const storeinfo = async(id) => {
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/storeinfo', {id : id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
       console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){
@@ -246,8 +246,8 @@ const ChatBot = () => {
   const waitPage = async() => {
     if (userInfo) {
     try{
-      const response = await axios.post('http://119.200.31.63:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
-      const storeData = await axios.post('http://119.200.31.63:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);

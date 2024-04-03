@@ -257,7 +257,7 @@ const ReviewList = ({route}) => {
     setSortOption(option);
 
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/reviewAlign',{option:option, store_seq:store_seq})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/reviewAlign',{option:option, store_seq:store_seq})
       setreviewList(response.data)
 
     }catch(error){

@@ -34,7 +34,7 @@ const Number = () => {
   const numbersetting = async () => {
     // 서버로부터 데이터를 받아오는 로직 구현
     try {
-      await axios.post('http://119.200.31.63:8090/botbuddies/numbersetting', {  id: userInfo[0].user_id,
+      await axios.post('http://18.188.101.208:8090/botbuddies/numbersetting', {  id: userInfo[0].user_id,
       inputText:inputText });
       const updatedUserInfo = { ...userInfo[0], user_phone: inputText }; // 닉네임 변경
       await AsyncStorage.setItem('userInfo', JSON.stringify([updatedUserInfo])); // AsyncStorage 업데이트

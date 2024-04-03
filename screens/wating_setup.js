@@ -32,7 +32,7 @@ const WatingSetup = ({route}) => {
   const wait = async(count) => {
 
     try{
-      const response = await axios.post('http://211.227.224.159:8090/botbuddies/wait', {user_id : user.user_id, store_seq : store.store_seq, people_num : count})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/wait', {user_id : user.user_id, store_seq : store.store_seq, people_num : count})
       navigation.navigate("TableingResult", {waitInfo:response.data, store:store.store_name});
 
     } catch(error){

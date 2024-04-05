@@ -42,7 +42,7 @@ const FavoriteStore = ({route}) => {
     console.log(userInfo)
     if (userInfo) { // userInfo 상태를 통해 로그인 상태 확인
       try {
-        const response = await axios.post('http://18.188.101.208:8090/botbuddies/favorite', { id: userInfo[0].user_id });
+        const response = await axios.post('https://18.188.101.208:8090/botbuddies/favorite', { id: userInfo[0].user_id });
         navigation.navigate('FavoriteStore', { FavoriteStore: response.data });
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -82,7 +82,7 @@ const FavoriteStore = ({route}) => {
   };
   const storeinfo = async(id) => {
     try{
-      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
+      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
       console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){
@@ -134,8 +134,8 @@ const FavoriteStore = ({route}) => {
 
   const waitPage = async() => {
     try{
-      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
-      const storeData = await axios.post('http://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      const response = await axios.post('https://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('https://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);

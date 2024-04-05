@@ -56,7 +56,7 @@ const Recomplete = ({route}) => {
       );
     } else{
       try{
-        const response = await axios.post('http://18.188.101.208:8090/botbuddies/cancelReserve', 
+        const response = await axios.post('https://18.188.101.208:8090/botbuddies/cancelReserve', 
         { 
           user_id:user_id,
           store_seq:store_seq,

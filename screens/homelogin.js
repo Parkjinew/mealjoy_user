@@ -39,7 +39,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
   // 로그인 버튼 핸들러
   const handleLogin = async () => {
     try {
-        const response = await axios.post('http://18.188.101.208:8090/botbuddies/signin', {
+        const response = await axios.post('https://18.188.101.208:8090/botbuddies/signin', {
             id: loginInfo.id,
             password: loginInfo.password,
         });
@@ -59,8 +59,13 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
             navigation.navigate('Main'); // 화면 이동
         }
     } catch (error) {
-        console.error('로그인 요청 실패:', error);
-        Alert.alert('로그인 요청 실패', '네트워크 상태를 확인해주세요.');
+      console.error('로그인 요청 실패:', error);
+      if (error.response) {
+          const errorMessage = `상태 코드: ${error.response.status}\n응답 데이터: ${JSON.stringify(error.response.data)}`;
+          Alert.alert('로그인 요청 실패', errorMessage);
+      } else {
+          Alert.alert('로그인 요청 실패', error.message);
+      }
     }
 };
 useEffect(() => {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "931311955507",
+    "project_id": "northern-net-417806",
+    "storage_bucket": "northern-net-417806.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931311955507:android:286418ba7a5ba19018fd46",
+        "android_client_info": {
+          "package_name": "com.smhrd.botbuddies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIJTUXUiGTqfDHqcxRg_Zmqpj7X8RxrUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -32,6 +32,7 @@ import ReviewModify from './screens/review_modify';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserInquiry from './screens/user_inquiry';
 import InquiryCheck from './screens/inquiry_check';
+// import Test from './screens/test';
 
 const Stack = createStackNavigator();
 
@@ -46,7 +47,7 @@ export default function App() {
         if (chatbotEnabled !== null && JSON.parse(chatbotEnabled)) {
           setInitialRouteName('ChatBot'); // 챗봇이 활성화되어 있으면 'ChatBot'으로 설정
         } else {
-          setInitialRouteName('Main'); // 그렇지 않으면 'Main'으로 설정
+          setInitialRouteName('Test'); // 그렇지 않으면 'Main'으로 설정
         }
       } catch (error) {
         console.error("Error fetching initial route name:", error);
@@ -61,6 +62,7 @@ export default function App() {
     // 초기 라우트 이름이 설정되기 전에 로딩 인디케이터를 보여줍니다.
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator size="large" /></View>;
   }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRouteName}>
@@ -94,6 +96,8 @@ export default function App() {
         <Stack.Screen name="ReviewModify" component={ReviewModify} options={{ headerShown: false }}/>
         <Stack.Screen name="UserInquiry" component={UserInquiry} options={{ headerShown: false }}/>
         <Stack.Screen name="InquiryCheck" component={InquiryCheck} options={{ headerShown: false }}/>
+        {/* <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/> */}
+      
        
       </Stack.Navigator>
     </NavigationContainer>

@@ -59,7 +59,7 @@ const SearchResult = ({ route }) => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post('http://18.188.101.208:8090/botbuddies/search_result', JSON.stringify({
+      const response = await axios.post('https://18.188.101.208:8090/botbuddies/search_result', JSON.stringify({
         searchQuery: searchQuery
       }), {
         headers: {
@@ -193,7 +193,7 @@ const SearchResult = ({ route }) => {
 
     const storeinfo = async(id) => {
       try{
-        const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
+        const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
         console.log(response.data);
         navigation.navigate('StoreInfo', response.data);
       } catch(error){

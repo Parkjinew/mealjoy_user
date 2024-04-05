@@ -58,7 +58,7 @@ const InquiryForm = () => {
 
   const handleSubmit = async () => {
     try {
-        await axios.post('http://18.188.101.208:8090/botbuddies/userInquiry', {
+        await axios.post('https://18.188.101.208:8090/botbuddies/userInquiry', {
             id: userInfo[0].user_id,
             title: title,
             content: content

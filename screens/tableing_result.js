@@ -36,7 +36,7 @@ const TableingResult = ({route}) => {
 
   const storeinfo = async(id) => {
     try{
-      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
+      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
       console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){
@@ -82,10 +82,10 @@ const TableingResult = ({route}) => {
 
   const waitDelet  = async() => {
     try{
-      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitDelet', {tabling_seq : wait.tabling_seq})
+      const response = await axios.post('https://18.188.101.208:8090/botbuddies/waitDelet', {tabling_seq : wait.tabling_seq})
       
-      const waitPage = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : wait.user_id})
-      const storeData = await axios.post('http://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : waitPage.data.store_seq})
+      const waitPage = await axios.post('https://18.188.101.208:8090/botbuddies/waitInfo', {user_id : wait.user_id})
+      const storeData = await axios.post('https://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : waitPage.data.store_seq})
       navigation.push('TableingResult', {waitInfo : waitPage.data, store : storeData.data.store_name})
     
     } catch(error){

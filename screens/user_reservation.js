@@ -145,7 +145,7 @@ const Reservation = ({route}) => {
   const reserva = async(reserva_info) => {
     console.log(reserva_info)
     try{
-      const response = await axios.post('http://18.188.101.208:8090/botbuddies/reservation', 
+      const response = await axios.post('https://18.188.101.208:8090/botbuddies/reservation', 
       {
         user_id:user.user_id,
         store_seq:store.store_seq,

@@ -56,7 +56,7 @@ const Recomplete = ({route}) => {
       );
     } else{
       try{
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/cancelReserve', 
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/cancelReserve', 
         { 
           user_id:user_id,
           store_seq:store_seq,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#ffff',
     marginBottom: 20, // Add some bottom margin to space out the header
-    paddingTop:60,
+    paddingTop:10,
     borderBottomWidth:1,
     borderColor:"#eeeeee"
   },

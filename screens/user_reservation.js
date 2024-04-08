@@ -45,6 +45,7 @@ const Reservation = ({route}) => {
     const store = data.store;
     const navigation = useNavigation();
     const reserveInfo = data.reserveInfo;
+    console.log(store);
 
     const allTimeSlots = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
     
@@ -145,14 +146,15 @@ const Reservation = ({route}) => {
   const reserva = async(reserva_info) => {
     console.log(reserva_info)
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/reservation', 
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/reservation', 
       {
         user_id:user.user_id,
         store_seq:store.store_seq,
         reserve_name:reserverName,
         reserve_date:selectedDate,
         reserve_time:selectedTimeSlot,
-        reserve_num:guestCount
+        reserve_num:guestCount,
+        store_user : store.user_id
       });
       navigation.navigate("Recomplete", 
       { 

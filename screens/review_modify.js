@@ -28,7 +28,7 @@ const ReviewItem = ({ review, onEdit, onDelete }) => {
         console.log(review.review_seq)
         try {
           // 서버에 DELETE 요청을 보냅니다. 주소와 세부 설정은 실제 환경에 맞게 조정해야 합니다.
-          const response = await axios.post('https://18.188.101.208:8090/botbuddies/reviewDelete',{reviewSeq: review.review_seq});
+          const response = await axios.post('http://18.188.101.208:8090/botbuddies/reviewDelete',{reviewSeq: review.review_seq});
     
           if (response.status >= 200 && response.status < 300) {
             // 요청이 성공적으로 처리되면 상위 컴포넌트의 삭제 핸들러를 호출
@@ -218,7 +218,7 @@ answerContent: {
         borderBottomColor: '#eeeeee',
         paddingBottom:24,
         paddingTop:-30,
-        marginTop:Platform.OS === "android"? 40 :0
+        marginTop:Platform.OS === "android"? 10 :0
         
       },
       headerTitleContainer: {

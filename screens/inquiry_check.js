@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     paddingBottom:20,
     borderBottomWidth:1,
     borderColor:"#eeeeee",
-    marginTop:Platform.OS === "android"? 40 :0
+    marginTop:Platform.OS === "android"? 10 :0
   },
   headerText: {
     fontSize: 18,

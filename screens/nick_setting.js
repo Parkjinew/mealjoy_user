@@ -36,7 +36,7 @@ const Nick = () => {
   const nicksetting = async () => {
     // 서버로부터 데이터를 받아오는 로직 구현
     try {
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/nicksetting', {  id: userInfo[0].user_id,
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/nicksetting', {  id: userInfo[0].user_id,
       inputText:inputText });
       const updatedUserInfo = { ...userInfo[0], user_nick: inputText }; // 닉네임 변경
       await AsyncStorage.setItem('userInfo', JSON.stringify([updatedUserInfo])); // AsyncStorage 업데이트
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    marginTop:Platform?.OS === 'android'? 40 : 0,
+    marginTop:Platform?.OS === 'android'? 10 : 0,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
   },

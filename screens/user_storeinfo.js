@@ -35,6 +35,7 @@ const StoreInfo = ({route}) => {
   const [peopleNum, setPeopleNum] = useState('');
 
 
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       const storedUserInfo = await AsyncStorage.getItem('userInfo');
@@ -46,7 +47,7 @@ const StoreInfo = ({route}) => {
         try{
           // userInfo 상태 대신 바로 parsedUserInfo를 사용합니다.
           // parsedUserInfo가 배열인지 객체인지에 따라 접근 방식을 조정해야 할 수 있습니다.
-          const response = await axios.post("https://18.188.101.208:8090/botbuddies/LikeTF", {
+          const response = await axios.post("http://18.188.101.208:8090/botbuddies/LikeTF", {
             user_id : parsedUserInfo[0].user_id, // 여기를 적절히 조정하세요.
             store_seq: store.store_seq // store는 상위 컴포넌트나 상태에서 정의되어야 합니다.
           });
@@ -70,7 +71,7 @@ const StoreInfo = ({route}) => {
       setFavorite(!favorite);
       try{
         console.log("like")
-        const response = await axios.post("https://18.188.101.208:8090/botbuddies/Like", {
+        const response = await axios.post("http://18.188.101.208:8090/botbuddies/Like", {
             user_id : userInfo[0].user_id, 
             store_seq: store.store_seq,
             like: favorite
@@ -92,8 +93,8 @@ const StoreInfo = ({route}) => {
   const order = async(store_seq) => {
     if(isLoggedIn){
       try{
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', {id : store_seq})
-        const tableList = await axios.post('https://18.188.101.208:8090/botbuddies/getTable', {store_seq : store_seq})
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : store_seq})
+        const tableList = await axios.post('http://18.188.101.208:8090/botbuddies/getTable', {store_seq : store_seq})
         
         navigation.navigate('UserOrder', {user_id:userInfo[0].user_id, store:response.data, tableList:tableList.data})
         
@@ -111,7 +112,7 @@ const StoreInfo = ({route}) => {
 
   const waitPage = async() => {
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : store.store_name})
     } catch(error){
       console.error(error);
@@ -123,12 +124,12 @@ const StoreInfo = ({route}) => {
       try{
         console.log("waiting");
         
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/waitState', {user_id : userInfo[0].user_id})
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitState', {user_id : userInfo[0].user_id})
         
         console.log(response.data);
 
         if(response.data == 0){
-          const response = await axios.post('https://18.188.101.208:8090/botbuddies/getCount', {store_seq : store.store_seq})
+          const response = await axios.post('http://18.188.101.208:8090/botbuddies/getCount', {store_seq : store.store_seq})
           navigation.navigate('WatingSetup', {user: userInfo[0], store: store, count:response.data}); 
 
         } else{
@@ -168,7 +169,7 @@ const StoreInfo = ({route}) => {
     if(isLoggedIn){
       try{
         console.log("Reservation");
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/getReserv', {store_seq : store.store_seq})
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/getReserv', {store_seq : store.store_seq})
         navigation.navigate("Reservation", {user:userInfo[0], store:store, reserveInfo:response.data});
       } catch(error){
         console.error(error);
@@ -181,7 +182,7 @@ const StoreInfo = ({route}) => {
   }
 
   const review = async() => {
-    const response = await axios.post('https://18.188.101.208:8090/botbuddies/reviewPage',{store_seq:store.store_seq})
+    const response = await axios.post('http://18.188.101.208:8090/botbuddies/reviewPage',{store_seq:store.store_seq})
     navigation.navigate("ReviewList", {reviewList:response.data, store_seq:store.store_seq})
     
   }
@@ -193,7 +194,7 @@ const StoreInfo = ({route}) => {
     Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
-  const handlePress = (store_seq, open_state, tabling_state) => {
+  const handlePress = (store_seq, open_state, tabling_state, user_state) => {
     if(open_state == '0'){
 
       Alert.alert(
@@ -219,7 +220,15 @@ const StoreInfo = ({route}) => {
         if (store.category_seq === 2 || store.tableCount > 0) {
           order(store_seq);
         } else {
-          waiting(store_seq);
+          if(user_state == '1'){
+            Alert.alert(
+              "원격 줄서기 기능 정지 회원입니다. 관리자에게 문의해주세요."
+            );
+
+          }else{
+            waiting(store_seq);
+          }
+          
         }
       }
       
@@ -325,7 +334,7 @@ const StoreInfo = ({route}) => {
 
       {/* {store.open_state === '1' && ( */}
       <SafeAreaView>
-        <TouchableOpacity style={store.open_state === '0' || store.tabling_state ==='0' ? styles.endTimeButton : styles.orderButton} onPress={() => handlePress(store.store_seq, store.open_state, store.tabling_state)}>
+        <TouchableOpacity style={store.open_state === '0' || store.tabling_state ==='0' ? styles.endTimeButton : styles.orderButton} onPress={() => handlePress(store.store_seq, store.open_state, store.tabling_state, userInfo[0].state)}>
           <Text style={[styles.orderButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 18 }]}>
             {store.open_state === '0' ? "오픈 전" : (store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기')}
             {/* {store.category_seq === 2 ? "주문하기" : store.tableCount === 0 ? '줄서기' : '주문하기'} */}

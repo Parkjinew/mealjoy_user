@@ -18,7 +18,6 @@ import { Locations } from "@env";
 import * as Font from 'expo-font';
 
 
-
 const images = [
   { id: '0', uri: require('../assets/all.png'), label: '전체' },
   { id: '1', uri: require('../assets/bibi.png'), label: '한식' },
@@ -41,7 +40,8 @@ const images = [
   { id: '16', uri: require('../assets/meet.png'), label: '고기/구이' },
   {id:'17'},
   {id:'18'},
-  {id:'19'}
+  {id:'19'},
+  {id:'20'}
 
 
 ];
@@ -51,6 +51,7 @@ const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [notiState, setNotiState] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -60,6 +61,7 @@ const Main = () => {
           const storedUserInfo = await AsyncStorage.getItem('userInfo');
           if (storedUserInfo) {
             setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
+
           } else {
             setUserInfo(null); // 로그아웃 상태 처리
           }
@@ -74,6 +76,9 @@ const Main = () => {
     return unsubscribe; // 클린업 함수에서 리스너를 제거
   }, [navigation]);
 
+  
+  
+
 
 
 
@@ -82,7 +87,7 @@ const Main = () => {
       // 사용자가 로그인 상태일 때 수행할 작업
       try {
         // 예를 들어, 사용자 ID를 서버로 보내 관심 매장 목록을 요청하는 경우
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/favorite', {id : userInfo[0].user_id});
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/favorite', {id : userInfo[0].user_id});
         // 서버로부터 받은 데이터를 처리
        navigation.navigate('FavoriteStore', {FavoriteStore : response.data});
       } catch (error) {
@@ -109,6 +114,43 @@ const Main = () => {
     const navigation = useNavigation();
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
   const [selectedAddress, setSelectedAddress] = useState('동구 대명동');
+
+  useEffect(() => {
+    const noti = async() => {
+      try{
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/notiState', {user_id:userInfo[0].user_id})
+        setNotiState(response.data);
+
+
+        const response_user = await axios.post('http://18.188.101.208:8090/botbuddies/getuser', {
+            id: userInfo[0].user_id,
+            password: userInfo[0].user_pw,
+            });
+          
+            if (response_user.data === null || response_user.data.length === 0) {
+              console.log("실패")
+            }else{
+              await AsyncStorage.removeItem('userInfo');
+              const userInfoString = JSON.stringify(response_user.data); // 사용자 정보를 문자열로 변환
+              await AsyncStorage.setItem('userInfo', userInfoString); // AsyncStorage에 저장
+              setUserInfo(response_user.data);
+            }
+            
+
+      } catch (error){
+        console.error(error);
+      }
+    
+    }
+    
+
+    if(userInfo){
+      noti();
+    }
+    
+  }, [userInfo]);
+  
+
   React.useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -129,9 +171,15 @@ const Main = () => {
     };
   }, []);
 
+
+  
+  
+
+
+
   const storeList = async (id) => {
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeList', {id : id})
 
       navigation.navigate('Store', {data: response.data, id : id, align:"align", selectedAddress:selectedAddress})
 
@@ -254,7 +302,7 @@ const Main = () => {
   const Stack = createStackNavigator();
   const handleSearch = async () => {
     try {
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/search_result', JSON.stringify({
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/search_result', JSON.stringify({
         searchQuery: searchQuery
       }), {
         headers: {
@@ -275,8 +323,8 @@ const Main = () => {
     if (isLoggedIn) {
       console.log("호출")
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
-      const storeData = await axios.post('https://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);
@@ -305,6 +353,25 @@ const Main = () => {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  const goNoti = async() => {
+    console.log("gonoti")
+    if (isLoggedIn) {
+      try{
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/goNoti', {user_id : userInfo[0].user_id})
+
+        navigation.navigate('NoticeList',{notice:response.data})
+
+        navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
+      } catch(error){
+        console.error(error);
+      }
+      
+  }else{
+    navigation.navigate("HomeLogin");
+  }
+    
+
+  };
 
 
   return (
@@ -326,8 +393,8 @@ const Main = () => {
     style={styles.logo}
   />
 
-<TouchableOpacity style={styles.bellIcon} onPress={() => navigation.navigate('Recomplete')}>
-      <Feather name="bell" size={24} color="black" />
+<TouchableOpacity style={styles.bellIcon} onPress={() => goNoti()}>
+      <Feather name="bell" size={24} color= {notiState?"red":"black"} />
     </TouchableOpacity>
   </View>
    
@@ -360,7 +427,7 @@ const Main = () => {
       {renderImagesRow(images.slice(4, 8))}
       {renderImagesRow(images.slice(8, 12))}
       {renderImagesRow(images.slice(12, 16))}
-      {renderImagesRow(images.slice(16, 19))}
+      {renderImagesRow(images.slice(16, 20))}
    </View>
 
         <TouchableOpacity style={styles.promotionCard}>
@@ -479,7 +546,7 @@ const styles = StyleSheet.create({
 
   },
   header: {
-    paddingTop:Platform.OS === 'android' ? 50 : 10,
+    paddingTop:Platform.OS === 'android' ? 10 : 10,
     padding: 16,
     paddingBottom:-10,
     backgroundColor: '#fff', 

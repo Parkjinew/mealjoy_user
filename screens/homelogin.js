@@ -39,7 +39,7 @@ const HomeLogin = ({ onSignUp, onKakaoLogin }) => {
   // 로그인 버튼 핸들러
   const handleLogin = async () => {
     try {
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/signin', {
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/signin', {
             id: loginInfo.id,
             password: loginInfo.password,
         });
@@ -124,12 +124,12 @@ if (!fontsLoaded) {
   </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.buttonKakao} onPress={() => navigation.navigate('KakaoLogin')}>
+        {/* <TouchableOpacity style={styles.buttonKakao} onPress={() => navigation.navigate('KakaoLogin')}>
         <Image
         source={require('../assets/Large.png')} // 이미지 파일 경로를 확인하세요
         style={styles.kakaoLoginImage}
         />
-  </TouchableOpacity>
+  </TouchableOpacity> */}
 
       </View>
     </SafeAreaView>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16, // 좌우 여백을 주기 위해 horizontal padding 값을 조정합니다. // 상단 바 여백
     backgroundColor: 'white',
-    marginTop: Platform.OS === 'android' ? -20 : -70
+    marginTop: Platform.OS === 'android' ? -50 : -70
   },
   header: {
     flexDirection: 'row',

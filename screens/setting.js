@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     justifyContent: 'center',
-    marginTop:Platform.OS === "android"? 40 :0
+    marginTop:Platform.OS === "android"? 10 :0
   },
   headerTitle: {
     flex: 1,

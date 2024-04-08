@@ -60,7 +60,7 @@ const ReservaList = ({route}) => {
   const cancelReservation = async (reservationId) => {
    
     try {
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/reserveCancel', { id: reservationId });
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/reserveCancel', { id: reservationId });
       console.log(response.data);
       // StoreInfo 페이지로 이동하면서 서버로부터 받은 응답 데이터를 넘깁니다.
       const updatedReservations = reservations.filter(reservation => reservation.reserve_seq !== reservationId);
@@ -135,7 +135,7 @@ const ReservaList = ({route}) => {
            const opacityStyle = isPast ? {opacity: 0.5} : {}; // 과거 예약일 경우 투명도 조절
            const storeinfo = async () => {
             try {
-              const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', { id: reservation.store_seq });
+              const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', { id: reservation.store_seq });
               console.log(response.data);
               // StoreInfo 페이지로 이동하면서 서버로부터 받은 응답 데이터를 넘깁니다.
               navigation.navigate('StoreInfo', response.data);
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     borderColor:'#ffff',
     paddingBottom:20,
     paddingTop:20,
-    marginTop:Platform.OS === "android"? 40 :0
+    marginTop:Platform.OS === "android"? 10 :0
   },
   scrollView: {
     flex: 1,

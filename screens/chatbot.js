@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_KEY } from "@env";
 import * as Font from 'expo-font';
+import { franc } from 'franc';
 
 
 const ChatBot = () => {
@@ -34,7 +35,7 @@ const ChatBot = () => {
     console.log(userInfo)
     if (userInfo) { // userInfo 상태를 통해 로그인 상태 확인
       try {
-        const response = await axios.post('https://18.188.101.208:8090/botbuddies/favorite', { id: userInfo[0].user_id });
+        const response = await axios.post('http://18.188.101.208:8090/botbuddies/favorite', { id: userInfo[0].user_id });
         navigation.navigate('FavoriteStore', { FavoriteStore: response.data });
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -88,6 +89,18 @@ const ChatBot = () => {
     saveMessages();
   }, [messages]);
 
+  const getLanguageDirective = (langCode) => {
+    switch (langCode) {
+      case 'kor':
+        return "한국어로 대답해주세요.";
+      case 'eng':
+        return "Please answer in English.";
+      default:
+        return "Please answer in English.";
+    }
+  }
+
+
   const sendMessage = async () => {
     if (inputText.trim() === '') return;
 
@@ -104,7 +117,7 @@ const ChatBot = () => {
   
     try {
       // 서버에 메시지 전송 및 챗봇 응답 받기
-      const response = await axios.post('https://18.188.101.208:8000/predict', {
+      const response = await axios.post('http://18.188.101.208:8000/predict', {
         text: inputText,
       });
   
@@ -112,13 +125,17 @@ const ChatBot = () => {
         // 챗봇의 응답을 채팅 목록에 추가
 
         if(response.data.text=="메뉴추천"){
+
+          const langCode = franc(response.data.text); // 사용자 입력에서 언어 감지
+          const languageDirective = getLanguageDirective(langCode); // 언어 지시 생성
+
           try {
             const response_chat = await axios.post(
               'https://api.openai.com/v1/chat/completions',
               {
                 model: "gpt-3.5-turbo",
                 messages: [
-                  { role: "system", content: "You are a menu recommendation chatbot. If there are no special conditions, we basically recommend 5 menus." },
+                  { role: "system", content: `You are a menu recommendation chatbot. Unless there are special conditions, we basically recommend 5 menu items. I definitely recommend the menu. ${languageDirective}`},
                   { role: "user", content: response.data.text }
                 ]
               },
@@ -143,7 +160,7 @@ const ChatBot = () => {
           
 
         } else if(response.data.text=="매장검색"){
-          const searchStoreResponse = await axios.post("https://18.188.101.208:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
+          const searchStoreResponse = await axios.post("http://18.188.101.208:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
           
           console.log("데이터 " ,searchStoreResponse.data)
 
@@ -234,7 +251,7 @@ const ChatBot = () => {
 
   const storeinfo = async(id) => {
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
       console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){
@@ -246,8 +263,8 @@ const ChatBot = () => {
   const waitPage = async() => {
     if (userInfo) {
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
-      const storeData = await axios.post('https://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/waitInfo', {user_id : userInfo[0].user_id})
+      const storeData = await axios.post('http://18.188.101.208:8090/botbuddies/getStoreName', {store_seq : response.data.store_seq})
       navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
     } catch(error){
       console.error(error);
@@ -402,7 +419,7 @@ const styles = StyleSheet.create({
     marginTop: 7
   },
   logoContainer: {
-    paddingTop: Platform.OS === 'android' ? 50 : 10,
+    paddingTop: Platform.OS === 'android' ? 10 : 10,
     justifyContent: 'center',
     alignItems:'center',
     borderBottomWidth: 1,

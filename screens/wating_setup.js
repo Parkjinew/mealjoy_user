@@ -13,7 +13,7 @@ const WatingSetup = ({route}) => {
   const store = data.store;
   const navigation = useNavigation();
   
-  console.log(data);
+  console.log(store);
 
   // 인원수를 증가시키는 함수
   const incrementCount = () => {
@@ -32,7 +32,7 @@ const WatingSetup = ({route}) => {
   const wait = async(count) => {
 
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/wait', {user_id : user.user_id, store_seq : store.store_seq, people_num : count})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/wait', {user_id : user.user_id, store_seq : store.store_seq, people_num : count, store_user:store.user_id})
       navigation.navigate("TableingResult", {waitInfo:response.data, store:store.store_name});
 
     } catch(error){
@@ -75,7 +75,9 @@ const WatingSetup = ({route}) => {
         <Text style={styles.caution}>주의사항</Text>
         {/* 주의사항 내용 */}
         <Text style={styles.precautionsText}>
-         - 원격 줄서기 신청 후 매장에 연락없이 방문하지 않으면 사용이 제한될 수 있습니다.
+         - 원격 줄서기 신청 후 방문하지 않을 시 1회 경고 후 기능이 정지됩니다.
+         - 정지된 회원은 관리자에게 문의 시 검토 후 해제됩니다.
+         - 일정 횟수 이상 정지된 회원은 기능이 영구 정지됩니다.
         </Text>
         <View style={styles.divider} />
         {/* <View style={styles.inputGroup}>

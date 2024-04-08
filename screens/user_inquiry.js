@@ -58,7 +58,7 @@ const InquiryForm = () => {
 
   const handleSubmit = async () => {
     try {
-        await axios.post('https://18.188.101.208:8090/botbuddies/userInquiry', {
+        await axios.post('http://18.188.101.208:8090/botbuddies/userInquiry', {
             id: userInfo[0].user_id,
             title: title,
             content: content
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent:"space-between",
     padding: 10,
     marginBottom: 30,
-    marginTop:Platform.OS === "android"? 40 :5
+    marginTop:Platform.OS === "android"? 10 :5
   },
   headerText: {
     fontSize: 18,

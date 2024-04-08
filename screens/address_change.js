@@ -33,7 +33,7 @@ const AddressChange = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? 40 : 10,
+    paddingTop: Platform.OS === 'android' ? 10 : 10,
   },
   safeArea: {
     flex: 1,

@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
-    marginTop:Platform?.OS === 'android'? 40 : 0,
+    marginTop:Platform?.OS === 'android'? 10 : 0,
   },
   headerTitle: {
     flex: 1,

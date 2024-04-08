@@ -140,7 +140,7 @@ const ReviewWrite = ({ route }) => {
     console.log(rating, imageUrls)
     try {
       // 서버로 POST 요청을 보냅니다. 여기서 'your-server-endpoint'는 실제 서버의 엔드포인트로 대체해야 합니다.
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/reviewWrite', {orderNum: orderNum,
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/reviewWrite', {orderNum: orderNum,
       storeName : storeName, 
       rating: rating, 
       photos: imageUrls, 
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flexDirection: 'row',
-    paddingTop: Platform.OS === 'android' ? 50 : 10,
+    paddingTop: Platform.OS === 'android' ? 10 : 10,
     justifyContent: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',

@@ -35,7 +35,7 @@ const SignUp = () => {
           if(username !=""){
   
          
-              const response = await axios.post('https://18.188.101.208:8090/botbuddies/idcheck', {
+              const response = await axios.post('http://18.188.101.208:8090/botbuddies/idcheck', {
                   id: username
               });
               
@@ -82,7 +82,7 @@ const SignUp = () => {
       console.log(hasCheckedDuplicate, passwordMatch);
       if (verifyInputs()) {
         try {
-          const response = await axios.post('https://18.188.101.208:8090/botbuddies/SignUp', {
+          const response = await axios.post('http://18.188.101.208:8090/botbuddies/SignUp', {
             id: username,
             pw: password,
             name: name,
@@ -263,12 +263,12 @@ const SignUp = () => {
         <TouchableOpacity style={styles.signUpButton} onPress={() => handleSignUp()}>
           <Text style={[styles.signUpButtonText, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 13 }]}>회원가입</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonKakao} >
+      {/* <TouchableOpacity style={styles.buttonKakao} >
       <Image
         source={require('../assets/Kakaostart.png')} 
         style={styles.kakaoLoginImage}
       />
-    </TouchableOpacity>
+    </TouchableOpacity> */}
 
         </View>
         </ScrollView>
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginBottom:-30,
-    marginTop: Platform.OS === 'android' ? 30 : 0,
+    marginTop: Platform.OS === 'android' ? 10 : 0,
   },
   headerContainer: {
     flexDirection: "row",

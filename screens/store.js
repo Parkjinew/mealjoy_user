@@ -146,7 +146,7 @@ const Store = ({route}) => {
   const storeList = async (id) => {
     
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeList', {id : id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeList', {id : id})
 
       navigation.push('Store', {data: response.data, id : id, align : "align"})
 
@@ -158,7 +158,7 @@ const Store = ({route}) => {
   const storeAlign = async(align) => {
     console.log(align);
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeAlign', {align : align, category : category, selectedAddress:selectedAddress})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeAlign', {align : align, category : category, selectedAddress:selectedAddress})
       console.log(response.data);
       setSortedCafes(response.data);
       scrollViewRef.current?.scrollTo({y:0, animated:true});
@@ -172,7 +172,7 @@ const Store = ({route}) => {
 
   const storeinfo = async(id) => {
     try{
-      const response = await axios.post('https://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
+      const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
       
       console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop:Platform.OS === 'android' ? 40 : 0
+    paddingTop:Platform.OS === 'android' ? 10 : 0
   },
   iconContainer: {
     marginBottom: 20,

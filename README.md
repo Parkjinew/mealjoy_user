@@ -37,7 +37,7 @@
 </br>
 
 ## 3. ERD 설계
-![화도 (2)](https://github.com/illhanunjung/Hwado-final/assets/114290412/141390c4-34de-4fca-b073-440f5d357c99)
+![erd](https://github.com/Parkjinew/mealjoy_user/assets/153901490/42a5170d-ddfc-4d28-9644-cd6aca4c5390)
 
 
 ## 4. 핵심 기능

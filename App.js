@@ -83,6 +83,12 @@ export default function App() {
     })();
   }, []);
 
+  const logout = async () => {
+    await AsyncStorage.removeItem('userInfo'); // AsyncStorage에서 사용자 정보 제거
+    AsyncStorage.clear();
+    setUserInfo(null); // userInfo 상태를 null로 업데이트
+  };
+
   
 
   const sendNotification = async () => {
@@ -147,7 +153,7 @@ export default function App() {
     
     const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [userInfo]);
 
 
 
@@ -208,13 +214,16 @@ export default function App() {
         <Stack.Screen name="StoreInfo" component={StoreInfo} options={{ headerShown: false }}/>
         <Stack.Screen name="WatingSetup" component={WatingSetup} options={{ headerShown: false }}/>
         <Stack.Screen name="ReviewList" component={ReviewList} options={{ headerShown: false }}/>
-        <Stack.Screen name="SettingsScreen" component={SettingsScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="SettingsScreen" options={{ headerShown: false }}>
+          {props => <SettingsScreen {...props} logout={logout} />}
+        </Stack.Screen>
         <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false }}/>
         <Stack.Screen name="ReviewModify" component={ReviewModify} options={{ headerShown: false }}/>
         <Stack.Screen name="UserInquiry" component={UserInquiry} options={{ headerShown: false }}/>
         <Stack.Screen name="InquiryCheck" component={InquiryCheck} options={{ headerShown: false }}/>
         <Stack.Screen name="NoticeList" component={NoticeList} options={{ headerShown: false }}/>
        
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

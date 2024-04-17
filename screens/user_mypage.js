@@ -47,7 +47,7 @@ const HeaderContainer = () => {
   );
 };
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ logout }) => {
   const [isLocationEnabled, setLocationEnabled] = useState(false); // 위치 정보 사용 상태
   const [isChatbotEnabled, setChatbotEnabled] = useState(false); // 챗봇 활성화 상태를 추가
   const [appState, setAppState] = useState(AppState.currentState); // 현재 앱 상태를 저장할 state
@@ -138,7 +138,7 @@ const SettingsScreen = () => {
   };
   const handleLogout = async () => {
     // AsyncStorage에서 사용자 정보 제거
-    await AsyncStorage.removeItem('userInfo');
+    logout();
     Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
     // 메인 페이지로 이동
     navigation.navigate('Main');

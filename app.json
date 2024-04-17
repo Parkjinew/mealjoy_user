@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "project",
+    "name": "mealjoy",
     "slug": "expo-test",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/joy.png",
+    "icon": "./assets/mealicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -29,7 +29,7 @@
       "package": "com.smhrd.botbuddies",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
-      "permissions": ["INTERNET"]
+      "permissions": ["RECORD_AUDIO", "INTERNET"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,7 +39,7 @@
         "projectId": "f1dcfc90-61e7-4897-b532-def27e503100"
       }
     },
-    "owner": "jinew",
+    "owner": "mealjoy",
    
     "plugins": [
       "expo-font",

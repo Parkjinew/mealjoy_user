@@ -98,7 +98,7 @@ const ReviewCard = ({ review, userInfo }) => {
   
     return (
         <View style={styles.reviewCard}>
-                   
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>           
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
 
     <Image
@@ -106,6 +106,8 @@ const ReviewCard = ({ review, userInfo }) => {
       style={styles.userImage}
     />
         <Text style={[styles.customerName, { fontFamily: 'KBO-Dia-Gothic_medium', fontSize: 15 }]}>{review.user_nick}</Text>
+        </View>
+        <Text style={[styles.reviewAt, { fontFamily: 'KBO-Dia-Gothic_light', fontSize: 13 }]}>{review.review.create_at}</Text>
         </View>
         <View style={{ flexDirection: 'row', marginBottom:4 }}>
           {renderStars()}
@@ -120,6 +122,7 @@ const ReviewCard = ({ review, userInfo }) => {
             <Image source={{ uri: img.img_filename }} style={styles.reviewImage} />
           </TouchableOpacity>
         ))}
+        
       </ScrollView>
 
       <Modal
@@ -505,6 +508,11 @@ const styles = StyleSheet.create({
     reviewText:{
         fontSize: 16,
       marginBottom:5
+    },
+    reviewAt:{
+        fontSize: 16,
+      marginBottom:5,
+      textAlign:"right"
     },
     reviewImage: {
       width: 100, // 이미지 크기에 맞게 조절해주세요.

@@ -153,7 +153,7 @@ const ReservaList = ({route}) => {
                 </View>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>예약 일시</Text>
+                <Text style={styles.detailLabel}>방문 예정일</Text>
                 <Text style={styles.detailValue}>{reservation.reserve_date} {formatTime(reservation.reserve_time)}</Text>
               </View>
               <View style={styles.detailRow}>

@@ -62,7 +62,7 @@ const OrderList = ({route}) => {
         </View>
       </View>
       </TouchableOpacity>
-       {item.review_seq === 0 ? (
+       {item.review_seq === null ? (
       <View style={styles.review}>
      
         <TouchableOpacity style={styles.review2} onPress={() => {

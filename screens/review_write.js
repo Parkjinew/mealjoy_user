@@ -21,6 +21,8 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
+
+
 const storage = getStorage();
 
 const ReviewWrite = ({ route }) => {
@@ -109,7 +111,6 @@ const ReviewWrite = ({ route }) => {
     });
   
     if (!result.canceled) {
-      // 이미지를 배열에 추가하고, 사진 개수를 업데이트
       setSelectedImages(currentImages => [...currentImages, result.assets[0].uri]);
       setPhotoCount(prevCount => prevCount + 1);
     }

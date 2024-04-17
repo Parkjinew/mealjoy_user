@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, FlatList, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, FlatList, SafeAreaView, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, Entypo, FontAwesome6 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_KEY } from "@env";
 import * as Font from 'expo-font';
-import { franc } from 'franc';
 
 
 const ChatBot = () => {
@@ -24,7 +23,7 @@ const ChatBot = () => {
           setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
@@ -91,9 +90,11 @@ const ChatBot = () => {
 
   const getLanguageDirective = (langCode) => {
     switch (langCode) {
-      case 'kor':
+      case 'ko':
         return "한국어로 대답해주세요.";
-      case 'eng':
+      case 'ja':
+        return "日本語で答えてください。";
+      case 'en':
         return "Please answer in English.";
       default:
         return "Please answer in English.";
@@ -126,8 +127,10 @@ const ChatBot = () => {
 
         if(response.data.text=="메뉴추천"){
 
-          const langCode = franc(response.data.text); // 사용자 입력에서 언어 감지
+          const langCode = response.data.lang;
           const languageDirective = getLanguageDirective(langCode); // 언어 지시 생성
+          console.log("=========================================================");
+          console.log("langCode",langCode)
 
           try {
             const response_chat = await axios.post(
@@ -135,17 +138,17 @@ const ChatBot = () => {
               {
                 model: "gpt-3.5-turbo",
                 messages: [
-                  { role: "system", content: `You are a menu recommendation chatbot. Unless there are special conditions, we basically recommend 5 menu items. I definitely recommend the menu. ${languageDirective}`},
+                  { role: "system", content: `You are a menu recommendation chatbot. We unconditionally recommend 5 menu items that will suit your taste. We definitely recommend 5 menu items. ${languageDirective}`},
                   { role: "user", content: response.data.text }
                 ]
               },
               {
                 headers: {
-                  'Authorization': `Bearer ${API_KEY}`
+                  'Authorization': `Bearer ${API_KEY}` 
                 }
               }
             );
-            console.log(response_chat.data.choices[0].message.content);
+            // console.log(response_chat.data.choices[0].message.content);
             const botMessage = {
               id: String(messages.length + 2), // ID 업데이트 주의
               text: response_chat.data.choices[0].message.content,
@@ -156,13 +159,14 @@ const ChatBot = () => {
       
           } catch (error) {
             console.error('Error generating text:', error);
+            Alert.alert('api 요청 실패', error.message);
           }
           
 
         } else if(response.data.text=="매장검색"){
           const searchStoreResponse = await axios.post("http://18.188.101.208:8090/botbuddies/selectStore", {location:response.data.keyword.location, nouns:response.data.keyword.nouns})
           
-          console.log("데이터 " ,searchStoreResponse.data)
+          // console.log("데이터 " ,searchStoreResponse.data)
 
           if (searchStoreResponse.data && searchStoreResponse.data.length > 0) {
             const botMessage =  searchStoreResponse.data.map((store, index) => ({
@@ -221,7 +225,7 @@ const ChatBot = () => {
       setTimeout(() => flatListRef.current.scrollToEnd({ animated: true }), 50);
     }
     
-    console.log("messages", messages)
+    // console.log("messages", messages)
   }, [messages]);
 
   // 채팅 내역을 자동으로 지우는 함수
@@ -252,7 +256,7 @@ const ChatBot = () => {
   const storeinfo = async(id) => {
     try{
       const response = await axios.post('http://18.188.101.208:8090/botbuddies/storeinfo', {id : id})
-      console.log(response.data);
+      // console.log(response.data);
       navigation.navigate('StoreInfo', response.data);
     } catch(error){
       console.error(error);
@@ -325,7 +329,7 @@ if (!fontsLoaded) {
               console.log("선택")
               if (item.storeId) {
                 storeinfo(item.storeId);
-                console.log(item.storeId)
+                // console.log(item.storeId)
               }
             }}
           >

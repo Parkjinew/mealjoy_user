@@ -52,18 +52,28 @@ const Main = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [notiState, setNotiState] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
+    
     const unsubscribe = navigation.addListener('focus', () => {
       // 페이지가 포커스를 받을 때 실행할 로직
       const fetchUserInfo = async () => {
+        console.log("메인페이지")
         try {
           const storedUserInfo = await AsyncStorage.getItem('userInfo');
+          console.log(JSON.parse(storedUserInfo))
           if (storedUserInfo) {
+            console.log("로그인 호출")
             setUserInfo(JSON.parse(storedUserInfo)); // AsyncStorage에서 불러온 userInfo 설정
+            setIsLoggedIn(true);
 
           } else {
+            await AsyncStorage.removeItem('userInfo'); 
+            AsyncStorage.clear();
             setUserInfo(null); // 로그아웃 상태 처리
+            setIsLoggedIn(false);
+            console.log("로그아웃")
           }
         } catch (error) {
           console.log(error);
@@ -111,7 +121,7 @@ const Main = () => {
   };
 
   const [searchQuery, setSearchQuery] = React.useState('');
-    const navigation = useNavigation();
+    
   const [keyboardVisible, setKeyboardVisible] = React.useState(false);
   const [selectedAddress, setSelectedAddress] = useState('동구 대명동');
 
@@ -131,6 +141,7 @@ const Main = () => {
               console.log("실패")
             }else{
               await AsyncStorage.removeItem('userInfo');
+              AsyncStorage.clear();
               const userInfoString = JSON.stringify(response_user.data); // 사용자 정보를 문자열로 변환
               await AsyncStorage.setItem('userInfo', userInfoString); // AsyncStorage에 저장
               setUserInfo(response_user.data);
@@ -262,6 +273,7 @@ const Main = () => {
 
     checkLoginStatus();
   }, [isFocused]);
+
   useEffect(() => {
     if (isFocused) {
       const loadAddress = async () => {
@@ -354,14 +366,13 @@ const Main = () => {
   }
 
   const goNoti = async() => {
-    console.log("gonoti")
+    console.log(userInfo[0].user_id)
     if (isLoggedIn) {
       try{
         const response = await axios.post('http://18.188.101.208:8090/botbuddies/goNoti', {user_id : userInfo[0].user_id})
-
+        console.log(response.data)
         navigation.navigate('NoticeList',{notice:response.data})
 
-        navigation.navigate('TableingResult', {waitInfo : response.data, store : storeData.data.store_name})
       } catch(error){
         console.error(error);
       }
@@ -455,6 +466,7 @@ const Main = () => {
         <TouchableOpacity style={styles.tabItem} onPress={handleUserIconPress}>
         <FontAwesome6 name="user" size={24} color="#ff3b30" />
         </TouchableOpacity>
+
       </View>
  )}
    

@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, SafeAreaView} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -93,7 +93,8 @@ const Recomplete = ({route}) => {
       return <ActivityIndicator size="large" color="#0000ff" />;
     }
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+    <ScrollView>
       
       <View style={styles.header}>
       <TouchableOpacity  onPress={()=>navigation.navigate("Main")}>
@@ -135,6 +136,7 @@ const Recomplete = ({route}) => {
       </TouchableOpacity>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

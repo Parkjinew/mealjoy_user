@@ -113,9 +113,6 @@ const HeaderContainer = () => {
     style={styles.logo}
   />
   </View>
-      <TouchableOpacity onPress={() => console.log("알림")}>
-      <Feather name="bell" style={styles.bellIcon} size={24} color="black" />
-      </TouchableOpacity>
     </View>
   );
 };

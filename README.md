@@ -349,7 +349,7 @@ window.Kakao.init('사용자 키'); 코드를 사용하여 카카오 SDK를 초�
 <div markdown="1">
   
 #### `Front-End`
-- 유저용과 자영업자용 알림 페이지
+- 알림 페이지
 
 #### `Back-end`
 - 메인 페이지 기능 구현

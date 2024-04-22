@@ -54,8 +54,8 @@
 <summary><b>핵심 기능 설명 펼치기</b></summary>
 <div markdown="1">
 
-### 4.1. 전체 흐름
-![시스템 아키텍쳐](https://github.com/illhanunjung/Hwado-final/assets/153901490/bae78183-b86a-4ac2-b16a-053209b4b2a2)
+### 4.1. 사용기술
+![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/7328453d-d9ce-4219-a848-173edc764d4c)
 <br>
 
 ### 4.2. 추천 알고리즘

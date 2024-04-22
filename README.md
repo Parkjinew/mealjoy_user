@@ -33,7 +33,7 @@
 #### `Front-end`
   - React Native
   - Javascript
-  - Ajax
+  - Axios
 #### `API`
   - Kakao Map API
   - PortOne API

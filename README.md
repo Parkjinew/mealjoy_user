@@ -4,6 +4,9 @@
 >
 >### [Mealjoy_owner](https://github.com/leehakgun/mealjoy_owner)           
 >자영업자용 앱
+>
+>### [Mealjoy_admin](https://github.com/jjjjjjj12345/mealjoy_admin)
+>관리자용 웹
 
 </br>
 

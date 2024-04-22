@@ -66,8 +66,8 @@
 <br>
 
 ### 4.2. 챗봇
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/b35ec733-6a94-4068-aeea-e176fc0569b1)
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/8015945e-5bb5-45fb-a243-e2400ac5b8f7)
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/b35ec733-6a94-4068-aeea-e176fc0569b1" width="25%">
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/8015945e-5bb5-45fb-a243-e2400ac5b8f7" width="25%">
 
 <br>
 
@@ -76,8 +76,8 @@
 <br>
 
 ### 4.3. 방문 전 주문
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/bfbdf953-acc9-4724-aa0d-2d43cbce8650)
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/f350f749-6464-4f94-bd47-583b30a7fdd6)
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/bfbdf953-acc9-4724-aa0d-2d43cbce8650" width="25%">
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/f350f749-6464-4f94-bd47-583b30a7fdd6" width="25%">
 
 <br>
 
@@ -86,8 +86,8 @@
 <br>
 
 ### 4.4. 원격 줄서기
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/11f77ae9-adcd-4ab7-860c-bd966f3425b5)
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/6a6dc838-5846-4960-82d0-28ecfef3984c)
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/11f77ae9-adcd-4ab7-860c-bd966f3425b5" width="25%">
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/6a6dc838-5846-4960-82d0-28ecfef3984c" width="25%">
 
  <br>
  
@@ -96,8 +96,7 @@
 <br>
 
 ### 4.5. 예약
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/32722020-6eed-4836-9198-51c604003c4f)
-
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/32722020-6eed-4836-9198-51c604003c4f" width="25%">
  <br>
 
 - 예약
@@ -105,10 +104,9 @@
 <br>
 
 ### 4.6. 리뷰 작성
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/3955de3a-95a6-4fc9-910e-a9a527363a17)
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/400ba2a2-29bb-49b1-8b42-ad9c15414c5e)
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/ba6eac4f-91ce-42ee-a859-de5f7d135cf8)
-
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/3955de3a-95a6-4fc9-910e-a9a527363a17" width="25%">
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/400ba2a2-29bb-49b1-8b42-ad9c15414c5e" width="25%">
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/ba6eac4f-91ce-42ee-a859-de5f7d135cf8" width="25%">
 
  <br>
  
@@ -117,8 +115,7 @@
 <br>
 
 ### 4.7. 사용자 현재 위치 확인
-![image](https://github.com/Parkjinew/mealjoy_user/assets/114290412/663a8f07-7245-4be3-a586-68f261795008)
-
+<img src = "https://github.com/Parkjinew/mealjoy_user/assets/114290412/663a8f07-7245-4be3-a586-68f261795008" width="25%">
 <br>
 
 - 위치

@@ -1,5 +1,9 @@
-# :pushpin: BotBuddies
->GPT를 활용한 메뉴추천 챗봇과 주문 및 웨이팅 플랫폼 서비스
+# :pushpin: Mealjoy_user
+>GPT를 활용한 메뉴추천 챗봇과 주문 및 웨이팅 플랫폼 서비스       
+>일반 사용자용 앱
+>
+>### [Mealjoy_owner](https://github.com/leehakgun/mealjoy_owner)           
+>자영업자용 앱
 
 </br>
 
@@ -345,7 +349,6 @@ window.Kakao.init('사용자 키'); 코드를 사용하여 카카오 SDK를 초�
 - 유저용과 자영업자용 알림 페이지
 
 #### `Back-end`
- 일반 사용자 앱 back 개발
 - 메인 페이지 기능 구현
 - 매장 목록 기능 구현
 - 매장 상세 페이지 기능 구현
@@ -369,7 +372,7 @@ window.Kakao.init('사용자 키'); 코드를 사용하여 카카오 SDK를 초�
 - 결제 PortOne API
 - 메뉴 추천 OpenAI API
 
->#### DB
+#### DB
 - DB설계 및 구축, 관리
 
 #### 배포 및 빌드
